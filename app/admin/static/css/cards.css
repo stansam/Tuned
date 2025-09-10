@@ -1,0 +1,90 @@
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-header {
+    background-color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1rem 1.25rem;
+}
+
+.card-footer {
+    background-color: white;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1rem 1.25rem;
+}
+
+/* Stat cards */
+.stat-card {
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card .icon-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: var(--primary-subtle);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.icon-blue {
+    background-color: rgba(33, 150, 243, 0.1) !important;
+    color: #2196f3 !important;
+}
+
+.icon-purple {
+    background-color: rgba(156, 39, 176, 0.1) !important;
+    color: #9c27b0 !important;
+}
+
+.icon-orange {
+    background-color: rgba(255, 152, 0, 0.1) !important;
+    color: #ff9800 !important;
+}
+
+/* Tables */
+.table> :not(:first-child) {
+    border-top: 1px solid currentColor;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--gray);
+}
+
+/* Insight cards */
+.insight-card {
+    transition: all 0.3s ease;
+}
+
+.insight-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+}
+
+.insight-icon {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+/* Chart */
+.chart-container {
+    position: relative;
+    margin: auto;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}

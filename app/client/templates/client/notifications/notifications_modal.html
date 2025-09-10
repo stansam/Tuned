@@ -1,0 +1,54 @@
+<div id="notif-modal-overlay" class="notif-modal-overlay">
+    <div class="notif-modal-container">
+        <div class="notif-modal-header">
+            <h2 class="notif-modal-title">All Notifications</h2>
+            <button id="notif-modal-close" class="notif-modal-close">&times;</button>
+        </div>
+        
+        <div class="notif-modal-controls">
+            <div class="notif-search-container">
+                <input type="text" id="notif-search-input" class="notif-search-input" placeholder="Search notifications...">
+                <button id="notif-search-clear" class="notif-search-clear">&times;</button>
+            </div>
+            
+            <div class="notif-filter-container">
+                <select id="notif-type-filter" class="notif-filter-select">
+                    <option value="">All Types</option>
+                    <option value="info">Info</option>
+                    <option value="success">Success</option>
+                    <option value="warning">Warning</option>
+                    <option value="error">Error</option>
+                    <option value="message">Messages</option>
+                </select>
+                
+                <select id="notif-status-filter" class="notif-filter-select">
+                    <option value="">All Status</option>
+                    <option value="unread">Unread</option>
+                    <option value="read">Read</option>
+                </select>
+            </div>
+            
+            <div class="notif-modal-actions">
+                <button id="notif-modal-mark-all-read" class="notif-btn primary">Mark All Read</button>
+                <button id="notif-modal-refresh" class="notif-btn">Refresh</button>
+            </div>
+        </div>
+        
+        <div id="notif-modal-body" class="notif-modal-body">
+            <div id="notif-modal-loading" class="notif-loading" style="display: none;">
+                <span class="notif-loading-spinner"></span>
+                Loading notifications...
+            </div>
+            
+            <div id="notif-modal-list" class="notif-modal-list">
+                <!-- Notifications will be populated here -->
+            </div>
+            
+            <div id="notif-empty-state" class="notif-empty-state" style="display: none;">
+                <div class="notif-empty-icon">🔔</div>
+                <h3>No notifications found</h3>
+                <p>You're all caught up! New notifications will appear here.</p>
+            </div>
+        </div>
+    </div>
+</div>

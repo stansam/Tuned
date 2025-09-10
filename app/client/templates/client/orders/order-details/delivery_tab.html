@@ -1,0 +1,82 @@
+{% if order.deliveries %}
+    {% for delivery in order.deliveries %}
+        <div class="delivery-section">
+            <div class="delivery-header">
+                <div class="delivery-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div>
+                    <div class="delivery-title">Delivery #{{ loop.index }}</div>
+                    <div class="delivery-info">
+                        <div class="delivery-topic">
+                            <strong>Topic:</strong> {{ order.title }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="delivery-description">
+                <div class="description-header">
+                    <div class="description-title">Description</div>
+                    <div class="description-date">{{ delivery.delivered_at.strftime('%b %d, %Y %I:%M %p') }}</div>
+                </div>
+            
+                <div class="delivery-message">
+                    <i class="fas fa-exclamation-triangle delivery-message-icon"></i>
+                    <strong>TunedOps Message</strong>
+                    <br>
+                    Thanks for your order. Your delivery is attached. If there is any problem, please let us know and we'll get back to you as soon as we can.
+                    <br><br>
+                    Thanks and a great day ahead
+                    <br>
+                    TunedOps
+                </div>
+            </div>
+
+    <!-- Attachments -->
+            {% if delivery.delivery_files %}
+                <div class="attachments-section">
+                    <div class="attachments-title">ATTACHMENTS</div>
+                    {% for file in delivery.delivery_files %}
+                        <div class="attachment-item">
+                            <div class="attachment-icon {% if file.file_format == 'pdf' %}pdf{% elif file.file_format in ['doc', 'docx'] %}docx{% elif file.file_format in ['zip', 'rar'] %}zip{% endif %}">
+                                <i class="{{ file.file_icon }}"></i>
+                            </div>
+                            <div class="attachment-name">{{ file.original_filename }}</div>
+                            <a href="{#{{ url_for('order_details.download_delivery_file', file_id=file.id) }}#}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+    <!-- Preview Section -->
+            <div class="preview-section">
+                <div class="preview-image">
+            <!-- Placeholder for document preview -->
+                    <div style="padding: 2rem; text-align: center; color: #666; background: #f8f9fa; border-radius: 8px;">
+                        <i class="fas fa-file-alt" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <br>
+                        Delivery Picture with preview.jpg
+                    </div>
+                </div>
+            </div>
+
+    <!-- Delivery Actions -->
+            <div class="delivery-actions">
+                <button class="btn-approve" onclick="approveDelivery({{ delivery.id }})">
+                    <i class="fas fa-check"></i> Approve
+                </button>
+                <button class="btn-revision" onclick="requestRevision({{ delivery.id }})">
+                    <i class="fas fa-undo"></i> Request Revision
+                </button>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="empty-state">
+        <i class="fas fa-truck" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+        <p>No deliveries yet. Your completed work will appear here.</p>
+    </div>
+{% endif %}

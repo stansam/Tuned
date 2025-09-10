@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}&nbsp;|&nbsp; TunedEssays</title>
+    <link rel="shortcut icon" href="{{ url_for('client.static', filename='client/assets/Logo.svg') }}" />
+    <link rel="stylesheet" href="{{ url_for('auth.static', filename='auth/css/main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Leckerli+One&display=swap" rel="stylesheet">
+    {% block styles %} {% endblock %}
+</head>
+<body>
+    {% include 'auth/partials/header.html' %}
+    {% include 'auth/partials/tags.html' %}
+    <main class="main-content">
+    {#{% include 'auth/partials/success-section.html' %}#}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% with messages = get_flashed_messages(with_categories=true) %} 
+        {% if messages %} 
+            {% for category, message in messages %} 
+                <div id="authAlert" class="auth-alert auth-alert-{{ 'error' if category == 'error' else 'success' }}"> {{ message }} </div> 
+            {% endfor %} 
+        {% endif %} 
+    {% endwith %}
+    
+    <script src="{{ url_for('auth.static', filename='auth/js/main.js') }}"></script>
+    {% block scripts %} {% endblock %}
+</body>
+</html>

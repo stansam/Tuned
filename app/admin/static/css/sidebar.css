@@ -1,0 +1,144 @@
+#admin-sidebar {
+    width: var(--sidebar-width);
+    background-color: white;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    border-right: 1px solid var(--gray-light);
+}
+
+#admin-sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+}
+
+.sidebar-header {
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid var(--gray-light);
+}
+#admin-sidebar.collapsed .sidebar-header h5 {
+    display: none;
+    overflow-x: visible;
+}
+#admin-sidebar.collapsed .logo-container i {
+    width: 50px;
+    height: 70px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    color: var(--primary);
+}
+
+#admin-sidebar.collapsed .nav-link span:not(.tooltip-text) {
+    display: none;
+}
+
+
+
+.logo-container {
+    background-color: var(--primary);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.logo-icon {
+    font-size: 1.2rem;
+}
+
+.sidebar-menu {
+    padding: 1rem 0;
+}
+
+.sidebar-menu .nav-link {
+    padding: 0.8rem 1.5rem;
+    color: var(--dark);
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.sidebar-menu .nav-link i {
+    margin-right: 12px;
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+
+
+.sidebar-menu .nav-link:hover,
+.sidebar-menu .nav-link.active {
+    color: var(--primary);
+    background-color: var(--primary-subtle);
+}
+
+.sidebar-menu .nav-link.active {
+    border-left: 3px solid var(--primary);
+}
+
+@media (max-width: 991.98px) {
+    #admin-sidebar {
+        transform: translateX(-100%);
+    }
+
+    #admin-sidebar.show {
+        transform: translateX(0);
+    }
+}
+
+#admin-sidebar::-webkit-scrollbar {
+    width: 7px; 
+}
+
+/* Style the scrollbar thumb (the "tab") */
+#admin-sidebar::-webkit-scrollbar-thumb {
+    background-color: #888; 
+    border-radius: 3px; 
+}
+
+/* Style the scrollbar track */
+#admin-sidebar::-webkit-scrollbar-track {
+    background-color: #f1f1f1; 
+}
+.messages-badge {
+    background-color: #6de73c;
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 50%;
+    margin-left: auto;
+    min-width: 20px;
+    text-align: center;
+    display: none;
+}
+#admin-sidebar.collapsed .messages-badge {
+    /* background-color: beige; */
+    margin-left: 0;
+    position: absolute;
+    top: 0;
+    min-width: none;
+    padding: 2px;
+    right: 19px;
+
+    /* line-height: 3; */
+}
+#admin-sidebar.collapsed #messageFab {
+    position: relative;
+}
+
+/* #liveChat {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+} */

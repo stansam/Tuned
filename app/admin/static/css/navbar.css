@@ -1,0 +1,48 @@
+.top-navbar {
+    background-color: white;
+    height: var(--top-nav-height);
+    position: sticky;
+    top: 0;
+    z-index: 99;
+}
+
+#sidebar-toggle {
+    background: none;
+    border: none;
+    color: var(--gray);
+    font-size: 1.2rem;
+}
+
+.search-box .input-group {
+    background-color: var(--light);
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.search-box input {
+    border-color: var(--light);
+    background-color: var(--light);
+}
+
+.search-box input:focus {
+    box-shadow: none;
+    border-color: var(--light);
+    background-color: var(--light);
+}
+
+.avatar-container {
+    width: 40px;
+    height: 40px;
+    /* background-color: var(--primary); */
+    /* background: url('https://avatar.iran.liara.run/public/job/administrator/male'); */
+    background-size: cover;
+    background-color: antiquewhite;
+    background-position: center;
+    /* border-radius: 50%; */
+    color: black;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}

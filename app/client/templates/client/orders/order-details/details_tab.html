@@ -1,0 +1,104 @@
+<div class="requirements-section">
+    <div class="section-title">
+        Requirements
+        <button class="collapse-btn" style="float: right;">
+            <i class="fas fa-chevron-up" id="requirements-icon"></i>
+        </button>
+    </div>
+    <div id="requirements-content" class="collapsed-content expanded">
+        <div class="requirements-content">
+            <div class="requirements-topic">
+                <strong>Topic:</strong> {{ order.title }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Description Section -->
+<div class="description-section">
+    <div class="description-header">
+        <div class="description-title">Description</div>
+        <div class="description-date">{{ order.created_at.strftime('%b %d, %Y %I:%M %p') }}</div>
+    </div>
+    <div class="description-content">
+        {{ order.description | safe }}
+    </div>
+</div>
+
+<!-- Files Section -->
+{% if order.files %}
+<div class="files-section">
+    <div class="files-title">Attachments</div>
+    {% for file in order.files %}
+    <div class="order-file-item">
+        <div class="file-icon">
+            <i class="fas fa-file"></i>
+        </div>
+        <div class="file-name">{{ file.filename }}</div>
+        <a href="{#{{ url_for('order_details.download_file', file_id=file.id) }}#}" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-download"></i>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Order Summary -->
+<div class="section-title" style="margin-top: 2rem;">Summary</div>
+<div class="details-grid">
+    <div class="detail-item">
+        <span class="detail-label">Topic:</span>
+        <span class="detail-value">{{ order.title }}</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">Service:</span>
+        <span class="detail-value">{{ order.service.name }}</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">Level:</span>
+        <span class="detail-value">{{ order.academic_level.name }}</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">Length:</span>
+        <span class="detail-value">{{ order.page_count }} pages, {{ order.word_count }} words, Double Space</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">Language:</span>
+        <span class="detail-value">English (US)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">Format:</span>
+        <span class="detail-value">{{ order.format_style or 'APA' }}</span>
+    </div>
+</div>
+
+<!-- Service Extras -->
+<div class="section-title">Service Extras</div>
+<div class="details-grid">
+    <div class="detail-item">
+        <span class="detail-label">Plagiarism:</span>
+        <span class="detail-value">{{ order.report_type| capitalize or 'Standard (Free)' }}</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">Custom Design:</span>
+        <span class="detail-value">None</span>
+    </div>
+</div>
+
+<!-- Payment Information -->
+<div class="payment-section">
+    <div class="section-title">Payment Information</div>
+    <div class="detail-item">
+        <span class="detail-label">Payment Status:</span>
+        <span class="detail-value">
+            {% if order.paid %}
+                <span class="badge badge-completed">Paid</span>
+            {% else %}
+                <span class="badge badge-pending">Pending</span>
+                <button class="pay-now-btn" onclick="payNow({{ order.id }})">
+                    <i class="fas fa-credit-card"></i> Pay Now
+                </button>
+            {% endif %}
+        </span>
+    </div>
+</div>

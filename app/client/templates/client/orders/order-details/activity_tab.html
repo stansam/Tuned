@@ -1,0 +1,203 @@
+<!-- Comments Section -->
+<div class="activity-section">
+    <div class="section-header comments">
+        <i class="fas fa-comment-dots"></i>
+        Comments
+    </div>
+    <div class="section-content">
+        <div id="comments-container">
+            {% if order.comments %}
+            {% for comment in order.comments %}
+            <div class="comment-item">
+                <div class="comment-avatar {% if comment.is_admin %}admin{% else %}user{% endif %}">
+                    {% if comment.is_admin %}
+                    <i class="fas fa-user-tie"></i>
+                    {% else %}
+                    <i class="fas fa-user"></i>
+                    {% endif %}
+                </div>
+                <div class="comment-content">
+                    <div class="comment-header">
+                        <span class="comment-author">
+                            {% if comment.is_admin %}
+                            TunedOps
+                            {% else %}
+                            {{ comment.user.first_name }} {{ comment.user.last_name }}
+                            {% endif %}
+                        </span>
+                        <span class="comment-time">{{ comment.created_at.strftime('%b %d, %Y %I:%M %p') }}</span>
+                    </div>
+                    <div class="comment-text">
+                        {{ comment.message }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="no-comments">
+                <i class="fas fa-comment-slash fa-2x mb-3"></i>
+                <p>No comments yet.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Add Comment Form -->
+        <div class="comment-item">
+            <div class="comment-avatar user">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="comment-content">
+                <div class="comment-header">
+                    <span class="comment-author">Add a comment</span>
+                </div>
+                <form id="comment-form" class="comment-form">
+                    <input type="hidden" value="{{order.id}}" id="activityOrderId">
+                    <div class="comment-input-wrapper">
+                        <textarea class="comment-input-area" id="comment-content" rows="3"
+                            placeholder="Type your comment here..." required></textarea>
+                        <div class="comment-actions">
+                            <button type="submit" class="comment-action-btn">
+                                <i class="fas fa-comment"></i> Add Comment
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="activity-section">
+    <div class="order-chat-card" id="orderChatCard" data-order-id="{{ order.id }}" data-chat-id="{{ order.chats[0].id if order.chats else '' }}">
+        <!-- Chat Header -->
+        <div class="order-chat-header">
+            <div class="order-chat-avatar">
+                <span id="orderChatAvatarIcon"><i class="fas fa-solid fa-clipboard-list"></i></span>
+            </div>
+            <div class="order-chat-title-info">
+                <h4 id="orderChatTitle">Need update or Clarification?</h4>
+                <p id="orderChatSubtitle">{{order.order_number}} - {{order.service.name}}</p>
+            </div>
+        </div>
+
+        <!-- Messages Container -->
+        <div class="order-chat-messages-container" id="orderChatMessagesContainer">
+            <!-- Loading state (hidden by default) -->
+            <div class="order-chat-loading" id="orderChatLoading" style="display: none;">
+                <div class="order-chat-loading-spinner"></div>
+                Loading messages...
+            </div>
+
+            <!-- Empty state (hidden by default) -->
+            <div class="order-chat-empty" id="orderChatEmpty">
+                <div class="order-chat-empty-icon"><i class="fas fa-solid fa-comment-dots"></i></div>
+                <p>Start a conversation about your order</p>
+            </div>
+
+            <!-- Sample messages (remove these in production) -->
+            <!-- <div class="order-chat-message order-chat-other">
+                <div class="order-chat-message-bubble">
+                    Hi,<br>
+                    Thanks so much for your order, our team is ready to work on it once payment is confirmed. Be sure to reach out if you need any clarification.<br>
+                    Thank you
+                    <div class="order-chat-message-time">June 14, 2025, 10:28 AM</div>
+                </div>
+            </div>
+
+            <div class="order-chat-message order-chat-own">
+                <div class="order-chat-message-bubble">
+                    Hi<br>
+                    Thanks for the quick Reply. I will upload additional files now and do the payment.<br>
+                    Thank you
+                    <div class="order-chat-message-time">June 14, 2025, 10:28 AM</div>
+                </div>
+            </div> -->
+
+            <!-- Typing indicator -->
+            <div class="order-chat-typing-indicator" id="orderChatTypingIndicator">
+                <div class="order-chat-typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Container -->
+        <div class="order-chat-input-container">
+            <div class="order-chat-input-wrapper">
+                <textarea 
+                    id="orderChatTextarea" 
+                    class="order-chat-textarea" 
+                    placeholder="Type your message here..." 
+                    maxlength="2500"
+                    rows="1"
+                ></textarea>
+                <div class="order-chat-char-counter" id="orderChatCharCounter">up to 2500 Characters</div>
+            </div>
+            
+            <!-- Attachment button (optional) -->
+            <button type="button" class="order-chat-send-btn" id="orderChatAttachBtn" style="background: #6c757d; margin-right: 8px;">
+                <i class="fas fa-solid fa-paperclip"></i>
+            </button>
+            
+            <!-- Emoji button (optional) -->
+            <button type="button" class="order-chat-send-btn" id="orderChatEmojiBtn" style="background: #6c757d; margin-right: 8px;">
+                <i class="fas fa-solid fa-face-smile"></i>
+            </button>
+            
+            <!-- Send button -->
+            <button type="button" class="order-chat-send-btn" id="orderChatSendBtn">
+                <i class="fas fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden File Upload Input -->
+<input type="file" id="file-upload-input" style="display: none;" multiple>
+
+<!-- File Highlight Modal -->
+<div class="modal fade" id="highlightFileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Highlight File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Select a file to highlight:</p>
+                <div class="list-group" id="files-list">
+                    <!-- Order files -->
+                    {% for file in order.files %}
+                    <a href="" class="list-group-item list-group-item-action file-item" data-file-id="{{ file.id }}"
+                        data-file-name="{{ file.filename }}" data-file-type="order">
+                        <i class="fas fa-file me-2"></i>
+                        {{ file.filename }}
+                        <small class="text-muted d-block">Uploaded: {{ file.uploaded_at.strftime('%b %d, %Y') }}</small>
+                    </a>
+                    {% endfor %}
+
+                    <!-- Delivery files if any -->
+                    {% if order.deliveries %}
+                    {% for delivery in order.deliveries %}
+                    {% for file in delivery.files %}
+                    <a href="#" class="list-group-item list-group-item-action file-item" data-file-id="{{ file.id }}"
+                        data-file-name="{{ file.filename }}" data-file-type="delivery">
+                        <i class="fas fa-file-download me-2"></i>
+                        {{ file.filename }}
+                        <small class="text-muted d-block">Delivered: {{ file.uploaded_at.strftime('%b %d, %Y')
+                            }}</small>
+                    </a>
+                    {% endfor %}
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirm-highlight">Highlight Selected</button>
+            </div>
+        </div>
+    </div>
+</div>

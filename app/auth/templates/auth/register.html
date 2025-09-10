@@ -1,0 +1,166 @@
+{% extends 'auth/base.html' %}
+{% block title %}Register{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('auth.static', filename='auth/css/login.css') }}">
+<link rel="stylesheet" href="{{ url_for('auth.static', filename='auth/css/register.css') }}">
+<link rel="stylesheet" href="{{ url_for('auth.static', filename='auth/css/country-menu.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+<script src="{{ url_for('auth.static', filename='auth/js/register.js') }}"></script>
+<script src="{{ url_for('auth.static', filename='auth/js/country-menu.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+<section class="success-section">
+    <h2>Success starts here</h2>
+    <ul class="features-list">
+        <li>Expert Guidance</li>
+        <li>Quality work done faster</li>
+        <li>24/7 Support</li>
+    </ul>
+    
+    <div class="reg-character-illustration">
+        <img class="register-actor" src="{{url_for('auth.static', filename='auth/assets/Loginuser2.png')}}" />
+        <!-- <div class="books-stack"></div> -->
+        
+    </div>
+</section>
+
+<section class="login-section">
+    <div class="login-header">
+        <div class="lock-icon">
+            <img src="{{url_for('auth.static', filename='auth/assets/Adduser.png')}}" />
+        </div>
+        <h3>Create Account</h3>
+        <p>Join our community. No paper is impossible!</p>
+    </div>
+
+    <form class="login-form" method="post" action="{{ url_for('auth.register')}}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-group">
+            <label for="username">Username <span class="required">*</span></label>
+            <div class="input-wrapper">
+                <span class="input-icon"><i class="fas fa-user"></i></span>
+                <input type="text" id="username" name="username" class="form-input with-icon" placeholder="Username">
+                <div class="tooltip">Please fill out this field</div>
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group half-width">
+                <label for="name">Name <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <span class="input-icon"><i class="fas fa-user"></i></span>
+                    <input type="text" id="name" name="fullname" class="form-input with-icon" placeholder="Full Name">
+                </div>
+            </div>
+            <div class="form-group half-width">
+                <label for="gender">Gender <span class="required">*</span></label>
+                <div class="gender-options">
+                    <label class="gender-option">
+                        <input type="radio" name="gender" value="male">
+                        <span class="gender-badge male">M</span>
+                    </label>
+                    <label class="gender-option">
+                        <input type="radio" name="gender" value="female">
+                        <span class="gender-badge female">F</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="reg-password">Password <span class="required">*</span></label>
+            <div class="input-wrapper">
+                <span class="input-icon"><i class="fas fa-lock"></i></span>
+                <input type="password" id="reg-password" name="password" class="form-input with-icon" placeholder="••••••••••">
+                <span class="password-toggle"><i class="fas fa-eye"></i></span>
+            </div>
+            <div class="password-strength">
+                <div class="strength-indicator">
+                    <div class="strength-bar"></div>
+                </div>
+                <span class="strength-text">Password Strength</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="confirm-password">Confirm password <span class="required">*</span></label>
+            <div class="input-wrapper">
+                <span class="input-icon"><i class="fas fa-lock"></i></span>
+                <input type="password" id="confirm-password" name="confirm_password" class="form-input with-icon" placeholder="••••••••••">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="reg-email">Email <span class="required">*</span></label>
+            <div class="input-wrapper">
+                <span class="email-input-icon"><i class="fas fa-inbox"></i></span>
+                <input type="email" name="email" id="reg-email" class="form-input with-icon" placeholder="your@email.xyz">
+                <div class="helper-text">We'll send an email verification link to this email</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number <span class="required">*</span></label>
+            
+            <div class="select-box">
+                <div class="selected-option">
+                    <div>
+                        <span class="iconify" data-icon="flag:gb-4x3"></span>
+                        <strong>+1</strong>
+                    </div>
+                    <input type="tel" id="phone" name="phone" class="form-input phone-input" placeholder="Phone Number">
+                </div>
+                <div class="options">
+                    <input type="text" class="search-box" placeholder="Search Country Name">
+                    <ol>
+        
+                    </ol>
+                </div>
+            </div>
+            
+        </div>
+
+        <button type="submit" class="sign-in-btn create-account-btn">Create Account</button>
+
+        <div class="signup-link">
+            Already have an account? <a href="{{url_for('auth.login')}}">Sign in</a>
+        </div>
+
+        <div class="terms-text">
+            By registering, you agree to TunedEssays' <strong>Terms of Service</strong> and acknowledge that TunedEssays' <strong>Privacy Policy</strong> applies to you. You consent to receive marketing communications from TunedEssays and can opt-out at any time. You also agree that any dispute or claim you may have against us must be resolved individually, without resort to any class action procedure.
+        </div>
+    </form>
+</section>
+<section class="benefits-section">
+    <div class="benefits-header">
+        <div class="benefits-icon"><i class="fas fa-gift"></i></div>
+        <h3 class="benefits-title">Benefits of Registration</h3>
+    </div>
+    
+    <div class="benefits-content">
+        <div class="benefit-item">
+            <div class="benefit-icon discounts"></div>
+            <h4 class="benefit-title">Exclusive Discounts</h4>
+            <p class="benefit-description">Enjoy special offers and loyalty rewards</p>
+        </div>
+        
+        <div class="benefit-item">
+            <div class="benefit-icon history"></div>
+            <h4 class="benefit-title">Order History</h4>
+            <p class="benefit-description">Track and manage all your orders easily</p>
+        </div>
+        
+        <div class="benefit-item">
+            <div class="benefit-icon alerts"></div>
+            <h4 class="benefit-title">Updates & Alerts</h4>
+            <p class="benefit-description">Get notified about your order status</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'auth/base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('auth.static', filename='auth/css/login.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('auth.static', filename='auth/js/login.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+<section class="success-section">
+    <h2>Success starts here</h2>
+    <ul class="features-list">
+        <li>Expert Guidance</li>
+        <li>Quality work done faster</li>
+        <li>24/7 Support</li>
+    </ul>
+    
+    <div class="character-illustration">
+        <!-- <div class="character"> -->
+            <img class="login-actor" src="{{url_for('auth.static', filename='auth/assets/Loginactor.png')}}" /> 
+            <div class="books-stack"></div>
+        <!-- </div> -->
+    </div>
+</section>
+
+<section class="login-section">
+    <div class="login-header">
+        <div class="lock-icon">
+            <img src="{{url_for('auth.static', filename='auth/assets/geenpadlock.png')}}" />
+        </div>
+        <h3>Welcome Back</h3>
+        <p>Sign in to your Account</p>
+    </div>
+
+    <form class="login-form" method="post" action="{{ url_for('auth.login')}}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-group">
+            <label for="email">Email or Username</label>
+            <div class="input-wrapper">
+                <span class="input-icon"><i class="fas fa-user"></i></span>
+                <input type="text" id="email" name="username" class="form-input with-icon" placeholder="Please fill out this field">
+                <div class="tooltip">Please fill out this field</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+                <span class="input-icon"><i class="fas fa-lock"></i></span>
+                <input type="password" id="password" name="password" class="form-input with-icon" placeholder="••••••••••">
+            </div>
+            <a href="#" class="forgot-password">Forgot Password?</a>
+        </div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="remember" name="remember">
+            <label for="remember">Remember me</label>
+        </div>
+
+        <button type="submit" class="sign-in-btn">Sign in</button>
+
+        <div class="signup-link">
+            Don't have an account? <a href="{{url_for('auth.register')}}">Join here</a>
+        </div>
+        <div class="signup-link">
+            <a href="{{url_for('auth.forgot_password')}}">Forgot Password?</a>
+        </div>
+
+        <div class="terms-text">
+            By registering, you agree to TunedEssays' <strong>Terms of Service</strong> and acknowledge that TunedEssays' <strong>Privacy Policy</strong> applies to you. You consent to receive marketing communications from TunedEssays and can opt-out at any time. You also agree that any dispute or claim you may have against us must be resolved individually, without resort to any class action procedure.
+        </div>
+    </form>
+</section>
+{% endblock %}

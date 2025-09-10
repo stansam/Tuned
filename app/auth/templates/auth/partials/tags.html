@@ -1,0 +1,18 @@
+<div class="service-tags">
+    <div class="tags-container">
+        <span class="tag popular"><i class="fas fa-heart"></i> Popular</span>
+        {% if service_categories %}
+            {% for service in service_categories %}
+                <span class="tag" value="{{service.id}}">{{service.name}}</span>
+            {% endfor %}
+        {% else %}
+            <span class="tag">Proofreading and Editing</span>
+            <span class="tag">Writing</span>
+            <span class="tag">Data Analysis</span>
+            <span class="tag">Business and Marketing Research</span>
+            <span class="tag">Presentations</span>
+            <span class="tag">Resume Writing</span>
+            <span class="tag">Technical Writing & Calculations</span>
+        {% endif %}
+    </div>
+</div>

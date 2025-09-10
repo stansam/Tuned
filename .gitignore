@@ -1,0 +1,7 @@
+logs/
+.env
+instance/
+migrations/
+venv/
+__pycache__/
+test/

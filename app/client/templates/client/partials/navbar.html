@@ -1,0 +1,64 @@
+<nav class="navbar no-cursor">
+    <div class="navbar-brand">
+        <img src="{{url_for('client.static', filename='client/assets/Logo.svg')}}" alt="TunedEssays Logo" class="logo">
+        <span class="brand-text">Tuned<span class="brand-text-second">Essays</span></span>
+    </div>
+
+    
+    
+    <div class="navbar-menu">
+        <a href="#" class="nav-link">Services</a>
+        <a href="#" class="nav-link">FAQ</a>
+        <a href="#" class="nav-link">Samples</a>
+        <a href="#" class="nav-link">Blog</a>
+    </div>
+    
+    <div class="navbar-actions">
+        <!-- <button class="notification-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+            </svg>
+        </button> -->
+        
+        <div class="notification-container" style="position: relative; display: inline-block;">
+            <div id="notification-bell" class="notification-bell notification-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                </svg>
+                <span id="notification-badge" class="notification-badge" style="display: none;">0</span>
+            </div>
+            
+            <!-- Notification Panel -->
+            <div id="notification-panel" class="notification-panel">
+                <div class="notification-header">
+                    <h5>Notifications</h5>
+                    <button id="mark-all-notifications-read" class="mark-all-read">✓✓</button>
+                    <button id="view-all-notifications" class="view-all-notifications">View all</button>
+                </div>
+                <div id="notifications-list" class="notifications-list">
+                    <!-- Notifications will be populated here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- <button class="chat-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+            </svg>
+        </button> -->
+        <!-- <button id="sound-toggle" class="sound-toggle" title="Toggle notification sounds">🔊</button> -->
+        
+        <div class="profile-avatar">
+            <button type="button" class="avatar-img" id="avatarBtn">{% if current_user.profile_pic == 'default.png' %}<i class="fas fa-user"> </i>{% else %} <img class="nav-prof-pic" src="{{ current_user.get_profile_pic_url() }}" alt="profile pic"/> {% endif %} </button>
+            <div class="nav-profile-dropdown-menu" id="avatarDropdown">
+                <a href="{{url_for('client.dashboard')}}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="{{url_for('auth.logout')}}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+        <button class="mobile-menu-toggle" aria-label="Toggle menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+    </div>
+</nav>

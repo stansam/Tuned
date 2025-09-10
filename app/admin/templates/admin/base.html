@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="user-id"
+      content="{{ current_user.id if current_user.is_authenticated else '' }}"
+    />
+    <title>{% block title %}TunedEssays Admin{% endblock %}</title>
+    <meta
+      name="description"
+      content="Admin dashboard for managing writing services, users, orders, and content."
+    />
+    <link href='https://fonts.googleapis.com/css?family=Leckerli One' rel='stylesheet'>
+    <!-- Favicon -->
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('client.static', filename='client/assets/Logo.svg') }}"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('admin.static', filename='css/main.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('admin.static', filename='css/sidebar.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('admin.static', filename='css/navbar.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('admin.static', filename='css/notifications/notification-panel.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('admin.static', filename='css/chats/chat.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('admin.static', filename='css/notifications/modal.css') }}"
+    />
+    {% block styles %}{% endblock %}
+  </head>
+
+  <body class="admin-dashboard-page">
+    <!-- Page Loader -->
+    <div class="loader-container" id="pageLoader">
+      <div class="loader"></div>
+    </div>
+    <div class="admin-wrapper">
+      <nav id="admin-sidebar" class="shadow-sm no-cursor">
+        <div class="sidebar-header">
+          <div class="d-flex align-items-center justify-content-center mb-1">
+            <div class="logo-container">
+              <i class="fas fa-graduation-cap logo-icon"></i>
+            </div>
+            <h5 class="mb-0 ms-2">Admin Portal</h5>
+          </div>
+        </div>
+
+        <div class="sidebar-menu">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}"
+                href="{{ url_for('admin.dashboard') }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Dashboard"
+              >
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint.endswith('orders') %}active{% endif %}"
+                href="{{ url_for('admin.list_orders') }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Orders"
+              >
+                <i class="fas fa-file-alt"></i>
+                <span>Orders</span>
+              </a>
+            </li>
+            <!-- <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint.endswith('delivery') %}active{% endif %}"
+                href="{#{{ url_for('admin_delivery.delivery_dashboard') }}#}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Delivery"
+              >
+                <i class="fas fa-truck"></i>
+                <span>Order Deliveries</span>
+              </a>
+            </li> -->
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint.endswith('users') %}active{% endif %}"
+                href="{{ url_for('admin.list_users') }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Users"
+              >
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint.endswith('payments') %}active{% endif %}"
+                href="{{ url_for('admin.list_payments') }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Payments"
+              >
+                <i class="fas fa-credit-card"></i>
+                <span>Payments</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if 'messages' in request.endpoint %}active{% endif %}"
+                href="{{ url_for('admin.services_management') }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Services"
+              >
+                <i class="fas fa-signal"></i>
+                <span>Services</span>
+              </a>
+            </li>
+            <li class="nav-item" >
+              <a
+                class="nav-link {% if 'chats' in request.endpoint %}active{% endif %}"
+                href="#" id="messageFab"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Chats"
+              >
+                <i class="fas fa-comments"></i>
+                <span>Live Chat</span>
+                <span class="messages-badge" id="messages-badge">0</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if 'blog' in request.endpoint %}active{% endif %}"
+                href="{{ url_for('admin.list_blog_posts') }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Blogs"
+              >
+                <i class="fas fa-blog"></i>
+                <span>Blog</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if 'testimonials' in request.endpoint %}active{% endif %}"
+                href="{{ url_for('admin.list_testimonials') }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Testimonials"
+              >
+                <i class="fas fa-star"></i>
+                <span>Testimonials</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if 'samples' in request.endpoint %}active{% endif %}"
+                href="{{ url_for('admin.list_samples') }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Samples"
+              >
+                <i class="fas fa-file-signature"></i>
+                <span>Samples</span>
+              </a>
+            </li>
+            <li class="nav-header pt-3 pb-2 px-3">
+              <!-- <small class="text-uppercase text-muted">Settings</small> -->
+              <hr />
+            </li>
+            <!-- <li class="nav-item">
+                <a class="nav-link {% if 'settings' in request.endpoint %}active{% endif %}" href="#">
+                    <i class="fas fa-cog"></i>
+                    <span>Account Settings</span>
+                </a>
+            </li> -->
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('auth.logout') }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="Logout"
+              >
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="main-content">
+        <div class="top-navbar shadow-sm">
+          <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center">
+                <button id="sidebar-toggle" class="btn btn-sm">
+                  <i class="fas fa-bars"></i>
+                </button>
+                <div class="search-box ms-3 d-none d-md-block">
+                  <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0">
+                      <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control border-start-0"
+                      placeholder="Search..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center gap-2 no-cursor">
+                <div class="notification-container" style="position: relative; display: inline-block;">
+                  <div id="notification-bell" class="notification-bell">
+                      <i class="fas fa-bell"></i>
+                      <span id="notification-badge" class="notification-badge" style="display: none;">0</span>
+                  </div>
+                  
+                  <!-- Notification Panel -->
+                  <div id="notification-panel" class="notification-panel">
+                      <div class="notification-header">
+                          <h5>Notifications</h5>
+                          <button id="mark-all-notifications-read" class="mark-all-read">Mark all as read</button>
+                          <button id="view-all-notifications" class="view-all-notifications">View all</button>
+                      </div>
+                      <div id="notifications-list" class="notifications-list">
+                          <!-- Notifications will be populated here -->
+                      </div>
+                  </div>
+              </div>
+                <div class="dropdown">
+                  <button
+                    class="btn admin-profile-btn d-flex align-items-center"
+                    type="button"
+                    id="profileDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <div class="avatar-container me-2">
+                      <!-- <span>{{ current_user.username[0]|upper }}</span> -->
+                      <span>
+                        <!-- <img
+                          src="https://avatar.iran.liara.run/public/boy?username=boniface"
+                          style="border-radius: 50%; max-width: 45px"
+                          alt="Admin Avatar"
+                        /> --><i class="fas fa-user"></i>
+                      </span>
+                    </div>
+                    <!-- <span class="d-none d-md-inline">{{ current_user.get_name() }}</span> -->
+                    <!-- <i class="fas fa-chevron-down ms-2"></i> -->
+                  </button>
+                  <ul
+                    class="dropdown-menu dropdown-menu-end shadow-sm"
+                    aria-labelledby="profileDropdown"
+                  >
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        href="{#{{url_for('admin.view_user', user_id=current_user.id)}}#}"
+                        ><i class="fas fa-user me-2"></i>Profile</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#"
+                        ><i class="fas fa-cog me-2"></i>Settings</a
+                      >
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider" />
+                    </li>
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        href="{{ url_for('auth.logout') }}"
+                        ><i class="fas fa-sign-out-alt me-2"></i>Logout</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+    <button class="chat-fab" id="chatFab">
+        <svg viewBox="0 0 24 24">
+            <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M13,7H11V11H7V13H11V17H13V13H17V11H13V7Z"/>
+        </svg>
+        <span class="fab-chat-notification-badge" id="fabChatNotificationBadge">3</span>
+    </button>
+    
+    <div class="chat-modal" id="chatModal">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <button class="back-btn" id="backBtn" style="display: none;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+            </button>
+            <h3 id="chatTitle">💬 Chat</h3>
+            <div></div>
+        </div>
+    
+        <!-- Chat Content -->
+        <div class="chat-content">
+            <!-- Landing Page -->
+            <div class="chat-landing" id="chatLanding">
+                <div class="landing-header">
+                    <h4>Questions? Chat with us!</h4>
+                    <p>Typical replies under 10 minutes</p>
+                </div>
+    
+                <div class="chat-list" id="chatList">
+                    <!-- Chat items will be loaded here -->
+                </div>
+    
+                <button class="new-chat-btn" id="newChatBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M13,7H11V11H7V13H11V17H13V13H17V11H13V7Z"/>
+                    </svg>
+                    Start New Chat
+                </button>
+            </div>
+    
+            <!-- New Chat Page -->
+            <div class="new-chat-page" id="newChatPage">
+                <div class="subject-selection">
+                    <h4>What can we help you with?</h4>
+                    
+                    <div class="subject-option" data-type="general">
+                        <div class="subject-icon">❓</div>
+                        <div>
+                            <div class="chat-subject">General Enquiry</div>
+                            <div class="chat-preview">Ask us anything about our services</div>
+                        </div>
+                    </div>
+    
+                    <div class="subject-option" data-type="order">
+                        <div class="subject-icon">📋</div>
+                        <div>
+                            <div class="chat-subject">About an Order</div>
+                            <div class="chat-preview">Questions about a specific order</div>
+                        </div>
+                    </div>
+    
+                    <div class="order-select" id="orderSelect">
+                        <select id="orderSelectDropdown">
+                            <option value="">Select an order...</option>
+                            <!-- Orders will be loaded here -->
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" id="csrfToken">
+                <button class="create-chat-btn" id="createChatBtn" disabled>
+                    Create Chat
+                </button>
+            </div>
+    
+            <!-- Chat Screen -->
+            <div class="chat-screen" id="chatScreen">
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will appear here -->
+                </div>
+                
+                <div class="typing-indicator" id="typingIndicator">
+                    Admin is typing...
+                </div>
+    
+                <div class="chat-input">
+                    <textarea class="message-input" id="messageInput" placeholder="Type your message..." rows="1"></textarea>
+                    <button class="send-btn" id="sendBtn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notif-modal-overlay" class="notif-modal-overlay">
+      <div class="notif-modal-container">
+          <div class="notif-modal-header">
+              <h2 class="notif-modal-title">All Notifications</h2>
+              <button id="notif-modal-close" class="notif-modal-close">&times;</button>
+          </div>
+          
+          <div class="notif-modal-controls">
+              <div class="notif-search-container">
+                  <input type="text" id="notif-search-input" class="notif-search-input" placeholder="Search notifications...">
+                  <button id="notif-search-clear" class="notif-search-clear">&times;</button>
+              </div>
+              
+              <div class="notif-filter-container">
+                  <select id="notif-type-filter" class="notif-filter-select">
+                      <option value="">All Types</option>
+                      <option value="info">Info</option>
+                      <option value="success">Success</option>
+                      <option value="warning">Warning</option>
+                      <option value="error">Error</option>
+                      <option value="message">Messages</option>
+                  </select>
+                  
+                  <select id="notif-status-filter" class="notif-filter-select">
+                      <option value="">All Status</option>
+                      <option value="unread">Unread</option>
+                      <option value="read">Read</option>
+                  </select>
+              </div>
+              
+              <div class="notif-modal-actions">
+                  <button id="notif-modal-mark-all-read" class="notif-btn primary">Mark All Read</button>
+                  <button id="notif-modal-refresh" class="notif-btn">Refresh</button>
+              </div>
+          </div>
+          
+          <div id="notif-modal-body" class="notif-modal-body">
+              <div id="notif-modal-loading" class="notif-loading" style="display: none;">
+                  <span class="notif-loading-spinner"></span>
+                  Loading notifications...
+              </div>
+              
+              <div id="notif-modal-list" class="notif-modal-list">
+                  <!-- Notifications will be populated here -->
+              </div>
+              
+              <div id="notif-empty-state" class="notif-empty-state" style="display: none;">
+                  <div class="notif-empty-icon">🔔</div>
+                  <h3>No notifications found</h3>
+                  <p>You're all caught up! New notifications will appear here.</p>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Toast container for notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ url_for('admin.static', filename='js/main.js') }}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script>
+        const currentUserId = {{ current_user.id if current_user.is_authenticated else 'null' }};
+        const isAdmin = {{ 'true' if current_user.is_authenticated and current_user.is_admin else 'false' }};
+        const API_BASE_URL = "http://api.tunedessays.com:5000"
+        const ADMIN_BASE_URL = "http://admin.tunedessays.com:5000"
+    </script>
+    <script src="{{ url_for('admin.static', filename='js/socket/socket_client.js') }}"></script>
+    <script src="{{ url_for('admin.static', filename='js/chats/chat.js') }}"></script>
+    <script src="{{ url_for('admin.static', filename='js/notifications/notificationManager.js') }}"></script>
+
+    <!-- Socket.io -->
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.min.js"></script> -->
+    <!-- Flash messages handling -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const toastContainer = document.querySelector('.toast-container');
+          {% for category, message in messages %}
+              const toast = document.createElement('div');
+              toast.className = 'toast show';
+              toast.setAttribute('role', 'alert');
+              toast.setAttribute('aria-live', 'assertive');
+              toast.setAttribute('aria-atomic', 'true');
+
+              toast.innerHTML = `
+                  <div class="toast-header">
+                      <strong class="me-auto">Notification</strong>
+                      <small>Just now</small>
+                      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                  </div>
+                  <div class="toast-body bg-{{ category if category != 'message' else 'info' }} text-white">
+                      {{ message }}
+                  </div>
+              `;
+
+              toastContainer.appendChild(toast);
+
+              setTimeout(() => {
+                  toast.remove();
+              }, 5000);
+          {% endfor %}
+      });
+    </script>
+    {% endif %} {% endwith %} {% block scripts %}{% endblock %}
+  </body>
+</html>

@@ -1,0 +1,95 @@
+<button class="chat-fab" id="chatFab">
+    <!-- <svg viewBox="0 0 24 24">
+        <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M13,7H11V11H7V13H11V17H13V13H17V11H13V7Z"/>
+    </svg> --><i class="fas fa-comment"></i>
+    <span class="fab-chat-notification-badge" id="fabChatNotificationBadge">3</span>
+</button>
+
+<div class="chat-modal" id="chatModal">
+    <!-- Chat Header -->
+    <div class="chat-header">
+        <button class="back-btn" id="backBtn" style="display: none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+        </button>
+        <h3 id="chatTitle"><i class="fas fa-solid fa-comment-dots"></i> Chat</h3>
+        <div></div>
+    </div>
+
+    <!-- Chat Content -->
+    <div class="chat-content">
+        <!-- Landing Page -->
+        <div class="chat-landing" id="chatLanding">
+            <div class="landing-header">
+                <h4>Questions? Chat with us!</h4>
+                <p>Typical replies under 10 minutes</p>
+            </div>
+
+            <div class="chat-list" id="chatList">
+                <!-- Chat items will be loaded here -->
+            </div>
+
+            <button class="new-chat-btn" id="newChatBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M13,7H11V11H7V13H11V17H13V13H17V11H13V7Z"/>
+                </svg>
+                Start New Chat
+            </button>
+        </div>
+
+        <!-- New Chat Page -->
+        <div class="new-chat-page" id="newChatPage">
+            <div class="subject-selection">
+                <h4>What can we help you with?</h4>
+                
+                <div class="subject-option" data-type="general">
+                    <div class="subject-icon"><i class="fas fa-solid fa-question"></i></div>
+                    <div>
+                        <div class="chat-subject">General Enquiry</div>
+                        <div class="chat-preview">Ask us anything about our services</div>
+                    </div>
+                </div>
+
+                <div class="subject-option" data-type="order">
+                    <div class="subject-icon"><i class="fas fa-solid fa-clipboard-list"></i></div>
+                    <div>
+                        <div class="chat-subject">About an Order</div>
+                        <div class="chat-preview">Questions about a specific order</div>
+                    </div>
+                </div>
+
+                <div class="order-select" id="orderSelect">
+                    <select id="orderSelectDropdown">
+                        <option value="">Select an order...</option>
+                        <!-- Orders will be loaded here -->
+                    </select>
+                </div>
+            </div>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" id="csrfToken">
+            <button class="create-chat-btn" id="createChatBtn" disabled>
+                Create Chat
+            </button>
+        </div>
+
+        <!-- Chat Screen -->
+        <div class="chat-screen" id="chatScreen">
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages will appear here -->
+            </div>
+            
+            <div class="typing-indicator" id="typingIndicator">
+                Admin is typing...
+            </div>
+
+            <div class="chat-input">
+                <textarea class="message-input" id="messageInput" placeholder="Type your message..." rows="1"></textarea>
+                <button class="send-btn" id="sendBtn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

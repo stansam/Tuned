@@ -1,0 +1,69 @@
+<div class="modal-overlay" id="profileModal">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" id="csrfToken">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">Edit Profile</h2>
+            <button class="close-btn" onclick="closeProfileModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="success-message" id="successMessage">
+                Profile updated successfully!
+            </div>
+            
+            <div class="profile-pic-section">
+                <div class="profile-pic-wrapper">
+                    <img id="profilePicPreview" 
+                         src="{% if current_user.profile_pic and current_user.profile_pic != 'default.png' %}{{ current_user.get_profile_pic_url() }} {% else %} {{url_for('client.static', filename='client/assets/profile_pics/default.png')}} {% endif %} " 
+                         alt="Profile Picture" 
+                         class="profile-pic">
+                </div>
+                <div class="profile-pic-actions">
+                    <label for="profilePicInput" class="profile-btn-upload">Upload Profile Picture</label>
+                    <input type="file" id="profilePicInput" accept="image/*" style="display:none">
+                </div>
+            </div>
+
+            <form id="profileForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name <span class="required">*</span></label>
+                        <input type="text" id="firstName" name="first_name" required>
+                        <div class="error-message" id="firstNameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name <span class="required">*</span></label>
+                        <input type="text" id="lastName" name="last_name" required>
+                        <div class="error-message" id="lastNameError"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username <span class="required">*</span></label>
+                    <input type="text" id="username" name="username" required>
+                    <div class="error-message" id="usernameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender <span class="required">*</span></label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                    <div class="error-message" id="genderError"></div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn btn-cancel" onclick="closeProfileModal()">Cancel</button>
+                    <button type="submit" class="btn btn-save" id="saveBtn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

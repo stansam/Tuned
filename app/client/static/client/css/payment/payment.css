@@ -1,0 +1,353 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+.payment-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.header {
+    background: linear-gradient(135deg, #4a9c4a, #2d7a2d);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    position: relative;
+}
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* flex-direction: column; */
+}
+.header h2 {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.header p {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px;
+}
+
+
+.shield-icon img {
+    width: 45px;
+    height: 45px;
+    /* background: rgba(255,255,255,0.2); */
+    border-radius: 50%;
+    /* display: inline-block; */
+    align-items: center;
+    justify-content: center;
+    /* margin-right: 10px; */
+    /* font-size: 16px; */
+}
+
+.content {
+    padding: 20px;
+}
+
+.intro-text {
+    font-size: 14px;
+    color: #161616;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.payment-option {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.payment-option.recommended {
+    border-color: #4a9c4a;
+    background: #f0f8f0;
+}
+
+.payment-option.recommended::after {
+    content: "Recommended";
+    position: absolute;
+    top: -8px;
+    right: 10px;
+    background: #4a9c4a;
+    color: white;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.payment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: center;
+    font-size: px;
+}
+
+.payment-logo img {
+    width: 50px;
+    height: 40px;
+    /* background: #003087; */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* font-weight: bold;
+    font-size: 14px;
+    margin-right: 0.5rem;
+    border-radius: 4px; */
+}
+.payment-logo-text {
+    font-size: 20px;
+    color: #333;
+    font-weight: bold;
+}
+
+.payment-logo.payoneer img {
+    width: 40px;
+    height: 40px;
+    /* background: #003087; */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* font-weight: bold;
+    font-size: 14px;
+    margin-right: 0.5rem;
+    border-radius: 4px; */
+}
+
+.payment-details {
+    font-size: 14px;
+    color: black;
+    margin-bottom: 5px;
+}
+/* .checker-logo {
+    background-color: #4a9c4a;
+} */
+.checker-logo img {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+    margin-right: 5px;
+    color: #4a9c4a;
+}
+
+.payment-details strong {
+    color: #333;
+}
+
+.confirm-section {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.confirm-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.confirm-header::before {
+    content: "✓";
+    background: #4a9c4a;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.key-details {
+    background: #e8f0fe;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.key-details h4 {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.form-group label {
+    /* display: block; */
+    font-size: 14px;
+    color: #0e0c0c;
+    margin-bottom: 3px;
+}
+
+.form-group input, .form-group select {
+    width: 40%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+}
+.form-group input:focus, .form-group select:focus {
+    border-color: #4a9c4a;
+    outline: none;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+/* .checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+    margin-top: 2px;
+} */
+.checkbox-logo img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+.checkbox-label {
+    font-size: 12px;
+    color: #666;
+    line-height: 2;
+}
+
+.paid-button {
+    background: #4a9c4a;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    float: right;
+    margin-top: 1rem;
+    margin-left: 0.5rem;
+
+}
+
+.paid-button:hover {
+    background: #3d8a3d;
+}
+
+.paid-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.amount-display {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.amount-display .total {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.amount-display .currency {
+    font-size: 12px;
+    color: #666;
+}
+
+.loading {
+    display: none;
+    text-align: center;
+    padding: 20px;
+}
+
+.error-message {
+    background: #fee;
+    color: #c33;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-size: 12px;
+    display: none;
+}
+
+.success-message {
+    background: #efe;
+    color: #3c3;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-size: 12px;
+    display: none;
+}
+
+.signature {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: cursive;
+    font-size: 40px;
+    color: #ff6600;
+    opacity: 0.5;
+}
+.signature img {
+    width: 100px;
+    height: auto;
+    opacity: 0.5;
+}
+
+@media (max-width: 480px) {
+    .payment-container {
+        margin: 10px;
+        max-width: none;
+    }
+    
+    .content {
+        padding: 15px;
+    }
+}

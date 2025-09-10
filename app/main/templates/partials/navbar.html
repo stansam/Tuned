@@ -1,0 +1,32 @@
+<nav class="navbar">
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    <a href="{{ url_for('main.home') }}" class="logo-container">
+        <img src="{{ url_for('main.static', filename='main/assets/Logo.svg') }}" alt="TunedEssays Logo" class="logo-img"></img>
+        
+        <!-- <div class="logo-text"><a href="{{ url_for('main.home') }}" class="logo"><image src="{{url_for('static', filename='assets/Logo.svg')}}" alt="TunedEssays"></image></a></div> -->
+            <span class="logo-text">Tuned<span class="accent">Essays</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+        <a class="nav-link {% if request.endpoint in ['main.services', 'main.service_detail'] %}active{% endif %}" href="{{ url_for('main.services') }}">Services</a>
+        <a class="nav-link {% if request.endpoint == 'main.faq' %}active{% endif %}" href="{{ url_for('main.faq') }}">FAQ</a>
+        <a class="nav-link {% if request.endpoint in ['main.samples', 'main.sample_detail'] %}active{% endif %}" href="{{ url_for('main.samples') }}">Samples</a>
+        <a class="nav-link {% if request.endpoint in ['main.index', 'main.category', 'main.post'] %}active{% endif %}" href="{{ url_for('main.index') }}">Blog</a>
+        <a class="nav-link {% if request.endpoint == 'main.testimonials' %}active{% endif %}" href="{{ url_for('main.testimonials') }}">Testimonials</a>
+    </div>
+    {% if current_user.is_authenticated %}
+        <div class="nav-profile-avatar">
+            <button type="button" class="nav-avatar-img" id="avatarBtn">{% if current_user.profile_pic == 'default.png' %}<i class="fas fa-user"> </i>{% else %} <img class="nav-prof-pic" src="{{ current_user.get_profile_pic_url() }}" alt="profile pic"/> {% endif %} </button>
+            <div class="nav-profile-dropdown-menu" id="avatarDropdown">
+                <a href="{% if current_user.is_admin %} {{url_for('admin.dashboard')}} {% else %} {{url_for('client.dashboard')}} {% endif %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="{{url_for('auth.logout')}}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    {% else %}
+        <div class="auth-buttons">  
+            <a href="{{url_for('auth.login')}}" class="sign-in">Sign in</a>
+            <a href="{{url_for('client.create_order')}}" class="order-now">Order now</a>
+        </div>
+    {% endif %}
+</nav>

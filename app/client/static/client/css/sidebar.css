@@ -1,0 +1,249 @@
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 60px;
+    width: 200px;
+    height: calc(100vh - 60px);
+    background-color: #2c3e50;
+    color: white;
+    /* overflow-y: auto; */
+    z-index: 900;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    padding: 1.5rem 1rem;
+}
+
+.new-order-btn {
+    width: 100%;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.new-order-btn:hover {
+    background-color: #229954;
+}
+
+.plus-icon {
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.sidebar-nav {
+    padding: 0 1rem 1rem;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 2px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    position: relative;
+    color: #bdc3c7;
+    text-decoration: none;
+}
+
+.sidebar-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.profile-item {
+    position: relative;
+}
+
+.item-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.item-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+    flex: 1;
+}
+
+.balance-amount {
+    font-size: 0.85rem;
+    color: #95a5a6;
+    margin-left: auto;
+}
+
+.order-badge {
+    background-color: #3498db;
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: auto;
+    min-width: 18px;
+    text-align: center;
+    display: none;
+}
+
+.messages-badge {
+    background-color: #e74c3c;
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: auto;
+    min-width: 18px;
+    text-align: center;
+    display: none;
+}
+
+.sidebar-divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 12px 0;
+}
+
+/* Profile Dropdown Styles */
+.dropdown-overlay {
+    display: inline-block;
+    position: relative;
+    /* max-width: fit-content; */
+}
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 160px;
+    /* right: 16px; */
+    background-color: #34495e;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    /* margin-top: 4px; */
+}
+
+.profile-dropdown.show {
+    opacity: 1;
+    transform: translateY(0);
+    transform: translateX(-20px);
+    width: 165px;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: #ecf0f1;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+    border-radius: 6px;
+    /* margin: 4px; */
+    /* padding-left: 1rem;
+    padding-right: 1rem; */
+
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-item.logout {
+    color: #e74c3c;
+}
+
+.dropdown-item.logout:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.dropdown-item svg {
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 800;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+        z-index: 950;
+    }
+    
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .sidebar-item {
+        padding: 14px 16px;
+    }
+    
+    .item-text {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 280px;
+    }
+    
+    .new-order-btn {
+        padding: 14px 16px;
+        font-size: 1rem;
+    }
+}

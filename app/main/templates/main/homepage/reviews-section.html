@@ -1,0 +1,73 @@
+<div class="reviews-container">
+  <h2 class="reviews-title">Reviews</h2>
+
+  <div class="reviews-slider">
+    {% for testimonial in testimonials %}
+    <div class="review-card">
+      <div class="rating">
+        {% for i in range(5) %}
+          {% if i < testimonial.rating %}
+            <span class="fas star fa-star"></span>
+          {% else %}
+            <span class="far star fa-star"></span>
+          {% endif %}
+        {% endfor %}
+        <!-- <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>-->
+      </div> 
+      <p class="review-text">
+        <!-- "Perfect for checking marketing materials. Keeps our brand content
+        fresh, original, and protected against plagiarism claims." -->
+        {{testimonial.content}}
+      </p>
+      <div class="reviewer-info">
+        <div class="avatar">
+          <span class="initials">{{ testimonial.author.first_name[0] | upper }}{{ testimonial.author.last_name[0] | upper }}</span>
+        </div>
+        <div class="reviewer-details">
+          <h4 class="reviewer-name">{{ testimonial.author.username }}</h4>
+          <p class="reviewer-title">{{ testimonial.service.name }}</p>
+        </div>
+      </div>      
+    </div>
+    {% endfor %}
+
+    
+  </div> 
+
+  <div class="reviews-navigation">
+    <button class="nav-arrow prev-arrow">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <button class="nav-arrow next-arrow">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+</div>

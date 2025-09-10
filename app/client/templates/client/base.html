@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf_token" content="{{ csrf_token() }}" id="csrfTokenMeta">
+    <title>{% block title %}{% endblock %} &nbsp;|&nbsp; TunedEssays </title>
+    <link rel="shortcut icon" href="{{ url_for('client.static', filename='client/assets/Logo.svg') }}" />
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/main.css')}}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/navbar.css')}}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/sidebar.css')}}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/chats/chat.css')}}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/notification/panel.css')}}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/notification/modal.css')}}">
+    <!-- <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/mobile_menu.css')}}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/responsive.css')}}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/screen_reader.css')}}"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Leckerli+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <div class="layout-container">
+        {% include 'client/partials/navbar.html' %}
+        {% include 'client/partials/sidebar.html' %}
+        
+        <main class="main-content">
+            {% block content %}
+            <div class="content-placeholder">
+                <h1>Welcome to TunedEssays</h1>
+                <p>Content will be loaded here...</p>
+            </div>
+            {% endblock %}
+        </main>
+    </div>
+
+    {% include 'client/chat/chat.html' %}
+    {% include 'client/notifications/notifications_modal.html' %}
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script>
+        const API_BASE_URL = "http://api.tunedessays.com:5000"
+        const currentUserId = {{ current_user.id if current_user.is_authenticated else 'null' }};
+        const isAdmin = {{ 'true' if current_user.is_authenticated and current_user.is_admin else 'false' }};
+    </script>
+    <script type="text/javascript" src="{{ url_for('client.static', filename='client/js/main.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('client.static', filename='client/js/socket/socket_client.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('client.static', filename='client/js/chats/chat.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('client.static', filename='client/js/notifications/notificationManager.js') }}"></script>
+    <!-- <script rel="stylesheet" src="{{ url_for('client.static', filename='client/js/responsive.js') }}"></script> -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

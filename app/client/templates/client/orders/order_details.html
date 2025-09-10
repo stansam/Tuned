@@ -1,0 +1,202 @@
+{% extends 'client/base.html' %}
+
+{% block title %}Order Details{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details.css') }}">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details/details_tab.css') }}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details/activity_tab.css') }}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details/activity-tab/order-chat-form.css') }}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details/file_highlight_modal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details/delivery-tab.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('client.static', filename='client/js/orders/order_details.js') }}"></script>
+    <script src="{{ url_for('client.static', filename='client/js/orders/activity_tab.js') }}"></script>
+    <script src="{{ url_for('client.static', filename='client/js/orders/activity-tab/orderChatForm.js') }}"></script>
+    <script src="{{ url_for('client.static', filename='client/js/orders/external.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+<!-- <div class="order-details-container"> -->
+    <!-- Main Order Content -->
+    <div class="order-main-content no-cursor">
+        <!-- Static Order Header -->
+        <div class="order-title-section">
+            <div class="order-number-display">
+                <button type="button" onclick="goBack()" class="back-icon-display"> </button>
+                <strong>{{ order.order_number }}</strong>
+                <!-- <button style="background: none; border: none; margin-left: 0.5rem; cursor: pointer; color: #666;">📋</button> -->
+            </div>
+        </div>
+        <div class="order-header">
+
+            
+            <div class="order-title"> {{ order.title }}</div>
+            
+
+            <div class="order-meta-info">
+                <div class="meta-item">
+                    <span class="order-status-badge {{ order.status_color }}">{{ order.status.title() }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">{{ order.page_count|int }} Pages</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">{{ order.service.name }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">{{order.deadline.name}}</span>
+                </div>
+
+                <div class="countdown-timer">
+                    <div class="time-left-label">Time Left</div><br>
+                    <div class="countdown-display" id="countdown" data-deadline="{{ order.due_date.isoformat() }}">
+                        <div class="time-unit">
+                            <span class="time-value" id="days">01</span>
+                            <span class="time-label">Days</span>
+                        </div>
+                        <div class="time-unit">
+                            <span class="time-value" id="hours">24</span>
+                            <span class="time-label">Hours</span>
+                        </div>
+                        <div class="time-unit">
+                            <span class="time-value" id="minutes">59</span>
+                            <span class="time-label">Minutes</span>
+                        </div>
+                        <div class="time-unit">
+                            <span class="time-value" id="seconds">43</span>
+                            <span class="time-label">Seconds</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="order-details-content">
+        <div class="order-details-main">
+            <div class="tab-navigation">
+                <button class="tab-btn active" onclick="switchTab(event, 'details')">Details</button>
+                <button class="tab-btn" onclick="switchTab(event, 'activity')">Activity</button>
+                <button class="tab-btn" onclick="switchTab(event, 'delivery')">Delivery</button>
+            </div>
+
+            <div class="tab-content-area">
+                <div id="details" class="tab-content active">
+                    <!-- Details content to be included  -->
+                    {% include 'client/orders/order-details/details_tab.html' %}
+                </div>
+
+                <div id="activity" class="tab-content">
+                    
+                    {% include 'client/orders/order-details/activity_tab.html' %}
+
+                </div>
+
+                <div id="delivery" class="tab-content">
+                    <!-- Delivery content to be included  -->
+                    {% include 'client/orders/order-details/delivery_tab.html' %}
+                    
+                </div>
+            </div>
+        </div>
+    
+
+        <div class="order-details-sidebar">
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-section-title">
+                    <i class="fas fa-solid fa-circle-info"></i> Order Details
+                </h3>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-info-label">Service:</span>
+                    <span class="sidebar-info-value">{{ order.service.name }}</span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-info-label">Status:</span>
+                    <span class="sidebar-info-value">
+                        <span class="order-status-badge {{ order.status_color }}">{{ order.status.title() }}</span>
+                    </span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-info-label">Date Ordered:</span>
+                    <span class="sidebar-info-value">{{ order.created_at.strftime('%b %d, %Y, %I:%M %p') }}</span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-info-label">Ordered by:</span>
+                    <span class="sidebar-info-value">{{ order.client.username }}</span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-info-label">Total Price:</span>
+                    <span class="sidebar-info-value">${{ "%.2f"|format(order.total_price) }}</span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-info-label">Order Number:</span>
+                    <span class="sidebar-info-value">{{ order.order_number }}</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-section-title">Track Order</h3>
+                <ul class="progress-tracker">
+                    <li class="progress-step completed">
+                        <div class="progress-icon">✓</div>
+                        <span class="progress-text">Order Placed</span>
+                    </li>
+                    <li class="progress-step completed">
+                        <div class="progress-icon">✓</div>
+                        <span class="progress-text">Requirements Submitted</span>
+                    </li>
+                    <li class="progress-step {% if order.status in ['active', 'completed pending review', 'completed'] %}current{% endif %}">
+                        <div class="progress-icon">
+                            {% if order.status in ['active', 'completed pending review', 'completed'] %}⚡{% else %}○{% endif %}
+                        </div>
+                        <span class="progress-text">Order In Progress</span>
+                    </li>
+                    <li class="progress-step {% if order.status == 'completed pending review' %}current{% elif order.status == 'completed' %}completed{% endif %}">
+                        <div class="progress-icon">
+                            {% if order.status == 'completed' %}✓{% elif order.status == 'completed pending review' %}⚡{% else %}○{% endif %}
+                        </div>
+                        <span class="progress-text">Review Completed Order</span>
+                    </li>
+                    <li class="progress-step {% if order.status == 'completed' %}completed{% endif %}">
+                        <div class="progress-icon">
+                            {% if order.status == 'completed' %}✓{% else %}○{% endif %}
+                        </div>
+                        <span class="progress-text">Complete Order</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="order-details-action-sidebar">
+                <div class="sidebar-title">
+                    <i class="fas fa-tools"></i>
+                    Quick Actions
+                </div>
+                <div class="sidebar-actions-section">
+                    {% if not order.paid %}
+                    <button class="create-order-btn" onclick="payNow({{ order.id }})">
+                        <i class="fas fa-credit-card"></i> Pay Now
+                    </button>
+                    {% endif %}
+                    <button class="create-order-btn" onclick="downloadFiles({{ order.id }})">
+                        <i class="fas fa-download"></i> Download Files
+                    </button>
+                    <button class="create-order-btn" onclick="contactSupport()">
+                        <i class="fas fa-headset"></i> Contact Support
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+            
+        <!-- </div> -->
+    </div>
+{% endblock %}
+

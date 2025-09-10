@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Your Order</title>
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/create_order/create_order.css')}}">
+</head>
+<body>
+    
+
+    <div class="header">
+        <h1>Place Your Order</h1>
+        <p>Get professional writing and assistance tailored to your needs</p>
+    </div>
+
+    <div class="container">
+        <div class="navigation">
+            <button class="nav-btn" onclick="goBack()">← Back</button>
+            <button class="nav-btn active" onclick="showOrderDetails()">✓ Order details</button>
+        </div>
+
+        
+        <form id="orderForm">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 33%"></div>
+            </div>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" id="csrfToken">
+            <!-- Step 1: Service Details -->
+            <div class="step active" id="step1">
+                <div class="step-header">
+                    <h2>SERVICE DETAILS</h2>
+                </div>
+                <div class="input-container">
+                <div class="form-group">
+                    <label for="service">Type of Service</label>
+                    <select id="service" name="service" required>
+                        <option value="">Select Service</option>
+                        {% for service in services %}
+                        <option value="{{service.id}}">{{service.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="ssl-overlay">
+                    <div class="ssl-badge" style="pointer-events: none;">
+                        <img src="{{url_for('client.static', filename='client/assets/Encrypted_Connection.svg')}}" alt="secure encryption" style="pointer-events: none;">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="academic_level">Project Level</label>
+                    <select id="academic_level" name="academic_level" required>
+                        <option value="">Select Level</option>
+                        {% for level in academic_levels %}
+                        <option value="{{level.id}}">{{level.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="deadline">Deadline</label>
+                    <div class="datetime-group">
+                        <!-- <div class="datetime-overlay"> -->
+                        <input type="date" id="due_date" name="due_date" required>
+                        <input type="time" id="due_time" name="due_time" value="12:00" required>
+                        <input type="hidden" id="deadline_hours" name="deadline">
+                    <!-- </div> -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Report Type</label>
+                    <div class="toggle-group">
+                        <button type="button" class="toggle-btn" id="turnitinReport">Turnitin +$9.99</button>
+                        <div class="report-desc">Turnitin report without database storage + AI check</div>
+                        <button type="button" class="toggle-btn" id="standardReport">Standard +$4.99</button>
+                        <div class="report-desc">Plagiarism report without database storage</div>                    
+                    </div>
+                    <input type="hidden" value="" name="report_type" id="report_type">
+                </div>
+                </div>
+
+                <div class="step-actions">
+                    <span></span>
+                    <button type="button" class="btn btn-next" onclick="nextStep()">Go to Paper Details</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Paper Details -->
+            <div class="step" id="step2">
+                <div class="step-header">
+                    <h2>PAPER DETAILS</h2>
+                </div>
+                <div class="input-container">
+                <div class="form-group">
+                    <label for="title">Paper Title</label>
+                    <input type="text" id="title" name="title" placeholder="Enter paper title" required>
+                </div>
+                
+                <div class="form-grid-section">
+                    <div class="form-group-block">
+                        <label for="word_count">Word Count</label>
+                        <div class="word-count-group">
+                        <input type="number" id="word_count" name="word_count" placeholder="275" min="1" required>
+                        <span>Pages: <span id="pageCount">1</span></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group-block">
+                        <label>Line Spacing</label>
+                        <div class="toggle-group">
+                        <button type="button" class="toggle-btn" id="singleSpacing">Single</button>
+                        <button type="button" class="toggle-btn active" id="doubleSpacing">Double</button>
+                        </div>
+                        <input type="hidden" value="" name="line_spacing" value="double" id="line_spacing">
+                    </div>
+
+                    <div class="form-group-block">
+                        <label for="citation_style">Formatting & Citation Style</label>
+                        <select id="citation_style" name="citation_style">
+                        <option value="APA" selected>APA</option>
+                        <option value="MLA">MLA</option>
+                        <option value="Chicago">Chicago</option>
+                        <option value="Harvard">Harvard</option>
+                        <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group-block">
+                        <label for="sources">Sources</label>
+                        <div class="counter-group">
+                        <button type="button" class="counter-btn" id="decreaseSources">-</button>
+                        <span class="counter-display" id="sourcesCount">2</span>
+                        <button type="button" class="counter-btn" id="increaseSources">+</button>
+                        </div>
+                        <input type="hidden" value="2" id="sources" name="sources">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Instructions & Requirements</label>
+                    <textarea id="description" name="description" rows="4" placeholder="Provide detailed instructions and requirements for your paper..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Files</label>
+                    <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                        <div class="file-upload-icon"><img src="{{url_for('client.static', filename='client/assets/cloud-upload-alt-solid.svg')}}"></div>
+                        <div>Click to upload files or drag and drop</div>
+                        <input type="file" id="fileInput" name="files" multiple accept=".pdf,.doc,.docx,.txt,.ppt,.pptx,.jpg,.jpeg,.png" style="display: none;" >
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="submitLater" name="submit_later">
+                    <label for="submitLater">I will submit files later</label>
+                </div>
+                </div>
+
+                <div class="step-actions">
+                    <button type="button" class="btn btn-back" onclick="prevStep()">← Back to Service Details</button>
+                    <button type="button" class="btn btn-next" onclick="nextStep()">Go to Review and Checkout</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Review and Checkout -->
+            <div class="step" id="step3">
+                <div class="step-header">
+                    <h2>Review and Checkout</h2>
+                </div>
+
+                <div class="order-summary">
+                    <div class="summary-section">
+                        <h3>Order Summary</h3>
+                        <div class="summary-row">
+                            <span class="summary-label">Service Type:</span>
+                            <span class="summary-value" id="summaryService">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Pages:</span>
+                            <span class="summary-value" id="summaryPages">1</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Deadline:</span>
+                            <span class="summary-value" id="summaryDeadline">-</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-section">
+                        <h3>Key Details</h3>
+                        <div class="summary-row">
+                            <span class="summary-label">Service:</span>
+                            <span class="summary-value" id="summaryServiceType">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Project Level:</span>
+                            <span class="summary-value" id="summaryLevel">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Deadline:</span>
+                            <span class="summary-value" id="summaryDeadlineDetail">-</span>
+                        </div>
+                        <div class="summary-row instructions-row">
+                            <span class="summary-label">Instructions:</span>
+                            <span class="summary-value" id="summaryInstructions">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Paper Count:</span>
+                            <span class="summary-value" id="summaryPaperCount">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Line Spacing:</span>
+                            <span class="summary-value" id="summarySpacing">-</span>
+                        </div>
+                        
+                        <div class="summary-row">
+                            <span class="summary-label">Formatting and Citation Style:</span>
+                            <span class="summary-value" id="summaryCitation">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Number of Sources:</span>
+                            <span class="summary-value" id="summarySources">-</span>
+                        </div>
+                    </div>
+                    <div class="summary-section">
+                        <h3> Service Extras</h3>
+                        <div class="summary-row">
+                            <span class="summary-label">Report Type </span>
+                            <span class="summary-value" id="summaryReportType">-</span>
+                        </div>
+                    </div>
+
+                    <div class="service-extras">
+                        <h4>Service Extras</h4>
+                        
+                        <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                            Included at no additional cost as part of standard service:<br>
+                            • Free <span class="plagiarism-badge">Unlimited Revisions</span><br>
+                            
+                        </div>
+                    </div>
+
+                    <div class="summary-section">
+                        <div class="summary-row">
+                            <span class="summary-label">Price Per Page:</span>
+                            <span class="summary-value price-loading" id="summaryPricePerPage">Calculating...</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Report Price:</span>
+                            <span class="summary-value price-loading" id="summaryReportPrice">Calculating...</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span class="summary-label">Total Price:</span>
+                            <span class="summary-value price-loading" id="summaryTotal">Calculating...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button type="button" class="btn btn-back" onclick="prevStep()">← Back to Paper Details</button>
+                    <button type="button" class="btn btn-submit" onclick="submitOrder()">Secure Checkout</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('client.static', filename='client/js/orders/create_order.js') }}"></script>
+</body>
+</html>

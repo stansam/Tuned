@@ -1,0 +1,168 @@
+.delivery-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.delivery-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.delivery-icon {
+    width: 40px;
+    height: 40px;
+    background: #27ae60;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+}
+
+.delivery-title {
+    font-weight: bold;
+    color: #333;
+}
+
+.delivery-info {
+    margin-bottom: 1rem;
+}
+
+.delivery-topic {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.delivery-description {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.delivery-message {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.delivery-message-icon {
+    color: #856404;
+    margin-right: 0.5rem;
+}
+
+.attachments-section {
+    margin-top: 1rem;
+}
+
+.attachments-title {
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    color: #333;
+}
+
+.attachment-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    border: 1px solid #e9ecef;
+}
+
+.attachment-icon {
+    width: 32px;
+    height: 32px;
+    background: #dc3545;
+    color: white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    font-size: 0.8rem;
+}
+
+.attachment-icon.docx {
+    background: #2b579a;
+}
+
+.attachment-icon.zip {
+    background: #6c757d;
+}
+
+.attachment-name {
+    flex: 1;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.preview-section {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.preview-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.delivery-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-approve {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.btn-approve:hover {
+    background: #218838;
+}
+
+.btn-revision {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.btn-revision:hover {
+    background: #c82333;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 24px;
+    color: #6b7280;
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: #d1d5db;
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 14px;
+}

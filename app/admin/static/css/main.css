@@ -1,0 +1,61 @@
+:root {
+    --primary: #4caf50;
+    --primary-light: #81c784;
+    --primary-dark: #388e3c;
+    --primary-subtle: rgba(76, 175, 80, 0.1);
+    --secondary: #2196f3;
+    --success: #4caf50;
+    --info: #00bcd4;
+    --warning: #ffc107;
+    --danger: #f44336;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
+    --gray-light: #e9ecef;
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 70px;
+    --top-nav-height: 60px;
+}
+
+body {
+    font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+    background-color: #f5f7fa;
+}
+
+.no-cursor {
+    caret-color: transparent;
+}
+
+.admin-dashboard-page {
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+.admin-wrapper {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+.main-content {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    transition: all 0.3s ease;
+}
+
+.main-content.expanded {
+    margin-left: var(--sidebar-collapsed-width);
+    width: calc(100% - var(--sidebar-collapsed-width));
+}
+
+.toast {
+    background-color: white;
+    border: none;
+}
+
+@media (max-width: 991.98px) {
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+}
