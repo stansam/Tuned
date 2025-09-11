@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash, current_app, jsonify
 from app.client.routes.orders.utils import validate_uploaded_files
-from app.services.triggers.triggers import *
+from app.services.triggers.triggers import handle_new_order_creation
 from flask_login import login_required, current_user
 from app.models.order import Order, OrderFile
 from app.models.service import Service, AcademicLevel, Deadline

@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Submit request
         fetch(`${API_BASE_URL}/admin/request-deadline-extension`, {
             method: 'POST',
-            credentials: include,
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest',
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to check extension status
     function checkExtensionStatus(orderId, callback) {
-        fetch(`${API_BASE_URL}/admin/get-extension-status/${orderId}`, {credentials:include})
+        fetch(`${API_BASE_URL}/admin/get-extension-status/${orderId}`, {credentials:'include'})
             .then(response => response.json())
             .then(result => {
                 if (result.success) {

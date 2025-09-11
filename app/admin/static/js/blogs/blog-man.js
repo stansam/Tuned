@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Submit to backend
         fetch(`${API_BASE_URL}/admin/blog/categories/create`, {
             method: 'POST',
-            credentials: include,
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCSRFToken()

@@ -159,8 +159,7 @@ input, select, textarea {
 }
 
 .form-group select,
-.form-group input,
-.form-group textarea {
+.form-group input {
     width: 50%;
     /* height: 40px; */
     padding: 12px;
@@ -169,7 +168,22 @@ input, select, textarea {
     font-size: 14px;
     background: white;
 }
-
+.form-group #title {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;
+}
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;   
+}
 .form-group select:focus,
 .form-group input:focus,
 .form-group textarea:focus {

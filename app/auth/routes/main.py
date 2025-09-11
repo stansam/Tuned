@@ -29,8 +29,8 @@ def login():
         # Find user
         user = User.query.filter(
             or_(
-                User.username == username,
-                User.email == username
+                User.username.ilike(username),
+                User.email.ilike(username)
             )
         ).first()
 
@@ -81,78 +81,6 @@ def login():
             return redirect(url_for('auth.login'))
         
     return render_template('auth/login.html')
-
-# @auth_bp.route('/register', methods=['GET', 'POST'])
-# def register():
-#     if current_user.is_authenticated:
-#         return redirect(url_for('main.home'))
-
-#     if request.method == 'POST':
-#         username = request.form.get('username')
-#         email = request.form.get('email')
-#         password = request.form.get('password')
-#         confirm_password = request.form.get('confirm_password')
-#         gender = (request.form.get("gender") or "").strip().lower()
-#         fullname = request.form.get('fullname', '')
-#         phone = request.form.get('phone', '').strip()
-
-#         first_name, last_name = '', ''
-
-#         if fullname:
-#             parts = fullname.split()
-#             if len(parts) > 1:
-#                 first_name = parts[0]
-#                 last_name = " ".join(parts[1:])
-#             else:
-#                 first_name = fullname
-
-
-#         # Validate input
-#         if not username or not email or not password or not confirm_password or not gender:
-#             flash('Please fill in all required fields.', 'danger')
-#             return redirect(url_for('auth.register'))
-
-#         if password != confirm_password:
-#             flash('Passwords do not match.', 'danger')
-#             return redirect(url_for('auth.register'))
-
-#         if gender in ["male", "m"]:
-#             gender = "male"
-#         elif gender in ["female", "f"]:
-#             gender = "female"
-#         else:
-#             flash("Invalid gender selected.", "error")
-#             return redirect(url_for("auth.register"))
-        
-
-#         # Check if username or email already exists
-#         username_exists = User.query.filter_by(username=username).first()
-#         email_exists = User.query.filter_by(email=email).first()
-
-#         if username_exists:
-#             flash('Username is already taken.', 'danger')
-#             return redirect(url_for('auth.register'))
-
-#         if email_exists:
-#             flash('Email is already registered.', 'danger')
-#             return redirect(url_for('auth.register'))
-
-#         # Create new user
-#         new_user = User(username=username, email=email, first_name=first_name, last_name=last_name, gender=gender, phone_number=phone)
-#         new_user.set_password(password)
-
-#         db.session.add(new_user)
-#         db.session.commit()
-
-#         # Send verification email
-#         send_verification_email(new_user)
-#         send_welcome_email(new_user)
-#         handle_user_registration(new_user.id)
-
-#         flash('Registration successful! Please check your email to verify your account.', 'success')
-#         return redirect(url_for('auth.login'))
-
-#     return render_template('auth/register.html', title="Register")
 
 @auth_bp.route('/logout')
 @login_required

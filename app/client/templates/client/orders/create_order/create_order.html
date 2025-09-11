@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('client.static', filename='client/assets/Logo.svg') }}" />
     <title>Place Your Order</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/create_order/create_order.css')}}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/create_order/extensions.css')}}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/toast.css')}}">
 </head>
 <body>
     
@@ -21,7 +26,7 @@
         </div>
 
         
-        <form id="orderForm">
+        <form id="orderForm" action="{{url_for('client.create_order')}}">
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill" style="width: 33%"></div>
             </div>
@@ -36,9 +41,9 @@
                     <label for="service">Type of Service</label>
                     <select id="service" name="service" required>
                         <option value="">Select Service</option>
-                        {% for service in services %}
-                        <option value="{{service.id}}">{{service.name}}</option>
-                        {% endfor %}
+                        {#{% for service in services %}#}
+                        <!-- <option value="{#{{service.id}}#}">{#{{service.name}}#}</option> -->
+                        {#{% endfor %}#}
                     </select>
                 </div>
 
@@ -52,9 +57,9 @@
                     <label for="academic_level">Project Level</label>
                     <select id="academic_level" name="academic_level" required>
                         <option value="">Select Level</option>
-                        {% for level in academic_levels %}
-                        <option value="{{level.id}}">{{level.name}}</option>
-                        {% endfor %}
+                        {#{% for level in academic_levels %}#}
+                        <!-- <option value="{#{{level.id}}#}">{#{{level.name}}#}</option> -->
+                        {#{% endfor %}#}
                     </select>
                 </div>
 
@@ -62,8 +67,8 @@
                     <label for="deadline">Deadline</label>
                     <div class="datetime-group">
                         <!-- <div class="datetime-overlay"> -->
-                        <input type="date" id="due_date" name="due_date" required>
-                        <input type="time" id="due_time" name="due_time" value="12:00" required>
+                        <input type="text" id="due_date" name="due_date" placeholder="Select date" required readonly>
+                        <input type="text" id="due_time" name="due_time" placeholder="Select time" value="12:00" required readonly>
                         <input type="hidden" id="deadline_hours" name="deadline">
                     <!-- </div> -->
                     </div>
@@ -263,7 +268,52 @@
             </div>
         </form>
     </div>
+    <script>
+        const API_BASE_URL = "http://api.tunedessays.com:5000"
+        window.TEMPLATE_VARS = {
+            selected_service: {{ selected_service|tojson if selected_service else 'null' }},
+            selected_academic_level: {{ selected_academic_level|tojson if selected_academic_level else 'null' }},
+            hoursUntilDeadline: {{ hoursUntilDeadline|tojson if hoursUntilDeadline else 'null' }},
+            word_count: {{ word_count|tojson if word_count else 'null' }},
+            pages: {{ pages|tojson if pages else 'null' }},
+            due_date: {{ due_date|tojson if due_date else 'null' }}
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script type="text/javascript" src="{{ url_for('client.static', filename='client/js/orders/create-order/extensions.js') }}"></script>
 
-    <script type="text/javascript" src="{{ url_for('client.static', filename='client/js/orders/create_order.js') }}"></script>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const toastContainer = document.querySelector('.toast-container');
+                {% for category, message in messages %}
+                    const toast = document.createElement('div');
+                    toast.className = 'toast show';
+                    toast.setAttribute('role', 'alert');
+                    toast.setAttribute('aria-live', 'assertive');
+                    toast.setAttribute('aria-atomic', 'true');
+
+                    toast.innerHTML = `
+                        <div class="toast-header">
+                            <strong class="me-auto">Notification</strong>
+                            <small>Just now</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body bg-{{ category if category != 'message' else 'info' }} text-white">
+                            {{ message }}
+                        </div>
+                    `;
+
+                    toastContainer.appendChild(toast);
+
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 5000);
+                {% endfor %}
+            });
+        </script>
+        {% endif %} {% endwith %} {% block scripts %}{% endblock %}
+
 </body>
 </html>

@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from app.extensions import db
 from app.models import User, GenderEnum
 from app.utils.emails import send_verification_email  
+from app.services.triggers.triggers import handle_user_registration
 from app.utils.referrals import generate_referral_code
 from app.auth import auth_bp as reg_bp  
 
@@ -58,9 +59,11 @@ def register():
             # Send verification email
             if not _send_verification_email(user):
                 flash('Account created but verification email failed to send. Please contact support.', 'warning')
-                       
+
+
+            handle_user_registration(user)
+
             flash('Registration successful! Please check your email to verify your account.', 'success')
-            
             if request.is_json:
                 return jsonify({
                     'success': True, 

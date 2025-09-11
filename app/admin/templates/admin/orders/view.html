@@ -1180,7 +1180,7 @@
                         {% endif %}
                         {% if order.status in ['active', 'completed pending review', 'revision', 'overdue'] %}
                         {% if chat %}
-                        <a href="{{url_for('admin.view_chat', chat_id=chat.id)}}" class="btn btn-dark order-action-btn">
+                        <a href="{#{{url_for('admin.view_chat', chat_id=chat.id)}}#}" class="btn btn-dark order-action-btn">
                                 <i class="fas fa-comment me-2"></i> Go to Chat
                         </a>
                         {% endif %}
@@ -1740,8 +1740,8 @@
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script> -->
-<script src="{{url_for('static', filename='js/orders/extension.js')}}"></script>
-<script src="{{url_for('static', filename='js/orders/upload-file.js')}}"></script>
+<script src="{{url_for('admin.static', filename='js/orders/extension.js')}}"></script>
+<script src="{{url_for('admin.static', filename='js/orders/upload-file.js')}}"></script>
 <script>
     const dueDate = new Date('{{ order.due_date.isoformat() }}');
     // Initialize flatpickr

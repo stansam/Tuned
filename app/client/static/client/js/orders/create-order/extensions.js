@@ -2,11 +2,248 @@ let currentStep = 1;
 const totalSteps = 3;
 let currentPriceData = null;
 
+// Initialize instances
+let serviceChoices = null;
+let academicLevelChoices = null;
+let datePicker = null;
+let timePicker = null;
+
 // Initialize form
 document.addEventListener('DOMContentLoaded', function() {
+    initializeCustomSelects();
+    initializeDateTimePickers();
+    initializeTemplateVariables();
     updateProgressBar();
     setupEventListeners();
 });
+
+async function initializeCustomSelects() {
+    try {
+        // Initialize service select with categories
+        await initializeServiceSelect();
+        
+        // Initialize academic level select
+        await initializeAcademicLevelSelect();
+        
+    } catch (error) {
+        console.error('Error initializing custom selects:', error);
+        // Fallback to default selects if API fails
+        initializeFallbackSelects();
+    }
+}
+
+async function initializeServiceSelect() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/client/new-order/services-with-categories`, {
+            credentials: 'include',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        
+        if (!response.ok) throw new Error('Failed to fetch services');
+        
+        const categories = await response.json();
+        const serviceSelect = document.getElementById('service');
+        
+        // Clear existing options
+        serviceSelect.innerHTML = '';
+        
+        // Populate with grouped options
+        categories.forEach(category => {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = category.name;
+            
+            category.services.forEach(service => {
+                const option = document.createElement('option');
+                option.value = service.id;
+                option.textContent = service.name;
+                optgroup.appendChild(option);
+            });
+            
+            serviceSelect.appendChild(optgroup);
+        });
+        
+        // Initialize Choices.js
+        serviceChoices = new Choices(serviceSelect, {
+            searchEnabled: true,
+            itemSelectText: '',
+            noChoicesText: 'No services available',
+            noResultsText: 'No services found',
+            placeholder: true,
+            placeholderValue: 'Select Service',
+            classNames: {
+                containerInner: 'choices__inner--service'
+            }
+        });
+        
+    } catch (error) {
+        console.error('Error initializing service select:', error);
+        throw error;
+    }
+}
+
+async function initializeAcademicLevelSelect() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/client/new-order/project-level`, {
+            credentials: 'include',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        
+        if (!response.ok) throw new Error('Failed to fetch academic levels');
+        
+        const levels = await response.json();
+        const levelSelect = document.getElementById('academic_level');
+        
+        // Clear existing options
+        levelSelect.innerHTML = '';
+        
+        // Populate options
+        levels.forEach(level => {
+            const option = document.createElement('option');
+            option.value = level.id;
+            option.textContent = level.name;
+            levelSelect.appendChild(option);
+        });
+        
+        // Initialize Choices.js
+        academicLevelChoices = new Choices(levelSelect, {
+            searchEnabled: false,
+            itemSelectText: '',
+            noChoicesText: 'No levels available',
+            placeholder: true,
+            placeholderValue: 'Select Level',
+            classNames: {
+                containerInner: 'choices__inner--level'
+            }
+        });
+        
+    } catch (error) {
+        console.error('Error initializing academic level select:', error);
+        throw error;
+    }
+}
+
+function initializeFallbackSelects() {
+    console.warn('Using fallback initialization for selects');
+    // Keep existing HTML structure as fallback
+}
+
+function initializeDateTimePickers() {
+    // Date picker
+    datePicker = flatpickr("#due_date", {
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "j M, Y",
+        minDate: "today",
+        maxDate: new Date().fp_incr(30),
+        defaultDate: new Date(),
+        locale: {
+            firstDayOfWeek: 1 
+        },
+        onChange: function(selectedDates, dateStr, instance) {
+            adjustTimeMin(selectedDates[0]);
+            updateDeadlineHours();
+            if (currentStep === 3) {
+                calculateAndUpdatePrice();
+            }
+        }
+    });
+    
+    // Time picker
+    const minTimeObj = new Date(Date.now() + 3 * 60 * 60 * 1000);
+    timePicker = flatpickr("#due_time", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: false,
+        defaultDate: minTimeObj,
+        minTime: minTimeObj.toTimeString().slice(0,5),
+        onChange: function(selectedDates, timeStr, instance) {
+            updateDeadlineHours();
+            if (currentStep === 3) {
+                calculateAndUpdatePrice();
+            }
+        }
+    });
+}
+
+function adjustTimeMin(selectedDate) {
+    const now = new Date();
+    const minTimeObj = new Date(Date.now() + 3 * 60 * 60 * 1000);
+    const minTimeStr = minTimeObj.toTimeString().slice(0,5);
+
+    const isToday = selectedDate.toDateString() === now.toDateString();
+
+    if (isToday) {
+        timePicker.set("minTime", minTimeStr);
+
+        const currentTime = timePicker.selectedDates[0];
+        if (!currentTime || currentTime < minTimeObj) {
+            timePicker.setDate(minTimeObj, true);
+        }
+    } else {
+        timePicker.set("minTime", "00:00");
+    }
+}
+
+function initializeTemplateVariables() {
+    // Check if template variables exist
+    if (typeof window.TEMPLATE_VARS === 'undefined') {
+        console.log('No template variables found');
+        return;
+    }
+    
+    const vars = window.TEMPLATE_VARS;
+    
+    // Set service if provided
+    if (vars.selected_service && serviceChoices) {
+        setTimeout(() => {
+            serviceChoices.setChoiceByValue(vars.selected_service.id.toString());
+        }, 100); // Small delay to ensure Choices.js is ready
+    }
+    
+    // Set academic level if provided
+    if (vars.selected_academic_level && academicLevelChoices) {
+        setTimeout(() => {
+            academicLevelChoices.setChoiceByValue(vars.selected_academic_level.id.toString());
+        }, 100);
+    }
+    
+    // Set word count if provided
+    if (vars.word_count) {
+        const wordCountField = document.getElementById('word_count');
+        if (wordCountField) {
+            wordCountField.value = vars.word_count;
+            // Trigger input event to update page count
+            wordCountField.dispatchEvent(new Event('input'));
+        }
+    }
+    
+    // Set due date if provided
+    if (vars.due_date && datePicker) {
+        try {
+            const date = new Date(vars.due_date);
+            if (!isNaN(date.getTime())) {
+                datePicker.setDate(date);
+            }
+        } catch (error) {
+            console.warn('Invalid due_date format:', vars.due_date);
+        }
+    }
+    
+    // Set deadline hours if provided
+    if (vars.hoursUntilDeadline) {
+        const deadlineField = document.getElementById('deadline_hours');
+        if (deadlineField) {
+            deadlineField.value = vars.hoursUntilDeadline;
+        }
+    }
+    
+    console.log('Template variables initialized:', vars);
+}
 
 function setupEventListeners() {
     // Word count to page count calculation
@@ -21,11 +258,7 @@ function setupEventListeners() {
         }
     });
 
-    // Date/time change listeners for deadline calculation
-    document.getElementById('due_date').addEventListener('change', updateDeadlineHours);
-    document.getElementById('due_time').addEventListener('change', updateDeadlineHours);
-
-    // Report Type  toggle
+    // Report Type toggle
     const turnitinReportBtn = document.getElementById('turnitinReport');
     const standardReportBtn = document.getElementById('standardReport');
     const reportHiddenInput = document.getElementById('report_type');
@@ -41,9 +274,6 @@ function setupEventListeners() {
             standardReportBtn.classList.remove('active');
             reportHiddenInput.value = 'turnitin';
         }
-        // turnitinReportBtn.classList.add('active');
-        // standardReportBtn.classList.remove('active');
-        // reportHiddenInput.value = 'turnitin'
     });
 
     standardReportBtn.addEventListener('click', () => {
@@ -57,9 +287,6 @@ function setupEventListeners() {
             turnitinReportBtn.classList.remove('active');
             reportHiddenInput.value = 'standard';
         }
-        // standardReportBtn.classList.add('active');
-        // turnitinReportBtn.classList.remove('active');
-        // reportHiddenInput.value = 'standard'
     });
 
     // Line spacing toggle
@@ -102,6 +329,7 @@ function setupEventListeners() {
     });
 
     // Service and level change listeners for price calculation
+    // These will be triggered by Choices.js change events
     document.getElementById('service').addEventListener('change', function() {
         if (currentStep === 3) {
             calculateAndUpdatePrice();
@@ -129,24 +357,29 @@ function setupEventListeners() {
             const existingDisplay = fileUpload.querySelector('.file-display');
             if (existingDisplay) existingDisplay.remove();
 
-            // Append the new display block
             displayInfo.classList.add('file-display');
             fileUpload.appendChild(displayInfo);
         }
     });
 
+    // Setup drag and drop
+    setupDragAndDrop();
 }
 
 function updateDeadlineHours() {
-    const dateValue = document.getElementById('due_date').value;
-    const timeValue = document.getElementById('due_time').value;
+    const dateInput = document.getElementById('due_date');
+    const timeInput = document.getElementById('due_time');
+    const deadlineField = document.getElementById('deadline_hours');
+    
+    const dateValue = dateInput.value;
+    const timeValue = timeInput.value;
     
     if (dateValue && timeValue) {
         const deadlineDateTime = new Date(`${dateValue}T${timeValue}`);
         const now = new Date();
         const hoursUntilDeadline = (deadlineDateTime - now) / (1000 * 60 * 60);
         
-        document.getElementById('deadline_hours').value = Math.max(0, hoursUntilDeadline);
+        deadlineField.value = Math.max(0, hoursUntilDeadline);
         
         // Recalculate price if we're on the summary step
         if (currentStep === 3) {
@@ -155,6 +388,7 @@ function updateDeadlineHours() {
     }
 }
 
+// Rest of your existing functions remain the same...
 function nextStep() {
     if (validateCurrentStep()) {
         if (currentStep < totalSteps) {
@@ -192,10 +426,26 @@ function validateCurrentStep() {
 
     requiredFields.forEach(field => {
         if (!field.value.trim()) {
-            field.style.borderColor = '#dc3545';
+            // For Choices.js selects, highlight the container instead
+            if (field.classList.contains('choices__input')) {
+                const choicesContainer = field.closest('.choices');
+                if (choicesContainer) {
+                    choicesContainer.classList.add('is-invalid');
+                }
+            } else {
+                field.style.borderColor = '#dc3545';
+            }
             isValid = false;
         } else {
-            field.style.borderColor = '#ddd';
+            // Remove error styling
+            if (field.classList.contains('choices__input')) {
+                const choicesContainer = field.closest('.choices');
+                if (choicesContainer) {
+                    choicesContainer.classList.remove('is-invalid');
+                }
+            } else {
+                field.style.borderColor = '#ddd';
+            }
         }
     });
 
@@ -219,7 +469,7 @@ function validateCurrentStep() {
 }
 
 function updateSummary() {
-    // Get form values
+    // Get form values - accounting for Choices.js
     const service = document.getElementById('service');
     const academicLevel = document.getElementById('academic_level');
     const dueDate = document.getElementById('due_date');
@@ -235,10 +485,19 @@ function updateSummary() {
     // Calculate pages
     const pages = Math.ceil(parseInt(wordCount.value) / 275) || 1;
 
+    // Get text from Choices.js selections
+    const serviceText = serviceChoices ? 
+        serviceChoices.getValue(true) : 
+        (service.options[service.selectedIndex] ? service.options[service.selectedIndex].text : '-');
+        
+    const levelText = academicLevelChoices ? 
+        academicLevelChoices.getValue(true) : 
+        (academicLevel.options[academicLevel.selectedIndex] ? academicLevel.options[academicLevel.selectedIndex].text : '-');
+
     // Update summary display
-    document.getElementById('summaryService').textContent = service.options[service.selectedIndex].text;
-    document.getElementById('summaryServiceType').textContent = service.options[service.selectedIndex].text;
-    document.getElementById('summaryLevel').textContent = academicLevel.options[academicLevel.selectedIndex].text;
+    document.getElementById('summaryService').textContent = serviceText;
+    document.getElementById('summaryServiceType').textContent = serviceText;
+    document.getElementById('summaryLevel').textContent = levelText;
     document.getElementById('summaryPages').textContent = pages;
     document.getElementById('summaryPaperCount').textContent = pages + ' pages';
     document.getElementById('summaryDeadline').textContent = `${dueDate.value} ${dueTime.value}`;
@@ -276,7 +535,7 @@ function calculateAndUpdatePrice() {
         academic_level_id: parseInt(academicLevel.value),
         deadline_data: parseFloat(deadlineHours.value),
         word_count: parseInt(wordCount.value),
-        report_type: reportType.value || '', // Default report type
+        report_type: reportType.value || '',
     };
 
     // Call the pricing API
@@ -347,7 +606,6 @@ function submitOrder() {
     const dueTime = document.getElementById('due_time').value;
     const deadlineHours = document.getElementById('deadline_hours').value;
 
-    
     const formattedDateTime = `${dueDate}, ${dueTime}`;
     
     formData.append('deadline', deadlineHours);
@@ -381,7 +639,8 @@ function submitOrder() {
     submitButton.classList.add('loading');
 
     // Submit the order
-    fetch(`${API_BASE_URL}/orders/new`, {
+    const orderFormUrl = document.getElementById('orderForm').action;
+    fetch(orderFormUrl, {
         method: 'POST',
         credentials: 'include',
         body: formData,
@@ -428,7 +687,6 @@ function submitOrder() {
         submitButton.classList.remove('loading');
     });
 }
-
 
 function goBack() {
     // Navigate back to previous page or home
@@ -484,24 +742,36 @@ function validateStep1() {
 
     if (!service.value) {
         alert('Please select a service type.');
+        if (serviceChoices) {
+            serviceChoices.showDropdown();
+        }
         service.focus();
         return false;
     }
 
     if (!academicLevel.value) {
         alert('Please select a project level.');
+        if (academicLevelChoices) {
+            academicLevelChoices.showDropdown();
+        }
         academicLevel.focus();
         return false;
     }
 
     if (!dueDate.value) {
         alert('Please select a due date.');
+        if (datePicker) {
+            datePicker.open();
+        }
         dueDate.focus();
         return false;
     }
 
     if (!dueTime.value) {
         alert('Please select a due time.');
+        if (timePicker) {
+            timePicker.open();
+        }
         dueTime.focus();
         return false;
     }
@@ -561,6 +831,8 @@ function validateCurrentStep() {
 function setupDragAndDrop() {
     const fileUpload = document.querySelector('.file-upload');
     
+    if (!fileUpload) return;
+    
     fileUpload.addEventListener('dragover', function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -591,7 +863,18 @@ function setupDragAndDrop() {
     });
 }
 
-// Initialize drag and drop when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    setupDragAndDrop();
+// Cleanup function for when page is unloaded
+window.addEventListener('beforeunload', function() {
+    if (serviceChoices) {
+        serviceChoices.destroy();
+    }
+    if (academicLevelChoices) {
+        academicLevelChoices.destroy();
+    }
+    if (datePicker) {
+        datePicker.destroy();
+    }
+    if (timePicker) {
+        timePicker.destroy();
+    }
 });

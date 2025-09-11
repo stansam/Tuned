@@ -36,6 +36,9 @@ def upload_additional_delivery_files(order_id):
             
                 db.session.add(delivery)
                 db.session.flush()
+
+                handle_order_delivery(order_id)
+
             except Exception as e:
                 import logging 
                 db.session.rollback()
@@ -140,11 +143,13 @@ def upload_additional_delivery_files(order_id):
             try:
                 order = Order.query.filter_by(id=order_id).first()
                 if order.status != 'completed pending review':
+                    if order.status == 'revision':
+                        handle_revised_order_delivery(order_id)
                     order.status = 'completed pending review'
                 
                 db.session.commit()
 
-                handle_order_delivery(order.id)
+                
                 
                 # send_order_completed_email(order, order.client)
             except Exception as e:

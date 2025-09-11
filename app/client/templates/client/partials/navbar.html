@@ -7,10 +7,10 @@
     
     
     <div class="navbar-menu">
-        <a href="#" class="nav-link">Services</a>
-        <a href="#" class="nav-link">FAQ</a>
-        <a href="#" class="nav-link">Samples</a>
-        <a href="#" class="nav-link">Blog</a>
+        <a href="{{url_for('main.services')}}" class="nav-link">Services</a>
+        <a href="{{url_for('main.faq')}}" class="nav-link">FAQ</a>
+        <a href="{{url_for('main.samples')}}" class="nav-link">Samples</a>
+        <a href="{{url_for('main.index')}}" class="nav-link">Blog</a>
     </div>
     
     <div class="navbar-actions">
@@ -32,8 +32,8 @@
             <div id="notification-panel" class="notification-panel">
                 <div class="notification-header">
                     <h5>Notifications</h5>
-                    <button id="mark-all-notifications-read" class="mark-all-read">✓✓</button>
-                    <button id="view-all-notifications" class="view-all-notifications">View all</button>
+                    <button id="mark-all-notifications-read" class="mark-all-read" title="Mark all notifications read">✓✓ Mark all</button>
+                    <button id="view-all-notifications" class="view-all-notifications" title="View all notifications">View all</button>
                 </div>
                 <div id="notifications-list" class="notifications-list">
                     <!-- Notifications will be populated here -->
@@ -49,7 +49,15 @@
         <!-- <button id="sound-toggle" class="sound-toggle" title="Toggle notification sounds">🔊</button> -->
         
         <div class="profile-avatar">
-            <button type="button" class="avatar-img" id="avatarBtn">{% if current_user.profile_pic == 'default.png' %}<i class="fas fa-user"> </i>{% else %} <img class="nav-prof-pic" src="{{ current_user.get_profile_pic_url() }}" alt="profile pic"/> {% endif %} </button>
+            <button type="button" class="avatar-img" id="avatarBtn" title="{{current_user.username}}">
+                {% if current_user.profile_pic == 'default.png' %}
+                    <i class="fas fa-user"> </i>
+                    <!-- <span class="nav-client-username"></span> -->
+                {% else %} 
+                    <img class="nav-prof-pic" src="{{ current_user.get_profile_pic_url() }}" alt="profile pic"/>
+                    <!-- <span class="nav-client-username"></span>  -->
+                {% endif %} 
+            </button>
             <div class="nav-profile-dropdown-menu" id="avatarDropdown">
                 <a href="{{url_for('client.dashboard')}}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
                 <a href="{{url_for('auth.logout')}}"><i class="fas fa-sign-out-alt"></i> Logout</a>

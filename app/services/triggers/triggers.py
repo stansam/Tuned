@@ -10,20 +10,21 @@ from app.models.user import User
 from app.models.order import Order
 from app.extensions import db
 from datetime import datetime, timedelta
+from app.utils.emails import send_welcome_email
 # from celery import Celery  # If you're using Celery for background tasks
 
 # =============================================================================
 # USER REGISTRATION FLOW
 # =============================================================================
 
-def handle_user_registration(user_id):
+def handle_user_registration(user):
     """Called after successful user registration"""
     try:
         # Send welcome notification to new user
-        NotificationService.notify_welcome_new_user(user_id)
-        
+        NotificationService.notify_welcome_new_user(user.id)
+        send_welcome_email(user) 
         # Notify admins about new registration
-        NotificationService.notify_new_user_registration(user_id)
+        NotificationService.notify_new_user_registration(user.id)
         
     except Exception as e:
         print(f"Error in user registration notifications: {e}")
@@ -37,6 +38,7 @@ def handle_new_order_creation(order_id):
     try:
         # Notify client that order was received
         NotificationService.notify_order_received(order_id)
+        
         
         # Notify admins about new order
         NotificationService.notify_new_order(order_id)

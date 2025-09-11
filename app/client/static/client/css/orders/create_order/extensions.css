@@ -1,0 +1,120 @@
+/* Choices.js customizations */
+.choices {
+    position: relative;
+    margin-bottom: 0;
+    width: 55%;
+    /* height: 40px; */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;
+}
+
+.choices__inner {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 14px;
+    min-height: 40px;
+    
+}
+
+.choices__inner:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(74, 124, 89, 0.2);
+}
+
+.choices__list--dropdown {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.choices__group {
+    font-weight: bold;
+    color: #333;
+    font-size: 12px;
+    padding: 8px 12px 4px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.choices__item--choice {
+    padding: 8px 12px;
+    font-size: 11px;
+}
+
+.choices__item--choice.is-highlighted {
+    background-color: #4CAF50;
+    color: #333;
+}
+
+
+.choices__item--choice[data-choice-selectable] {
+    padding-left: 24px;    
+    font-size: 11px;
+}
+/* .choices__item--choice[data-choice-disabled] {
+    padding-left: 24px;    
+    font-size: 13px;
+} */
+
+/* Flatpickr customizations */
+.flatpickr-input {
+    background: white !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    padding: 12px !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+}
+
+.flatpickr-input:focus {
+    border-color: #4CAF50 !important;
+    box-shadow: 0 0 0 2px rgba(74, 124, 89, 0.2) !important;
+}
+
+.datetime-group .flatpickr-input {
+    flex: 1;
+}
+
+.flatpickr-calendar {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.flatpickr-day.selected {
+    background: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.flatpickr-day.selected:hover {
+    background: #45a049;
+    border-color: #45a049;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .choices__inner {
+        padding: 10px;
+    }
+    
+    .datetime-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .datetime-group .flatpickr-input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575px) {
+    .choices__list--dropdown {
+        max-height: 250px;
+    }
+}

@@ -60,7 +60,7 @@ def send_password_reset_email(user):
     {reset_url}
 
     If you did not request a password reset, please ignore this email.
-    This link is valid for 1 hour.
+    This link is valid for 1 hour. 
     '''
     
     try:

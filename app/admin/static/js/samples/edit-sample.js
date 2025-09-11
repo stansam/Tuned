@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         fetch(`${API_BASE_URL}/admin/samples/edit/${sampleId}`, {
             method: 'GET',
-            credentials: include,
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': document.querySelector('[name=csrf_token]').value
@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         fetch(`${API_BASE_URL}/admin/samples/edit/${sampleId}`, {
             method: 'POST', 
-            credentials: include,
+            credentials: 'include',
             body: formData,
             headers: {
                 'X-CSRFToken': document.querySelector('[name=csrf_token]').value

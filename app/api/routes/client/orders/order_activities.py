@@ -75,7 +75,20 @@ def upload_additional_files():
             # Save file
             file_path = os.path.join(upload_dir, f"{order_id}_{filename}")
             file.save(file_path)
-            
+
+            if not OrderFile.query.filter_by(order_id=order_id).first():
+                from app.sockets.utils import send_system_notification
+                from flask import url_for
+                admin_user = User.query.filter_by(is_admin=True).first()
+                send_system_notification(
+                    user_id=admin_user.id,
+                    title=f"New Files Added in Order number: #{order.order_number}",
+                    message="Review Files Added By Client",
+                    notification_type="info",
+                    link=url_for('admin.view_order', order_id=order.id),
+                    priority="high"
+                )
+
             # Create database record
             order_file = OrderFile(
                 order_id=order_id,
@@ -106,6 +119,18 @@ def update_order_deadline(order_id):
         order.due_date = datetime.fromisoformat(new_deadline.replace('Z', '+00:00'))
         order.updated_at = datetime.now()
         db.session.commit()
+
+        from app.sockets.utils import send_system_notification
+        from flask import url_for
+        admin_user = User.query.filter_by(is_admin=True).first()
+        send_system_notification(
+            user_id=admin_user.id,
+            title=f"Deadline updated for Order number: #{order.order_number}",
+            message="Review updated deadline By Client",
+            notification_type="info",
+            link=url_for('admin.view_order', order_id=order.id),
+            priority="normal"
+        )
         
         return jsonify({'success': True})
     except ValueError:

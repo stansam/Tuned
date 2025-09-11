@@ -144,7 +144,7 @@
         <!-- Order Info -->
         <div class="order-info">
             <strong>New Order: {{ order.id }}</strong><br>
-            Due: {{ order.due_time }}
+            Due: {{ order.due_date }}
         </div>
         
         <!-- Main Content -->
@@ -158,7 +158,7 @@
                     <hr />
 
                     <div class="detail-item">
-                        <span class="detail-label">Service:</span> {{ order.service }}
+                        <span class="detail-label">Service:</span> {{ order.service.name }}
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Report Type:</span> {{ order.report_type }}
@@ -168,7 +168,7 @@
                     </div>
                     
                     <div class="detail-item">
-                        <span class="detail-label">Level:</span> {{ order.academic_level }}
+                        <span class="detail-label">Level:</span> {{ order.academic_level.name }}
                     </div>
                 </div>
                 
@@ -176,7 +176,7 @@
                     <h3>Extras</h3>
                     
                     <div class="detail-item">
-                        <span class="detail-label">Track changes:</span> Required
+                        <!-- <span class="detail-label">Track changes:</span> Required -->
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Format:</span> {{ order.format_style }}

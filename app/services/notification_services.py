@@ -1,6 +1,7 @@
 from app.sockets.utils import send_system_notification, broadcast_to_admins
 from app.models import User, Order
 from app.extensions import db
+from app.utils.emails import send_order_confirmation, send_order_created, send_order_completed_email, send_payment_completion_email, send_payment_confirmation_email, send_revision_request_email, send_extension_request_email
 
 class NotificationService:
     """Service class for managing notifications"""
@@ -50,16 +51,17 @@ class NotificationService:
             send_system_notification(
                 user_id=admin.id,
                 title="New Order Received",
-                message=f"New assignment order #{order.id} from {order.user.username}",
+                message=f"New assignment order #{order.id} from {order.client.username}",
                 notification_type='info',
                 link=f"/admin/orders/{order.id}",
                 priority='high'
             )
+            send_order_created(admin, order)
         
         # Also broadcast to admin room
         broadcast_to_admins('new_order_alert', {
             'order_id': order.id,
-            'user': order.user.username,
+            'user': order.client.username,
             'subject': getattr(order, 'subject', 'N/A'),
             'created_at': order.created_at.isoformat()
         })
@@ -72,7 +74,7 @@ class NotificationService:
             return
         
         send_system_notification(
-            user_id=order.user_id,
+            user_id=order.client_id,
             title="Payment Confirmed",
             message=f"Payment for assignment #{order.id} has been confirmed. Work will begin shortly.",
             notification_type='success',
@@ -90,7 +92,7 @@ class NotificationService:
         message = f"Deadline reminder: Assignment #{order.id} is due in {hours_remaining} hours."
         
         send_system_notification(
-            user_id=order.user_id,
+            user_id=order.client_id,
             title="Deadline Reminder",
             message=message,
             notification_type='warning',
@@ -143,15 +145,19 @@ class NotificationService:
             send_system_notification(
                 user_id=admin.id,
                 title="Payment Completed",
-                message=f"Client {order.user.username} has completed payment for order #{order.id}.",
+                message=f"Client {order.client.username} has completed payment for order #{order.id}.",
                 notification_type='success',
                 link=f"/admin/orders/{order.id}",
                 priority='high'
             )
-        
+            
+        user = User.query.get(order.client_id)
+        invoice = invoice.query.filter_by(order_id=order.id).first()
+        send_payment_confirmation_email(invoice, user)
+
         broadcast_to_admins('payment_completed', {
             'order_id': order.id,
-            'client_username': order.user.username,
+            'client_username': order.client.username,
             'amount': getattr(order, 'amount', 0),
             'paid_at': order.updated_at.isoformat() if hasattr(order, 'updated_at') else None
         })
@@ -169,7 +175,7 @@ class NotificationService:
             send_system_notification(
                 user_id=admin.id,
                 title="Order Deadline Approaching",
-                message=f"Order #{order.id} from {order.user.username} is due in {hours_remaining} hours.",
+                message=f"Order #{order.id} from {order.client.username} is due in {hours_remaining} hours.",
                 notification_type='warning',
                 link=f"/admin/orders/{order.id}",
                 priority='high'
@@ -177,7 +183,7 @@ class NotificationService:
         
         broadcast_to_admins('deadline_approaching', {
             'order_id': order.id,
-            'client_username': order.user.username,
+            'client_username': order.client.username,
             'hours_remaining': hours_remaining,
             'deadline': order.deadline.isoformat() if hasattr(order, 'deadline') else None
         })
@@ -195,15 +201,15 @@ class NotificationService:
             send_system_notification(
                 user_id=admin.id,
                 title="Order Completed by Client",
-                message=f"Client {order.user.username} has accepted and marked order #{order.id} as complete.",
+                message=f"Client {order.client.username} has accepted and marked order #{order.id} as complete.",
                 notification_type='success',
                 link=f"/admin/orders/{order.id}",
                 priority='normal'
             )
-        
+
         broadcast_to_admins('order_completed_by_client', {
             'order_id': order.id,
-            'client_username': order.user.username,
+            'client_username': order.client.username,
             'completed_at': order.updated_at.isoformat() if hasattr(order, 'updated_at') else None
         })
 
@@ -216,10 +222,13 @@ class NotificationService:
         
         admin_users = User.query.filter_by(is_admin=True).all()
         
-        message = f"Client {order.user.username} has requested a revision for order #{order.id}."
+        message = f"Client {order.client.username} has requested a revision for order #{order.id}."
         if revision_message:
             message += f" Message: {revision_message[:100]}..."
-        
+
+        user = User.query.get(order.client_id)
+        send_revision_request_email(order, user)
+
         for admin in admin_users:
             send_system_notification(
                 user_id=admin.id,
@@ -232,7 +241,7 @@ class NotificationService:
         
         broadcast_to_admins('revision_requested', {
             'order_id': order.id,
-            'client_username': order.user.username,
+            'client_username': order.client.username,
             'revision_message': revision_message,
             'requested_at': order.updated_at.isoformat() if hasattr(order, 'updated_at') else None
         })
@@ -264,8 +273,11 @@ class NotificationService:
         if not order:
             return
         
+        user = User.query.get(order.client_id)
+        send_order_confirmation(order, user)
+
         send_system_notification(
-            user_id=order.user_id,
+            user_id=order.client_id,
             title="Order Received",
             message=f"We have received your order #{order.id}. Please complete the payment to begin processing.",
             notification_type='info',
@@ -279,9 +291,11 @@ class NotificationService:
         order = Order.query.get(order_id)
         if not order:
             return
-        
+        user = User.query.get(order.client_id)
+
+        send_payment_completion_email(user=user, order=order)
         send_system_notification(
-            user_id=order.user_id,
+            user_id=order.client_id,
             title="Complete Payment Required",
             message=f"Please complete payment for order #{order.id} to start processing your assignment.",
             notification_type='warning',
@@ -299,9 +313,12 @@ class NotificationService:
         message = f"We are requesting an extension for order #{order.id}."
         if reason:
             message += f" Reason: {reason}"
-        
+
+        user = User.query.get(order.client_id)
+        send_extension_request_email(order, user)
+
         send_system_notification(
-            user_id=order.user_id,
+            user_id=order.client_id,
             title="Deadline Extension Request",
             message=message,
             notification_type='info',
@@ -316,8 +333,11 @@ class NotificationService:
         if not order:
             return
         
+        user = User.query.get(order.client_id)
+        send_order_completed_email(order, user)
+
         send_system_notification(
-            user_id=order.user_id,
+            user_id=order.client_id,
             title="Order Delivered - Review Required",
             message=f"Your order #{order.id} has been delivered! Please review the work and confirm completion.",
             notification_type='success',
@@ -333,7 +353,7 @@ class NotificationService:
             return
         
         send_system_notification(
-            user_id=order.user_id,
+            user_id=order.client_id,
             title="Revised Order Delivered",
             message=f"Your revised order #{order.id} has been delivered! Please review the updated work.",
             notification_type='success',

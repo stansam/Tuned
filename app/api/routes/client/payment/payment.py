@@ -234,7 +234,7 @@ def confirm_payment():
     if not data:
         raise PaymentConfirmationError("No data provided")
     
-    # Log the request (excluding sensitive data)
+    # Log the request 
     safe_data = {k: v for k, v in data.items() if k != 'email'}
     current_app.logger.info(f"Processing payment confirmation: {safe_data}")
     
@@ -245,7 +245,7 @@ def confirm_payment():
     order, user = PaymentConfirmationService.find_order_and_user(validated_data['orderId'])
     
     # Check if payment confirmation already exists
-    from app.models.order import SupportTicket  # Replace with your actual import
+    from app.models.order import SupportTicket  
     existing_ticket = SupportTicket.query.filter_by(
         order_id=order.id,
         subject=f"Payment Confirmation - Order #{order.id} - {validated_data['paymentMethod'].title()}"
@@ -265,17 +265,30 @@ def confirm_payment():
     )
     
     # Send notifications
+    from app.sockets.utils import send_system_notification
+    send_system_notification(
+            user_id=user.id,
+            title=f"Payment confirmation for order: #{order.order_number} submitted successfully!",
+            message="Payment confirmation submitted successfully! Our team will verify your payment shortly.",
+            notification_type="success",
+            # link=f"/client/orders/{order.id}",
+            priority="normal"
+        )
     PaymentConfirmationService.send_notifications(support_ticket, order, user)
     
     # Return success response
+    from flask import url_for
+    redirect_url = url_for('client.order_details', order_id=order.id)
     response_data = {
         'success': True,
         'message': 'Payment confirmation submitted successfully! Our team will verify your payment shortly.',
         'data': {
+            'success': True,
             'ticketId': support_ticket.id,
             'orderId': order.id,
             'status': 'submitted',
-            'estimatedProcessingTime': '2-4 hours'
+            'estimatedProcessingTime': '2-4 hours',
+            'redirect_url': redirect_url
         }
     }
     

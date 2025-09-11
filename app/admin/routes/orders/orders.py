@@ -138,6 +138,9 @@ def update_status(order_id):
     
     order.status = new_status
     db.session.commit()
+
+    from app.services.triggers.triggers import handle_assignment_status_change
+    handle_assignment_status_change(order.id, status=new_status)
     # notify(current_user,
     #         title=f"Order #{order.order_number} status updated to {new_status}",
     #         message="Order status updated successfully",
@@ -169,16 +172,7 @@ def add_comment(order_id):
         message=message,
         is_admin=True
     )
-    # notify(current_user,
-    #         title=f"Comment added to Order #{order.order_number}",
-    #         message=message,
-    #         type='info',
-    #         link=url_for('admin.view_order', order_id=order.id))
-    # notify(order.client,
-    #         title=f"New comment on your Order #{order.order_number}",
-    #         message=message,
-    #         type='info',
-    #         link=url_for('client.view_order', order_id=order.id))
+    
     db.session.add(comment)
     db.session.commit()
     
