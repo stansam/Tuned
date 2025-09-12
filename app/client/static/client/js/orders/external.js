@@ -62,8 +62,8 @@ function requestRevision(deliveryId) {
 }
 
 // Quick actions
-function downloadFiles(orderId) {
-    window.location.href = `/client/download-order-files/${orderId}`;
+function downloadFiles(url) {
+    window.location.href = url;
 }
 
 function contactSupport() {

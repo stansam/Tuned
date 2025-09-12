@@ -184,7 +184,7 @@
                         <i class="fas fa-credit-card"></i> Pay Now
                     </button>
                     {% endif %}
-                    <button class="create-order-btn" onclick="downloadFiles({{ order.id }})">
+                    <button class="create-order-btn" onclick="downloadFiles('{{url_for('client.download_order_files', order_id=order.id)}}')">
                         <i class="fas fa-download"></i> Download Files
                     </button>
                     <button class="create-order-btn" onclick="contactSupport()">
