@@ -41,7 +41,7 @@ def create_app():
     # app.register_blueprint(main_bp)
     # app.register_blueprint(client_bp)
     # app.register_blueprint(admin_bp)
-    app.register_blueprint(main_bp, subdomain="main")
+    app.register_blueprint(main_bp, url_prefix="/main")
     app.register_blueprint(auth_bp, subdomain="auth")
     app.register_blueprint(api_bp, subdomain="api")
     app.register_blueprint(client_bp, subdomain="client")

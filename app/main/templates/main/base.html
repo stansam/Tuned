@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
+    {% block meta_description %}{% endblock %}
     <title>{% block title %} {% endblock %}&nbsp;|&nbsp; TunedEssays</title>
     <link rel="stylesheet" href="{{ url_for('main.static', filename='main/css/main.css') }}">
     <link rel="stylesheet" href="{{ url_for('main.static', filename='main/css/navbar.css') }}">

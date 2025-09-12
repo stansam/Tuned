@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, Response
 from app.main import main_bp
 from app.extensions import db
 from app.models.blog import BlogPost, BlogCategory
@@ -86,3 +86,8 @@ def terms():
 @main_bp.route('/contact')
 def contact():
     return render_template('main/legals/contact.html', title="Contact Us")
+
+@main_bp.route("/robots.txt")
+def robots_txt():
+    return Response("User-agent: *\nAllow: /\nSitemap: https://tunedessays.com/sitemap.xml",
+                    mimetype="text/plain")
