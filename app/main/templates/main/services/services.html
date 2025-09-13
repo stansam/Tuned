@@ -296,7 +296,9 @@
                                             </div>
                                             <div class="service-tags">
                                                 {% if service.tags%} 
-                                                    <a href="{{url_for('main.search', q=service.tags)}}" class="btn btn-sm btn-outline-success rounded-pill">{{ service.tags }}</a>
+                                                {% for tag in service.get_tags()%}
+                                                    <a href="{{url_for('main.search', q=tag)}}" class="btn btn-sm btn-outline-success rounded-pill">{{ service.tags }}</a>
+                                                {% endfor %}
                                                 {% endif %}
                                             </div>
                                         </div>

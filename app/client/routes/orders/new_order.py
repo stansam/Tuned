@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, url_for, flash, current_ap
 from app.client.routes.orders.utils import validate_uploaded_files
 from app.services.triggers.triggers import handle_new_order_creation
 from flask_login import login_required, current_user
+from sqlalchemy.exc import SQLAlchemyError
 from app.models.order import Order, OrderFile
 from app.models.service import Service, AcademicLevel, Deadline
 from app.models.user import User
@@ -201,12 +202,19 @@ def create_order():
 
     elif request.method == "GET":
         try:
+            current_app.logger.debug("Fetching services, academic levels, and deadlines for order creation.")
+
             services = Service.query.all()
             services_data = [service.to_dict() for service in services]
+            current_app.logger.debug("Loaded %d services.", len(services_data))
+
             academic_levels = AcademicLevel.query.order_by(AcademicLevel.order).all()
             levels_data = [level.to_dict() for level in academic_levels]
+            current_app.logger.debug("Loaded %d academic levels.", len(levels_data))
+
             deadlines = Deadline.query.order_by(Deadline.order).all()
             deadline_data = [deadline.to_dict() for deadline in deadlines]
+            current_app.logger.debug("Loaded %d deadlines.", len(deadline_data))
             
             template_vars = {
                 'services': services_data,
@@ -216,44 +224,74 @@ def create_order():
             }
 
             if request.args:
-                service_id = request.args.get('service_id')
-                due_date = request.args.get('due_date')
-                deadline_data = request.args.get('deadline')
-                academic_level_id = request.args.get('academic_level_id')
-                word_cnt = request.args.get('word_count')
-                pages = request.args.get('pages')
-                
-                if service_id:
-                    selected_service = Service.query.get(service_id)
-                    if selected_service:
-                        template_vars['selected_service'] = selected_service.to_dict()
+                try:
 
-                if academic_level_id:
-                    selected_academic_level = AcademicLevel.query.get(academic_level_id)
-                    if selected_academic_level:
-                        template_vars['selected_academic_level'] = selected_academic_level.to_dict()
+                    current_app.logger.debug("Request args received: %s", request.args.to_dict())
 
-                if deadline_data and float(deadline_data) > 3:
-                    template_vars['hoursUntilDeadline'] = deadline_data
+                    service_id = request.args.get('service_id')
+                    due_date = request.args.get('due_date')
+                    deadline_data = request.args.get('deadline')
+                    academic_level_id = request.args.get('academic_level_id')
+                    word_cnt = request.args.get('word_count')
+                    pages = request.args.get('pages')
+                    
+                    if service_id:
+                        selected_service = Service.query.get(service_id)
+                        if selected_service:
+                            template_vars['selected_service'] = selected_service.to_dict()
+                            current_app.logger.debug("Selected service: %s", selected_service.name)
 
-                if word_cnt:
-                    try:
-                        template_vars['word_count'] = int(word_cnt)
-                    except (ValueError, TypeError):
-                        pass
-                        
-                if pages:
-                    try:
-                        template_vars['pages'] = int(pages)
-                    except (ValueError, TypeError):
-                        pass
+                    if academic_level_id:
+                        selected_academic_level = AcademicLevel.query.get(academic_level_id)
+                        if selected_academic_level:
+                            template_vars['selected_academic_level'] = selected_academic_level.to_dict()
+                            current_app.logger.debug("Selected academic level: %s", selected_academic_level.name)
+
+                    if deadline_data:
+                        try:
+                            deadline_value = float(deadline_data)
+                            if deadline_value >= 3:
+                                template_vars['hoursUntilDeadline'] = deadline_data
+                                current_app.logger.debug("Deadline set: %s hours", deadline_data)
+                            else:
+                                current_app.logger.debug("Deadline recieved must be higher than 3hours from now. \nPassed: %s hours", deadline_data)
+                        except ValueError:
+                            current_app.logger.warning("Invalid deadline value: %s", deadline_data)
+
+                        # template_vars['hoursUntilDeadline'] = deadline_data
+
+                    if word_cnt:
+                        try:
+                            template_vars['word_count'] = int(word_cnt)
+                            current_app.logger.debug("Word count set: %d", template_vars['word_count'])
                             
-                if due_date:
-                    template_vars['due_date'] = due_date
+                        except (ValueError, TypeError):
+                            current_app.logger.warning("Invalid word count: %s", word_cnt)
+                            
+                    if pages:
+                        try:
+                            template_vars['pages'] = int(pages)
+                            current_app.logger.debug("Pages set: %d", template_vars['pages'])
 
-                template_vars['title'] = "Complete Order"
+                        except (ValueError, TypeError):
+                            current_app.logger.warning("Invalid pages value: %s", pages)                        
+                                
+                    if due_date:
+                        template_vars['due_date'] = due_date
+                        current_app.logger.debug("Due date set: %s", due_date)
+
+                    template_vars['title'] = "Complete Order"
+                except Exception as arg_err:
+                    current_app.logger.error("Error processing request args: %s", str(arg_err), exc_info=True)
+                    flash("Invalid request parameters. Please check your inputs.", "danger")
+                    return redirect(url_for("client.create_order"))
 
             return render_template('client/orders/create_order/create_order.html', **template_vars)
+        
+        except SQLAlchemyError as db_err:
+            current_app.logger.error("Database error: %s", str(db_err), exc_info=True)
+            flash('We encountered a database issue while fetching order data. Please try again later.', 'danger')
+            return redirect(url_for('client.dashboard'))
             
         except Exception as e:
             current_app.logger.error(f'Order form display error: {str(e)}', exc_info=True)

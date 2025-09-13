@@ -590,10 +590,15 @@ input, select, textarea {
         font-size: 14px;
         background: white;
     }
-    /* .datetime-group {
-        flex-direction: column;
-        /* width: 100%; 
-    } */
+    .datetime-group {
+        flex-direction: row;
+        /* width: 100%; */
+        /* display: flex; */
+        justify-content: space-between;
+        /* padding: 1rem; */
+        /* gap: 1.5rem; */
+        align-items: flex-start; 
+    }
      .instructions-row {
         flex-direction: column;
         align-items: flex-start;
@@ -614,18 +619,18 @@ input, select, textarea {
         flex-direction: column;
     }
 
-    .datetime-group {
+    /* .datetime-group {
         width: 100%;
-        /* margin-left: 5px; */
-    }
+        margin-left: 5px;
+    } */
 
     .datetime-group input[type="date"] {
-        flex: 1;
-        width: 80%;
+        flex: 0;
+        width: 65%;
     }
 
     .datetime-group input[type="time"] {
-        flex: 1;
+        flex: 0;
         width: 60%
     }
 

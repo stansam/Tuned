@@ -1,13 +1,15 @@
 <nav class="navbar">
-    <button class="menu-toggle" id="menuToggle">
-        <i class="fas fa-bars"></i>
-    </button>
-    <a href="{{ url_for('main.home') }}" class="logo-container">
-        <img src="{{ url_for('main.static', filename='main/assets/Logo.svg') }}" alt="TunedEssays Logo" class="logo-img"></img>
-        
+    
+    <div class="logo-container">
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a href="{{ url_for('main.home') }}" class="nav-home-link">
+            <img src="{{ url_for('main.static', filename='main/assets/Logo.svg') }}" alt="TunedEssays Logo" class="logo-img"></img>
         <!-- <div class="logo-text"><a href="{{ url_for('main.home') }}" class="logo"><image src="{{url_for('static', filename='assets/Logo.svg')}}" alt="TunedEssays"></image></a></div> -->
             <span class="logo-text">Tuned<span class="accent">Essays</span></span>
-    </a>
+        </a>
+    </div>
     <div class="nav-links" id="navLinks">
         <a class="nav-link {% if request.endpoint in ['main.services', 'main.service_detail'] %}active{% endif %}" href="{{ url_for('main.services') }}">Services</a>
         <a class="nav-link {% if request.endpoint == 'main.faq' %}active{% endif %}" href="{{ url_for('main.faq') }}">FAQ</a>

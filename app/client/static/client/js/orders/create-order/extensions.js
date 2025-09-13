@@ -198,20 +198,71 @@ function initializeTemplateVariables() {
     
     const vars = window.TEMPLATE_VARS;
     
-    // Set service if provided
-    if (vars.selected_service && serviceChoices) {
-        setTimeout(() => {
-            serviceChoices.setChoiceByValue(vars.selected_service.id.toString());
-        }, 100); // Small delay to ensure Choices.js is ready
+    let serviceReady = false;
+    let levelReady = false;
+    
+    function checkAndSetValues() {
+        if (serviceReady && levelReady) {
+            if (vars.selected_service && serviceChoices) {
+                serviceChoices.setChoiceByValue(vars.selected_service.id.toString());
+            }
+            
+            if (vars.selected_academic_level && academicLevelChoices) {
+                academicLevelChoices.setChoiceByValue(vars.selected_academic_level.id.toString());
+            }
+            
+            setOtherTemplateValues(vars);
+        }
+    }
+
+    if (serviceChoices) {
+        serviceChoices.passedElement.element.addEventListener('choice', function() {
+            serviceReady = true;
+            checkAndSetValues();
+        }, { once: true });
     }
     
-    // Set academic level if provided
-    if (vars.selected_academic_level && academicLevelChoices) {
-        setTimeout(() => {
-            academicLevelChoices.setChoiceByValue(vars.selected_academic_level.id.toString());
-        }, 100);
+    if (academicLevelChoices) {
+        academicLevelChoices.passedElement.element.addEventListener('choice', function() {
+            levelReady = true;
+            checkAndSetValues();
+        }, { once: true });
     }
+
+    setTimeout(() => {
+        if (!serviceReady || !levelReady) {
+            console.warn('Choices.js ready events did not fire, using fallback');
+            serviceReady = true;
+            levelReady = true;
+            checkAndSetValues();
+        }
+    }, 1000);
     
+    // // Set service if provided
+    // if (vars.selected_service && serviceChoices) {
+    //     console.log(`Setting selected service: ${vars.selected_service.name}`);
+    //     try {
+    //         serviceChoices.setChoiceByValue(vars.selected_service.id.toString());
+    //     } catch (error) {
+    //         console.error('Error setting service choice:', error);
+    //         document.getElementById('service').value = vars.selected_service.id.toString();
+    //     }
+    // }
+    
+    // // Set academic level if provided
+    // if (vars.selected_academic_level && academicLevelChoices) {
+    //     console.log(`Setting selected level: ${vars.selected_academic_level.name}`);
+    //     try {
+    //         academicLevelChoices.setChoiceByValue(vars.selected_academic_level.id.toString());
+    //     } catch (error) {
+    //         console.error('Error setting academic level choice:', error);
+    //         document.getElementById('academic_level').value = vars.selected_academic_level.id.toString();
+    //     }
+
+    // }
+}
+
+function setOtherTemplateValues(vars) {
     // Set word count if provided
     if (vars.word_count) {
         const wordCountField = document.getElementById('word_count');
@@ -242,7 +293,7 @@ function initializeTemplateVariables() {
         }
     }
     
-    console.log('Template variables initialized:', vars);
+    console.log('Other Template variables initialized:', vars);
 }
 
 function setupEventListeners() {

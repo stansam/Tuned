@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    {% block meta_description %}{% endblock %}
+    <meta name="description" content="{% block meta_description %}{% endblock %}">
     <title>{% block title %} {% endblock %}&nbsp;|&nbsp; TunedEssays</title>
     <link rel="stylesheet" href="{{ url_for('main.static', filename='main/css/main.css') }}">
     <link rel="stylesheet" href="{{ url_for('main.static', filename='main/css/navbar.css') }}">
@@ -36,6 +36,7 @@
     </button>
     <script>
         const API_BASE_URL = "http://api.tunedessays.com:5000"
+        const CLIENT_BASE_URL = "http://client.tunedessays.com:5000"
     </script>
     <script src="{{ url_for('main.static', filename='main/js/main/main.js') }}"></script>
     {% block scripts %} {% endblock %}

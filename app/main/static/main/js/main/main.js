@@ -87,14 +87,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const avatarBtn = document.getElementById('avatarBtn');
     const avatarDropdown = document.getElementById('avatarDropdown');
 
-    avatarBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        avatarDropdown.classList.toggle('show');
-    });
-
-    document.addEventListener('click', () => {
-        avatarDropdown.classList.remove('show');
-    });
+    if(avatarBtn){
+        avatarBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            avatarDropdown.classList.toggle('show');
+        });
+    
+        document.addEventListener('click', () => {
+            avatarDropdown.classList.remove('show');
+        });
+    }
     
     // Animate elements on scroll
     const animateElements = document.querySelectorAll('.animate-on-scroll');
@@ -200,27 +202,65 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Mobile menu functionality
-    const navbarToggler = document.querySelector('.navbar-toggler');
-    const navbarCollapse = document.querySelector('.navbar-collapse');
+    // const navbarToggler = document.querySelector('.navbar-toggler');
+    // const navbarCollapse = document.querySelector('.navbar-collapse');
     
-    if (navbarToggler && navbarCollapse) {
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(e) {
-            if (navbarCollapse.classList.contains('show') && 
-                !navbarCollapse.contains(e.target) && 
-                !navbarToggler.contains(e.target)) {
-                navbarToggler.click();
-            }
-        });
+    // if (navbarToggler && navbarCollapse) {
+    //     // Close mobile menu when clicking outside
+    //     document.addEventListener('click', function(e) {
+    //         if (navbarCollapse.classList.contains('show') && 
+    //             !navbarCollapse.contains(e.target) && 
+    //             !navbarToggler.contains(e.target)) {
+    //             navbarToggler.click();
+    //         }
+    //     });
         
-        // Close mobile menu when clicking on a nav link
-        const navLinks = navbarCollapse.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                if (navbarCollapse.classList.contains('show')) {
-                    navbarToggler.click();
-                }
-            });
+    //     // Close mobile menu when clicking on a nav link
+    //     const navLinks = navbarCollapse.querySelectorAll('.nav-link');
+    //     navLinks.forEach(link => {
+    //         link.addEventListener('click', function() {
+    //             if (navbarCollapse.classList.contains('show')) {
+    //                 navbarToggler.click();
+    //             }
+    //         });
+    //     });
+    // }
+
+    const menuToggle = document.getElementById("menuToggle")
+    menuToggle.addEventListener('click', function() {
+        navLinks.classList.toggle('active');
+        
+        // Change icon between bars and times
+        const icon = menuToggle.querySelector('i');
+        if (icon.classList.contains('fa-bars')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    });
+
+    // Close menu when clicking on a link
+    const links = navLinks.querySelectorAll('a');
+    links.forEach(link => {
+        link.addEventListener('click', function() {
+            navLinks.classList.remove('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
         });
-    }
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.navbar')) {
+            navLinks.classList.remove('active');
+            const icon = menuToggle.querySelector('i');
+            if (icon.classList.contains('fa-times')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+    });
 });

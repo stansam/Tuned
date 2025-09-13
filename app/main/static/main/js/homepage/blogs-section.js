@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const title = post.title || 'Untitled Post';
             const slug = post.slug || `post-${post.id}`;
             const excerpt = truncateWords(post.excerpt || 'No excerpt available.');
-            const featuredImage = post.featured_image ? `/static/${post.featured_image}` : '/static/main/assets/placeholder.webp';
+            const featuredImage = post.featured_image ? `/static/${post.featured_image}` : '/static/main/main/assets/no-blog.jpeg';
             const categoryName = post.category?.name || 'Uncategorized';
             const publishedDate = post.published_at || post.created_at || new Date().toISOString();
             const tags = post.tags.split(',').map(tag => tag.trim());

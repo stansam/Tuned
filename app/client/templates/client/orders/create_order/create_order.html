@@ -278,7 +278,7 @@
             pages: {{ pages|tojson if pages else 'null' }},
             due_date: {{ due_date|tojson if due_date else 'null' }}
         };
-    </script>
+    </script> 
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script type="text/javascript" src="{{ url_for('client.static', filename='client/js/orders/create-order/extensions.js') }}"></script>

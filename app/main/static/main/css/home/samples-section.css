@@ -103,6 +103,14 @@ margin-top: 20px;
     overflow: hidden;
     transform: scale(1.05);
     margin-bottom: 2rem;
+} 
+.paper-image-cont img {
+  height: 180px;
+  width: 100%;
+  display: block;
+  object-fit: cover; 
+  object-position: center;
+
 }
 .paper-card:hover .paper-image-cont img {
     transform: scale(1.05);

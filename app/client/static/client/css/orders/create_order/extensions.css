@@ -99,18 +99,21 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    .choices {
+        width: 85%;
+    }
     .choices__inner {
         padding: 10px;
     }
     
-    .datetime-group {
+    /* .datetime-group {
         flex-direction: column;
         gap: 10px;
     }
     
     .datetime-group .flatpickr-input {
         width: 100%;
-    }
+    } */
 }
 
 @media (max-width: 575px) {

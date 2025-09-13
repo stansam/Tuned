@@ -5,11 +5,11 @@
     {% for sample in samples %}
     <div class="paper-card">
       <div class="paper-body">
-        <div class="paper-image-cont">
+        <div class="paper-image-cont" style="overflow: hidden;">
           {% if sample.image %}
             <img src="{{ url_for('main.static', filename='uploads/samples/' + sample.image) }}">
           {% else %}
-            <img src="{{url_for('main.static', filename='main/assets/no-orders.svg')}}">
+            <img src="{{url_for('main.static', filename='main/assets/no-img.jpeg')}}">
           {% endif %}
         </div>
         <h3 class="paper-title">{{sample.title}}</h3>
@@ -37,7 +37,7 @@
 
     <div class="paper-card">
       <div class="paper-image-cont">
-        <img src="{{url_for('main.static', filename='main/assets/no-orders.svg')}}">
+        <img src="{{url_for('main.static', filename='main/assets/no-img.jpeg')}}">
       </div>
       <h3 class="paper-title">Research Paper on AI Ethics</h3>
       <p class="paper-type">Research Paper | 2500 words</p>
@@ -50,7 +50,7 @@
 
     <div class="paper-card">
       <div class="paper-image-cont">
-        <img src="{{url_for('main.static', filename='main/assets/no-orders.svg')}}">
+        <img src="{{url_for('main.static', filename='main/assets/no-img.jpeg')}}">
       </div>
       <h3 class="paper-title">Machine Learning Algorithms</h3>
       <p class="paper-type">Technical Paper | 3500 words</p>

@@ -87,7 +87,7 @@ def terms():
 def contact():
     return render_template('main/legals/contact.html', title="Contact Us")
 
-@main_bp.route("/robots.txt")
-def robots_txt():
-    return Response("User-agent: *\nAllow: /\nSitemap: https://tunedessays.com/sitemap.xml",
-                    mimetype="text/plain")
+# @main_bp.route("/robots.txt")
+# def robots_txt():
+#     return Response("User-agent: *\nAllow: /\nSitemap: https://tunedessays.com/sitemap.xml",
+#                     mimetype="text/plain")

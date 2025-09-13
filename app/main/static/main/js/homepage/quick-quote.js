@@ -64,7 +64,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeForm() {
         // Show only the writing tab initially
         showTabContent('writing');
-        initializeFlatpickr();
+        // initializeFlatpickr();
+
+        if (isMobile()) {
+            document.querySelector(".desktop-picker").style.display = "none";
+            document.querySelector(".mobile-picker").style.display = "block";
+            initMobilePicker();
+        } else {
+            document.querySelector(".desktop-picker").style.display = "block";
+            document.querySelector(".mobile-picker").style.display = "none";
+            initializeFlatpickr();
+        }
+
+        
         // Set minimum date to today
         // const today = new Date().toISOString().slice(0, 16);
         // dueDateInput.setAttribute('min', today);
@@ -72,6 +84,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Calculate initial price
         calculatePrice();
+    }
+
+    function isMobile() {
+        return /Mobi|Android|iPhone/i.test(navigator.userAgent);
     }
 
     // Tab switching functionality
@@ -155,6 +171,59 @@ document.addEventListener('DOMContentLoaded', function() {
                 return null;
         }
     }
+
+    function pad(num) {
+       return num.toString().padStart(2, "0");
+    }
+      
+    function toDatetimeLocalValue(date) {
+        const yyyy = date.getFullYear();
+        const mm = pad(date.getMonth() + 1);
+        const dd = pad(date.getDate());
+        const hh = pad(date.getHours());
+        const min = pad(date.getMinutes());
+        return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+    }
+
+    function initMobilePicker() {
+        const mobileInput = document.getElementById("mobile_deadline_picker");
+        
+        const now = new Date();
+        const minDate = new Date(now.getTime() + 3 * 60 * 60 * 1000); 
+        const maxDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+        
+        // mobileInput.min = minDate.toISOString().slice(0,16);
+        // mobileInput.max = maxDate.toISOString().slice(0,16);
+        mobileInput.min = toDatetimeLocalValue(minDate);
+        mobileInput.max = toDatetimeLocalValue(maxDate);
+        mobileInput.value = toDatetimeLocalValue(minDate);
+
+        const timeDiff = minDate - now;
+        const hoursUntilDeadline = timeDiff / (1000 * 60 * 60);
+        const aText = getDeadlineDisplayInfo(hoursUntilDeadline);
+        updateDeadlineInfo(aText);
+        
+        document.getElementById("deadline").value = hoursUntilDeadline;
+        document.getElementById("dateDue").value = mobileInput.value;
+
+        mobileInput.addEventListener("change", function () {
+            if (!mobileInput.value) return;
+        
+            const selectedDate = new Date(mobileInput.value);
+            const now = new Date();
+            const timeDiff = selectedDate - now;
+            const hoursUntilDeadline = timeDiff / (1000 * 60 * 60);
+        
+            const dText = getDeadlineDisplayInfo(hoursUntilDeadline);
+            updateDeadlineInfo(dText);
+        
+            document.getElementById("deadline").value = hoursUntilDeadline;
+            document.getElementById("dateDue").value = mobileInput.value;
+        
+            calculatePrice();
+        });
+    }
+
     function initializeFlatpickr() {
         const deadlinePicker = document.getElementById('deadline_picker');
         // const today =  
@@ -166,8 +235,8 @@ document.addEventListener('DOMContentLoaded', function() {
             altFormat: "h:i K, M d",
             altInput: true,
             time_24hr: true,
-            minDate: new Date(Date.now() + 3 * 60 * 60 * 1000), // 3 hours from now
-            maxDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
+            minDate: new Date(Date.now() + 3 * 60 * 60 * 1000), 
+            maxDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), 
             minuteIncrement: 30,
             defaultDate: new Date(Date.now() + 3 * 60 * 60 * 1000),
             defaultHour: 23,
@@ -436,7 +505,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('orderContinue', function(event) {
         console.log('Order continuation triggered:', event.detail);
         const queryString = new URLSearchParams(event.detail).toString();
-        window.location.href = `orders/create?${queryString}`; 
+        window.location.href = `${CLIENT_BASE_URL}/orders/new?${queryString}`; 
     });
 
 
