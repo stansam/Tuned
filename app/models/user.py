@@ -47,7 +47,6 @@ class User(UserMixin, db.Model):
     referrals = db.relationship('Referral', foreign_keys='Referral.referrer_id', backref='referrer', lazy=True)
     referred_by = db.relationship('Referral', foreign_keys='Referral.referred_id', backref='referred', lazy=True)
     notifications = db.relationship('Notification', backref='user', lazy=True)
-    # blog_posts = db.relationship('BlogPost', backref='author', lazy=True)
     testimonials = db.relationship('Testimonial', backref='author', lazy=True, cascade='all, delete-orphan')
     
     def set_password(self, password):

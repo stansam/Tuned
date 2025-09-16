@@ -91,6 +91,8 @@ def compile_global_assets(assets: Environment, data_dir: str) -> Environment:
     
     for bundle_name, bundle in global_bundles.items():
         assets.register(bundle_name, bundle)
+        if current_app.config["ENVIRONMENT"] == "development":
+            assets.build()
         current_app.logger.info(f"Registered global bundle: {bundle_name}")
     
     # Build bundles in development environment
@@ -120,6 +122,8 @@ def compile_blueprint_assets(assets: Environment, blueprint_name: str, data_dir:
         # Create a unique bundle name to avoid conflicts
         unique_bundle_name = f"{blueprint_name}_{bundle_name}"
         assets.register(unique_bundle_name, bundle)
+        if current_app.config["ENVIRONMENT"] == "development":
+            assets.build()
         current_app.logger.info(f"Registered {blueprint_name} bundle: {unique_bundle_name}")
     
     # Build bundles in development environment
@@ -222,14 +226,7 @@ def init_assets(app: Flask, project_root: str = None) -> Environment:
     return assets
 
 
-# Convenience function for backward compatibility
-def create_assets(app: Flask, project_root: str = None) -> Environment:
-    """
-    Create and configure Flask-Assets Environment.
-    This is an alias for init_assets for backward compatibility.
-    
-    :param app: Flask application instance
-    :param project_root: Root directory of the project
-    :returns: Configured Environment
-    """
-    return init_assets(app, project_root)
+def register_assets_cli(app: Flask, assets: Environment) -> None:
+    """Attach flask-assets CLI commands to `flask`."""
+    from flask_assets import ManageAssets
+    app.cli.add_command(ManageAssets(assets), "assets")

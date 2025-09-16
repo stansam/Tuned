@@ -4,7 +4,7 @@
 
 {% block styles %}
 {{ super()}}
-{% assets "client_orders_css" %}
+{% assets "client_client_orders_css" %}
     <link rel="stylesheet" href="{{ ASSET_URL }}">
 {% endassets %}
 
@@ -12,7 +12,7 @@
 
 {% block scripts %}
 {{ super()}}
-    {% assets "client_orders_js" %}
+    {% assets "client_client_orders_js" %}
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
 {% endblock %}

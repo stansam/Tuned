@@ -5,7 +5,7 @@
 {% block styles %}
 {{ super() }}
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-{% assets "admin_blog_list_css" %}
+{% assets "admin_admin_blog_list_css" %}
 <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
 {% endassets %}
 <!-- <link rel="stylesheet" href="{{url_for('admin.static', filename='css/blogs/list-blogs.css')}}"> -->
@@ -456,7 +456,7 @@
 
 {% block scripts %}
 {{ super() }}
-{% assets "admin_blog_list_js" %}
+{% assets "admin_admin_blog_list_js" %}
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
 {% endblock %}
