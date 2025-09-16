@@ -49,6 +49,9 @@ class Config:
 
     SSL_REDIRECT = os.environ.get("SSL_REDIRECT", False).lower() in ['true', '1']
 
+    ASSETS_AUTO_BUILD = os.environ.get("ASSETS_AUTO_BUILD", True).lower() in ['true', '1']
+    ASSETS_DEBUG = os.environ.get("ASSETS_DEBUG", True).lower() in ['true', '1']
+
     # Cache (for production)
     # CACHE_TYPE = "redis"
     # CACHE_REDIS_URL = os.environ.get('CACHE_REDIS_URL') or 'redis://localhost:6379/0'

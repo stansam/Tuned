@@ -1,12 +1,10 @@
 {% extends 'auth/base.html' %}
 {% block title %}Login{% endblock %}
 
-{% block styles %}
-<link rel="stylesheet" href="{{ url_for('auth.static', filename='auth/css/login.css') }}">
-{% endblock %}
-
 {% block scripts %}
-<script src="{{ url_for('auth.static', filename='auth/js/login.js') }}"></script>
+{% assets "auth_auth_login_js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 {% endblock %}
 
 {% block content %}

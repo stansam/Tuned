@@ -1,0 +1,82 @@
+bundles:  
+  client_js:
+    filters: jsmin
+    output: dist/client.min.js
+    contents:
+      - client/client/js/main.js
+      - client/client/js/chats/chat.js
+      - client/client/js/notifications/notificationManager.js
+      - client/client/js/profile/edit-profile.js
+      - client/client/js/profile/refresh.js
+      - client/client/js/profile/upload-profile-pic.js
+      - client/client/js/socket/socket_client.js
+
+  client_order_detail_js:
+    filters: jsmin
+    output: dist/client/order_detail.min.js
+    contents:
+      - client/client/js/orders/order_details.js
+      - client/client/js/orders/activity_tab.js
+      - client/client/js/orders/activity-tab/orderChatForm.js
+      - client/client/js/orders/external.js
+
+  client_orders_js:
+    filters: jsmin
+    output: dist/client/orders.min.js
+    contents:
+      - client/client/js/orders.
+      
+  client_create_order_js:
+    filters: jsmin
+    output: dist/client/create_order.min.js
+    contents:
+      - client/client/js/orders/create-order/extensions.js
+      
+  client_css:
+    filters: cssmin
+    output: dist/client.min.css
+    contents:
+      - client/client/css/main.css
+      - client/client/css/navbar.css
+      - client/client/css/sidebar.css
+      - client/client/css/chats/chat.css
+      - client/client/css/notification/modal.css
+      - client/client/css/notification/panel.css
+  
+  client_order_detail_css:
+    filters: cssmin
+    output: dist/client/order_detail.min.css
+    contents:
+    - client/client/css/orders/order_details.css
+    - client/client/css/orders/order_details/activity_tab.css
+    - client/client/css/orders/order_details/delivery-tab.css
+    - client/client/css/orders/order_details/details_tab.css
+    - client/client/css/orders/order_details/file_highlight_modal.css
+    - client/client/css/orders/order_details/activity-tab/order-chat-form.css
+
+  client_dashboard_css:
+    filters: cssmin
+    output: dist/client/dashboard.min.css
+    contents:
+    - client/client/css/dashboard.css
+    - client/client/css/profile/edit-profile.css
+  
+  client_orders_css:
+    filters: cssmin
+    output: dist/client/orders.min.css
+    contents:
+      - client/client/css/orders.css
+      
+  client_create_order_css:
+    filters: cssmin
+    output: dist/client/create_order.min.css
+    contents:
+      - client/client/css/toast.css
+      - client/client/css/orders/create_order/create_order.css
+      - client/client/css/orders/create_order/extensions.css
+
+  client_checkout_css:
+    filters: cssmin
+    output: dist/client/checkout.min.css
+    contents:
+      - client/client/css/payment/payment.css

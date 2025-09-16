@@ -48,20 +48,31 @@
                         </button>
                     </li>
                     {% for category_name in faq_categories.keys() %}
+                    {% set slug = category_name|lower|replace(" ", "-") %}
                         <li class="nav-item m-1" role="presentation">
-                            <button class="nav-link px-4 py-2" id="{{ category_name.lower() }}-tab" data-bs-toggle="tab" data-bs-target="#{{ category_name.lower() }}" type="button" role="tab" aria-controls="{{ category_name.lower() }}" aria-selected="false">
-                                {% if category_name == 'Services' %}
-                                    <i class="fas fa-clipboard-check me-2" ></i>
-                                {% elif category_name == 'Ordering' %}
-                                    <i class="fas fa-shopping-cart me-2" ></i>
-                                {% elif category_name == 'Pricing' %}
-                                    <i class="fas fa-tag me-2" ></i>
-                                {% elif category_name == 'Delivery' %}
-                                    <i class="fas fa-truck me-2" ></i>
-                                {% elif category_name == 'Revisions' %}
+                            <button class="nav-link px-4 py-2" id="{{ slug }}-tab" data-bs-toggle="tab" data-bs-target="#{{ slug }}" type="button" role="tab" aria-controls="{{ slug }}" aria-selected="false">
+                                {% if slug == 'security' %}
+                                    <i class="fas fa-shield me-2" ></i>
+                                {% elif slug == 'revisions' %}
                                     <i class="fas fa-sync-alt me-2" ></i>
-                                {% elif category_name == 'Payment' %}
+                                {% elif slug == 'ordering' %}
+                                    <i class="fas fa-file-invoice-dollar me-2" ></i>
+                                {% elif slug == 'communication' %}
+                                    <i class="fas fa-tty me-2" ></i>
+                                {% elif slug == 'pricing' %}
+                                    <i class="fas fa-tag me-2" ></i>
+                                {% elif slug == 'delivery' %}
+                                    <i class="fas fa-truck me-2" ></i>
+                                {% elif slug == 'process' %}
+                                    <i class="fas fa-diagram-project me-2" ></i>
+                                {% elif slug == 'writers' %}
+                                    <i class="fas fa-pen-nib me-2" ></i>
+                                {% elif slug == 'payment' %}
                                     <i class="fas fa-credit-card me-2" ></i>
+                                {% elif slug == 'about-us' %}
+                                    <i class="fas fa-user me-2" ></i>
+                                {% elif slug == 'quality' %}
+                                    <i class="fas fa-award me-2" ></i>
                                 {% else %}
                                     <i class="fas fa-folder me-2" ></i>
                                 {% endif %}
@@ -81,22 +92,33 @@
                             <div class="accordion custom-accordion" id="accordionAllFAQs">
                                 {% set counter = namespace(value=0) %}
                                 {% for category, faqs in faq_categories.items() %}
+                                {% set slug = category|lower|replace(" ", "-") %}
                                     <div class="category-divider mb-4">
                                         <h3 class="category-title h5 mb-3">
-                                            {% if category == 'Services' %}
-                                                <i class="fas fa-clipboard-check text-success me-2"></i>
-                                            {% elif category == 'Ordering' %}
-                                                <i class="fas fa-shopping-cart text-success me-2"></i>
-                                            {% elif category == 'Pricing' %}
-                                                <i class="fas fa-tag text-success me-2"></i>
-                                            {% elif category == 'Delivery' %}
-                                                <i class="fas fa-truck text-success me-2"></i>
-                                            {% elif category == 'Revisions' %}
-                                                <i class="fas fa-sync-alt text-success me-2"></i>
-                                            {% elif category == 'Payment' %}
-                                                <i class="fas fa-credit-card text-success me-2"></i>
+                                            {% if slug == 'security' %}
+                                                <i class="fas fa-shield me-2" ></i>
+                                            {% elif slug == 'process' %}
+                                                <i class="fas fa-diagram-project me-2" ></i>
+                                            {% elif slug == 'revisions' %}
+                                                <i class="fas fa-sync-alt me-2" ></i>
+                                            {% elif slug == 'ordering' %}
+                                                <i class="fas fa-file-invoice-dollar me-2" ></i>
+                                            {% elif slug == 'communication' %}
+                                                <i class="fas fa-tty me-2" ></i>
+                                            {% elif slug == 'pricing' %}
+                                                <i class="fas fa-tag me-2" ></i>
+                                            {% elif slug == 'delivery' %}
+                                                <i class="fas fa-truck me-2" ></i>
+                                            {% elif slug == 'writers' %}
+                                                <i class="fas fa-pen-nib me-2" ></i>
+                                            {% elif slug == 'payment' %}
+                                                <i class="fas fa-credit-card me-2" ></i>
+                                            {% elif slug == 'about-us' %}
+                                                <i class="fas fa-user me-2" ></i>
+                                            {% elif slug == 'quality' %}
+                                                <i class="fas fa-award me-2" ></i>
                                             {% else %}
-                                                <i class="fas fa-folder text-success me-2"></i>
+                                                <i class="fas fa-folder me-2" ></i>
                                             {% endif %}
                                             {{ category }}
                                         </h3>
@@ -139,19 +161,20 @@
                 
                 <!-- Category Tabs -->
                 {% for category_name, faqs in faq_categories.items() %}
-                    <div class="tab-pane fade" id="{{ category_name.lower() }}" role="tabpanel" aria-labelledby="{{ category_name.lower() }}-tab">
+                {% set slug = category_name|lower|replace(" ", "-") %}
+                    <div class="tab-pane fade" id="{{ slug }}" role="tabpanel" aria-labelledby="{{ slug }}-tab">
                         <div class="row">
                             <div class="col-lg-10 mx-auto">
-                                <div class="accordion custom-accordion" id="accordion{{ category_name | replace(' ', '') }}">
+                                <div class="accordion custom-accordion" id="accordion{{ slug }}">
                                     {% for faq in faqs %}
                                         <div class="accordion-item custom-accordion-item mb-3">
-                                            <h2 class="accordion-header" id="heading-{{ category_name.lower() }}-{{ loop.index }}">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ category_name.lower() }}-{{ loop.index }}" aria-expanded="false" aria-controls="collapse-{{ category_name.lower() }}-{{ loop.index }}">
+                                            <h2 class="accordion-header" id="heading-{{ slug }}-{{ loop.index }}">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ slug }}-{{ loop.index }}" aria-expanded="false" aria-controls="collapse-{{ slug }}-{{ loop.index }}">
                                                     <span class="question-number me-3">{{ '%02d' % loop.index }}</span>
                                                     {{ faq.question }}
                                                 </button>
                                             </h2>
-                                            <div id="collapse-{{ category_name.lower() }}-{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ category_name.lower() }}-{{ loop.index }}" data-bs-parent="#accordion{{ category_name | replace(' ', '') }}">
+                                            <div id="collapse-{{ slug }}-{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ slug }}-{{ loop.index }}" data-bs-parent="#accordion{{ slug }}">
                                                 <div class="accordion-body">
                                                     <!-- <div class="answer-content"> -->
                                                         {{ faq.answer | safe }}
@@ -278,7 +301,7 @@
                     <p class="lead mb-0">Order your custom paper today and experience our professional writing service.</p>
                 </div>
                 <div class="col-lg-3 text-lg-end">
-                    <a href="{#{{ url_for('orders.create_order') }}#}" class="btn btn-light btn-lg">
+                    <a href="{{ url_for('client.create_order') }}" class="btn btn-light btn-lg">
                         <i class="fas fa-pencil-alt me-2"></i>Order Now
                     </a>
                 </div>
@@ -288,6 +311,7 @@
 {% endblock %}
 
 {% block styles %}
+{{ super()}}
 <style>
     :root {
         --primary-color: #4CAF50;

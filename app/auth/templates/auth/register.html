@@ -2,15 +2,17 @@
 {% block title %}Register{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('auth.static', filename='auth/css/login.css') }}">
-<link rel="stylesheet" href="{{ url_for('auth.static', filename='auth/css/register.css') }}">
-<link rel="stylesheet" href="{{ url_for('auth.static', filename='auth/css/country-menu.css') }}">
+{{ super() }}
+{% assets "auth_auth_register_css" %}
+    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+{% endassets %}
 {% endblock %}
 
 {% block scripts %}
-<script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
-<script src="{{ url_for('auth.static', filename='auth/js/register.js') }}"></script>
-<script src="{{ url_for('auth.static', filename='auth/js/country-menu.js') }}"></script>
+{{ super() }}
+{% assets "auth_auth_register_js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 {% endblock %}
 
 {% block content %}

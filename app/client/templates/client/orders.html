@@ -3,20 +3,25 @@
 {% block title %}My Orders{% endblock %}
 
 {% block styles %}
-
-<link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders.css')}}">
+{{ super()}}
+{% assets "client_orders_css" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets %}
 
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('client.static', filename='client/js/orders.js') }}"></script>
+{{ super()}}
+    {% assets "client_orders_js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 {% endblock %}
 
 {% block content %}
 <div class="orders-header">
     <h1 class="orders-title">My Orders</h1>
     <div style="display: flex; align-items: center;">
-        <a href="{#{{ url_for('orders.new_order') }}#}" class="new-order-btn">
+        <a href="{{ url_for('client.new_order') }}" class="new-order-btn">
             New Order
         </a>
         <button class="refresh-btn" onclick="refreshOrders()"><i class="fas fa-sync-alt"></i> </button>

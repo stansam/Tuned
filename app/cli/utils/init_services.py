@@ -63,7 +63,7 @@ def init_services_cmd(force):
                     description=service_description,
                     category=category,
                     featured=True,
-                    tags=" ".join(tags_list),
+                    tags=",".join(tags_list),
                     pricing_category_id=pricing_cat_id
                 )
 

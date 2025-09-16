@@ -8,3 +8,8 @@ test/
 uploads/
 Flask-Seo/
 ngrok.exe
+dist/
+build/
+.webassets-cache
+*.pyc
+backups/

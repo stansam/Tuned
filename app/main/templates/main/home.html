@@ -3,20 +3,13 @@
 {% block title %}Home{% endblock %}
 
 {% block styles %}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ url_for('main.static', filename='main/css/home/hero-section.css') }}">
-    <link rel="stylesheet" href="{{ url_for('main.static', filename='main/css/home/quick-quote.css') }}">
-    <link rel="stylesheet" href="{{ url_for('main.static', filename='main/css/home/services-section.css') }}">
-    <link rel="stylesheet" href="{{ url_for('main.static', filename='main/css/home/blogs-section.css') }}">
-    <link rel="stylesheet" href="{{ url_for('main.static', filename='main/css/home/reviews-section.css') }}">
-    <link rel="stylesheet" href="{{ url_for('main.static', filename='main/css/home/samples-section.css') }}">
-    <link rel="stylesheet" href="{{ url_for('main.static', filename='main/css/home/how-it-works.css') }}">
-    <link rel="stylesheet" href="{{ url_for('main.static', filename='main/css/home/seo.css') }}">
+{{ super()}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>  
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    {% assets "main_main_home_css" %}
+        <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+    {% endassets %}
 {% endblock %}
 
 {% block content %}
@@ -30,9 +23,12 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('main.static', filename='main/js/homepage/blogs-section.js') }}"></script>
-<script src="{{ url_for('main.static', filename='main/js/homepage/quick-quote-data-fetcher.js') }}"></script>
-<script src="{{ url_for('main.static', filename='main/js/homepage/quick-quote.js') }}"></script>
-<script src="{{ url_for('main.static', filename='main/js/homepage/quick-quote-loader.js') }}"></script>
-<script src="{{ url_for('main.static', filename='main/js/homepage/seo.js') }}"></script>
+{{ super()}}
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>  
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
+    {% assets "main_main_home_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 {% endblock %}

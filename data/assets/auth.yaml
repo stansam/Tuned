@@ -1,0 +1,39 @@
+bundles:  
+  auth_js:
+    filters: jsmin
+    output: dist/auth.min.js
+    contents:
+      - auth/auth/js/main.js
+
+  auth_login_js:
+    filters: jsmin
+    output: dist/auth/login.min.js
+    contents:
+      - auth/auth/js/login.js
+
+  auth_register_js:
+    filters: jsmin
+    output: dist/auth/register.min.js
+    contents:
+      - auth/auth/js/country-menu.js
+      - auth/auth/js/register.js
+      
+  auth_css:
+    filters: cssmin
+    output: dist/auth.min.css
+    contents:
+      - auth/auth/css/main.css
+      - auth/auth/css/login.css
+
+  auth_register_css:
+    filters: cssmin
+    output: dist/auth/register.min.css
+    contents:
+      - auth/auth/css/country-menu.css
+      - auth/auth/css/register.css
+
+  auth_forgot_pass_css:
+    filters: cssmin
+    output: dist/auth/forgot_pass.min.css
+    contents:
+      - auth/auth/css/forgot-password.css

@@ -3,8 +3,12 @@
 {% block title %}Blog Management - TunedEssays Admin{% endblock %}
 
 {% block styles %}
+{{ super() }}
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="{{url_for('admin.static', filename='css/blogs/list-blogs.css')}}">
+{% assets "admin_blog_list_css" %}
+<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+{% endassets %}
+<!-- <link rel="stylesheet" href="{{url_for('admin.static', filename='css/blogs/list-blogs.css')}}"> -->
 {% endblock %}
 
 {% block content %}
@@ -451,6 +455,8 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{url_for('admin.static', filename='js/blogs/blog-man.js')}}"></script>
-<script src="{{url_for('admin.static', filename='js/blogs/list-blogs.js')}}"></script>
+{{ super() }}
+{% assets "admin_blog_list_js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 {% endblock %}

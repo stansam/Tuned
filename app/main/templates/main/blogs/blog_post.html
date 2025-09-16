@@ -41,11 +41,14 @@
                     </div>
                     
                     <!-- Featured Image -->
-                    {% if post.featured_image %}
-                        <div class="post-featured-image mb-4">
-                            <img src="{{ post.featured_image }}" alt="{{ post.title }}" class="img-fluid rounded">
-                        </div>
-                    {% endif %}
+                    <div class="post-featured-image mb-4">
+                        {% if post.featured_image %}
+                            <img src="{{ url_for('static', filename=post.featured_image) }}" alt="{{ post.title }}" class="img-fluid rounded">
+                        {% else %}
+                        <img src="{{ url_for('main.static', filename='main/assets/no-blog.jpeg') }}" class="img-fluid rounded" alt="{{ post.title }}">
+                        {% endif %}
+                    </div>
+                    
                     
                     <!-- Post Content -->
                     <div class="post-content bg-white p-4 rounded shadow-sm mb-4">
@@ -107,15 +110,16 @@
                                 <div class="col-md-6 mb-4">
                                     <div class="card h-100 border-0 shadow-sm">
                                         {% if related_post.featured_image %}
-                                            <img src="{{ related_post.featured_image }}" class="card-img-top" alt="{{ related_post.title }}">
+                                            <img src="{{ url_for('static', filename=related_post.featured_image) }}" class="card-img-top" alt="{{ related_post.title }}">
                                         {% else %}
-                                            <div class="card-img-top bg-light py-4 text-center">
+                                            <!-- <div class="card-img-top bg-light py-4 text-center">
                                                 <svg width="150" height="100" viewBox="0 0 150 100" class="img-fluid">
                                                     <rect width="150" height="100" fill="#e6f0ff" rx="5" ry="5"/>
                                                     <path d="M60,50 L90,50 M75,35 L75,65" stroke="#0056b3" stroke-width="6" stroke-linecap="round"/>
                                                     <circle cx="75" cy="50" r="30" fill="none" stroke="#0056b3" stroke-width="2"/>
                                                 </svg>
-                                            </div>
+                                            </div> -->
+                                            <img src="{{ url_for('main.static', filename='main/assets/no-blog.jpeg') }}" class="card-img-top" alt="{{ related_post.title }}">
                                         {% endif %}
                                         <div class="card-body">
                                             <div class="post-meta mb-2">
@@ -169,14 +173,15 @@
                                 <ul class="recent-posts-list list-unstyled mb-0">
                                     {% for recent_post in recent_posts %}
                                         <li class="recent-post-item mb-3 pb-3 {% if not loop.last %}border-bottom{% endif %}">
-                                            <a href="{{ url_for('main.post', slug=recent_post.slug) }}" class="d-flex align-items-center text-decoration-none">
+                                            <a href="{{ url_for('main.post', slug=recent_post.slug) }}" class="d-flex align-items-center justify-content-flex-start text-decoration-none">
                                                 <div class="flex-shrink-0">
                                                     {% if recent_post.featured_image %}
                                                         <img src="{{ url_for('static', filename=recent_post.featured_image.replace('\\', '/')) }}" alt="{{ recent_post.title }}" class="recent-post-thumb" width="60" height="60">
                                                     {% else %}
-                                                        <div class="recent-post-thumb bg-light rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                                        <!-- <div class="recent-post-thumb bg-light rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                                                             <i class="fas fa-newspaper text-success"></i>
-                                                        </div>
+                                                        </div> -->
+                                                        <img src="{{ url_for('main.static', filename='main/assets/no-blog.jpeg') }}" class="recent-post-thumb" alt="{{ recent_post.title }}" width="60" height="60">
                                                     {% endif %}
                                                 </div>
                                                 <div class="flex-grow-1 ms-3">
@@ -243,6 +248,7 @@
 {% endblock %}
 
 {% block styles %}
+{{ super()}}
 <style>
     .post-content {
         line-height: 1.8;
@@ -282,6 +288,7 @@
     .recent-post-thumb {
         object-fit: cover;
         border-radius: 4px;
+        /* width: 90%; */
     }
     
     .category-item:last-child a {

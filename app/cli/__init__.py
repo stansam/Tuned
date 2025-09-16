@@ -20,7 +20,7 @@ from app.cli.utils.init_content import init_content_cmd
 from app.cli.utils.init_blog import init_blog_cmd
 from app.cli.utils.init_all import init_all_cmd
 from app.cli.utils.drop_table import drop_table_cmd
-
+from app.cli.utils.init_faq import init_faqs_command, list_faqs_command, clear_faqs_command
 
 def register_cli_commands(app):
     app.cli.add_command(init_users_cmd)
@@ -31,3 +31,6 @@ def register_cli_commands(app):
     app.cli.add_command(init_blog_cmd)
     app.cli.add_command(init_all_cmd)
     app.cli.add_command(drop_table_cmd)
+    app.cli.add_command(init_faqs_command)
+    app.cli.add_command(list_faqs_command)
+    app.cli.add_command(clear_faqs_command)
