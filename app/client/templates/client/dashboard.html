@@ -1,11 +1,14 @@
 {% extends "client/base.html" %}
 {% block title %}Dashboard {% endblock %}
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/dashboard.css') }}">
-<link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/profile/edit-profile.css') }}">
+{{ super()}}
+{% assets "client_client_dashboard_css" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets %}
 {% endblock %}
 
 {% block scripts %}
+{{ super() }}
 <!-- <link rel="stylesheet" href="{{ url_for('client.static', filename='client/js/profile/refresh.js') }}">
 <link rel="stylesheet" href="{{ url_for('client.static', filename='client/js/profile/edit-profile.js') }}"> -->
 <script>

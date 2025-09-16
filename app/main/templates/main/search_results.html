@@ -5,6 +5,7 @@
 {% block meta_description %}Search results for "{{ query }}" - Find professional writing services, blog posts, and more at TunedEssays.{% endblock %}
 
 {% block styles %}
+{{ super() }}
 <style>
     :root {
         --primary-color: #4CAF50;
@@ -686,6 +687,7 @@
 {% endblock %}
 
 {% block scripts %}
+{{ super() }}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Filter functionality

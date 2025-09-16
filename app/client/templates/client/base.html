@@ -5,13 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf_token" content="{{ csrf_token() }}" id="csrfTokenMeta">
     <title>{% block title %}{% endblock %} &nbsp;|&nbsp; TunedEssays </title>
-    <link rel="shortcut icon" href="{{ url_for('client.static', filename='client/assets/Logo.svg') }}" />
-    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/main.css')}}">
-    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/navbar.css')}}">
-    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/sidebar.css')}}">
-    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/chats/chat.css')}}">
-    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/notification/panel.css')}}">
-    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/notification/modal.css')}}">
+    {% assets "client_client_css" %}
+        <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+    {% endassets %}
     <!-- <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/mobile_menu.css')}}">
     <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/responsive.css')}}">
     <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/screen_reader.css')}}"> -->
@@ -43,10 +39,14 @@
         const currentUserId = {{ current_user.id if current_user.is_authenticated else 'null' }};
         const isAdmin = {{ 'true' if current_user.is_authenticated and current_user.is_admin else 'false' }};
     </script>
-    <script type="text/javascript" src="{{ url_for('client.static', filename='client/js/main.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('client.static', filename='client/js/socket/socket_client.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('client.static', filename='client/js/chats/chat.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('client.static', filename='client/js/notifications/notificationManager.js') }}"></script>
+    
+    {% assets "global_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {% assets "client_client_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
     <!-- <script rel="stylesheet" src="{{ url_for('client.static', filename='client/js/responsive.js') }}"></script> -->
     {% block scripts %}{% endblock %}
 </body>

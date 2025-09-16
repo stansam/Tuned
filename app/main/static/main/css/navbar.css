@@ -62,8 +62,9 @@
     /* fill: #000000; */
     /* dominant-baseline: hanging; */
 /* } */
-.logo-img {
+.nav-home-link img {
     width: 40px;
+    max-width: none;
     height: 40px;
     margin-left: 1rem;
 }

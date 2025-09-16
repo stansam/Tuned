@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock %}&nbsp;|&nbsp; TunedEssays</title>
     <link rel="shortcut icon" href="{{ url_for('client.static', filename='client/assets/Logo.svg') }}" />
-    <link rel="stylesheet" href="{{ url_for('auth.static', filename='auth/css/main.css') }}">
+    {% assets "auth_auth_css" %}
+        <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+    {% endassets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Leckerli+One&display=swap" rel="stylesheet">
     {% block styles %} {% endblock %}
@@ -28,7 +30,14 @@
         {% endif %} 
     {% endwith %}
     
-    <script src="{{ url_for('auth.static', filename='auth/js/main.js') }}"></script>
+    {% assets "global_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    
+    <!-- Client JavaScript (if needed for functionality) -->
+    {% assets "auth_auth_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
     {% block scripts %} {% endblock %}
 </body>
 </html>

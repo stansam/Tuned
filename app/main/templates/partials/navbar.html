@@ -5,7 +5,7 @@
             <i class="fas fa-bars"></i>
         </button>
         <a href="{{ url_for('main.home') }}" class="nav-home-link">
-            <img src="{{ url_for('main.static', filename='main/assets/Logo.svg') }}" alt="TunedEssays Logo" class="logo-img"></img>
+            <img loading="lazy" decoding="async" src="{{ url_for('main.static', filename='main/assets/Logo.svg') }}" alt="TunedEssays Logo" class="logo-img"></img>
         <!-- <div class="logo-text"><a href="{{ url_for('main.home') }}" class="logo"><image src="{{url_for('static', filename='assets/Logo.svg')}}" alt="TunedEssays"></image></a></div> -->
             <span class="logo-text">Tuned<span class="accent">Essays</span></span>
         </a>

@@ -6,7 +6,9 @@
     <link rel="shortcut icon" href="{{ url_for('client.static', filename='client/assets/Logo.svg') }}" />
     <title>Secure Manual Payment</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{{url_for('client.static', filename='client/css/payment/payment.css')}}">
+    {% assets "client_client_checkout_css" %}
+        <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+    {% endassets %}
 </head>
 <body>
     <div class="payment-container">
@@ -397,5 +399,8 @@
             });
         });
     </script>
+    {% assets "global_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 </body>
 </html>

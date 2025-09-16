@@ -1,10 +1,15 @@
 {% extends 'admin/base.html' %}
 
 {% block title %}Admin Dashboard{% endblock %}
-{% block styles %}
 
-<link rel="stylesheet" href="{{ url_for('admin.static', filename='css/cards.css') }}">
+{% block styles %}
+{{ super() }}
+<!-- <link rel="stylesheet" href="{{ url_for('admin.static', filename='css/cards.css') }}"> -->
+{% assets "admin_admin_dashboard_css" %}
+<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+{% endassets %}
 {% endblock %}
+
 {% block content %}
 <div class="container-fluid py-4">
     <div class="row mb-4">
@@ -442,5 +447,7 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{url_for('admin.static', filename='js/dashboard.js')}}"></script>
+{% assets "admin_admin_dashboard_js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 {% endblock %}

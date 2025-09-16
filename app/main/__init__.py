@@ -1,4 +1,6 @@
 from flask import Blueprint
+from flask_assets import Environment, Bundle
+import yaml
 
 main_bp = Blueprint("main", __name__, template_folder="templates", static_folder="static", static_url_path="/static/main")
 

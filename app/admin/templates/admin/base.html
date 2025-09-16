@@ -39,30 +39,9 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('admin.static', filename='css/main.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('admin.static', filename='css/sidebar.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('admin.static', filename='css/navbar.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('admin.static', filename='css/notifications/notification-panel.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('admin.static', filename='css/chats/chat.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('admin.static', filename='css/notifications/modal.css') }}"
-    />
+    {% assets "admin_admin_css" %}
+        <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+    {% endassets %}
     {% block styles %}{% endblock %}
   </head>
 
@@ -488,7 +467,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="{{ url_for('admin.static', filename='js/main.js') }}"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
     <script>
@@ -497,9 +475,14 @@
         const API_BASE_URL = "http://api.tunedessays.com:5000"
         const ADMIN_BASE_URL = "http://admin.tunedessays.com:5000"
     </script>
-    <script src="{{ url_for('admin.static', filename='js/socket/socket_client.js') }}"></script>
-    <script src="{{ url_for('admin.static', filename='js/chats/chat.js') }}"></script>
-    <script src="{{ url_for('admin.static', filename='js/notifications/notificationManager.js') }}"></script>
+
+    {% assets "global_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {% assets "admin_admin_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 
     <!-- Socket.io -->
     <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.min.js"></script> -->

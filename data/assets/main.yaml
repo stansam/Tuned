@@ -1,0 +1,39 @@
+bundles:  
+  main_js:
+    filters: jsmin
+    output: dist/main.min.js
+    contents:
+      - main/main/js/main/main.js
+
+  main_home_js:
+    filters: jsmin
+    output: dist/main/home.min.js
+    contents:
+      - main/main/js/homepage/blogs-section.js
+      - main/main/js/homepage/quick-quote-data-fetcher.js
+      - main/main/js/homepage/quick-quote-loader.js
+      - main/main/js/homepage/quick-quote.js
+      - main/main/js/homepage/seo.js
+
+  main_css:
+    filters: cssmin
+    output: dist/main.min.css
+    contents:
+      - main/main/css/main.css
+      - main/main/css/navbar.css
+      - main/main/css/footer.css
+      
+  
+  main_home_css:
+    filters: cssmin
+    output: dist/main/home.min.css
+    contents:
+      - main/main/css/home.css
+      - main/main/css/home/blogs-section.css
+      - main/main/css/home/hero-section.css
+      - main/main/css/home/how-it-works.css
+      - main/main/css/home/quick-quote.css
+      - main/main/css/home/reviews-section.css
+      - main/main/css/home/samples-section.css
+      - main/main/css/home/seo.css
+      - main/main/css/home/services-section.css

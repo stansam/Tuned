@@ -1,0 +1,55 @@
+faqs:
+  - question: "What is TunedEssays, and how can it help me?"
+    answer: "TunedEssays is your trusted partner in academic success. We offer personalized writing, editing, and proofreading services designed to meet your specific assignment needs. Whether you're juggling multiple classes, managing a full-time job, or just need expert support, our platform allows you to access help on your terms, conveniently, and from wherever you are."
+    category: "About Us"
+    order: 1
+
+  - question: "How does the writing process work?"
+    answer: "Once your order is placed, we begin by reviewing your instructions thoroughly. If you've started working on a draft, we'll provide detailed feedback to strengthen and polish your work. You'll be able to communicate directly with us throughout the process via chat or email, so you stay informed, involved, and in control."
+    category: "Process"
+    order: 1
+
+  - question: "How is pricing determined?"
+    answer: "Our pricing is based on the length of your assignment, the academic level, and the urgency, not on hourly rates. We also offer volume-based discounts for larger or recurring orders. Everything is transparent from the start, and you'll always know what you're paying for."
+    category: "Pricing"
+    order: 1
+
+  - question: "How can I make a payment?"
+    answer: "TunedEssays supports flexible and secure payment options. We accept most major payment methods, including credit/debit cards, PayPal, and more. For longer-term projects or semester-based support, we can arrange flexible installment plans tailored to your academic calendar."
+    category: "Payment"
+    order: 1
+
+  - question: "How soon can I get my paper?"
+    answer: "Turnaround times depend on the length and complexity of the assignment. We handle urgent tasks as quickly as within 3 hours, but the earlier you submit your request, the more time you have for reviewing and requesting edits. We always encourage clients to order ahead for the best experience."
+    category: "Delivery"
+    order: 1
+
+  - question: "Do you guarantee quality and satisfaction?"
+    answer: "Absolutely. Our work is aligned with your exact requirements, and we offer a 10-day free revision period in case adjustments are needed. If you're ever unsatisfied with the final outcome, even after revisions, we offer a money-back guarantee in accordance with our terms."
+    category: "Quality"
+    order: 1
+
+  - question: "Is your service confidential and secure?"
+    answer: "Your privacy is our priority. We use advanced 256-bit encryption to ensure all transactions and communications remain fully secure. Your data will never be shared with third parties, and no one will know you've used our services unless you choose to tell them."
+    category: "Security"
+    order: 1
+
+  - question: "Will my paper be plagiarism-free?"
+    answer: "Yes. Every assignment is crafted from scratch based on your unique instructions. We never reuse content, and every project includes a plagiarism scan to guarantee originality. You can even request the plagiarism report at no extra cost."
+    category: "Quality"
+    order: 2
+
+  - question: "Who will be working on my order?"
+    answer: "Your work will be handled by a vetted expert with an academic background in your subject area. Our writers and editors go through a rigorous selection process, including grammar tests, writing assessments, and background verification, to ensure only the most capable professionals work with TunedEssays."
+    category: "Writers"
+    order: 1
+
+  - question: "What if I'm not satisfied with the final product?"
+    answer: "Your satisfaction is our mission. You have full oversight during the process, and we welcome your feedback at any stage. If the final draft doesn't meet your expectations, we offer free revisions and even a refund option if necessary."
+    category: "Quality"
+    order: 3
+
+  - question: "Is the payment process safe?"
+    answer: "Yes. All payments are processed through secure, industry-standard gateways. We never store your financial details, and we ensure that every transaction is protected from unauthorized access."
+    category: "Payment"
+    order: 2

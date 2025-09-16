@@ -3,6 +3,7 @@
 {% block title %}Testimonial Management - TunedEssays Admin{% endblock %}
 
 {% block styles %}
+{{ super() }}
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .testimonial-card {
@@ -539,6 +540,7 @@
 {% endblock %}
 
 {% block scripts %}
+{{ super() }}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize selectize for service selection

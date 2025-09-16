@@ -3,21 +3,30 @@
 {% block title %}Order Details{% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details.css') }}"> -->
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet"> -->
-    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details/details_tab.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details/details_tab.css') }}">
     <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details/activity_tab.css') }}">
     <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details/activity-tab/order-chat-form.css') }}">
     <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details/file_highlight_modal.css') }}">
-    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details/delivery-tab.css') }}">
+    <link rel="stylesheet" href="{{ url_for('client.static', filename='client/css/orders/order_details/delivery-tab.css') }}"> -->
+    {{ super()}}
+    {% assets "client_order_detail_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
 {% endblock %}
 
 {% block scripts %}
+{{ super()}}
+    
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('client.static', filename='client/js/orders/order_details.js') }}"></script>
+{% assets "client_order_detail_js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+    <!-- <script src="{{ url_for('client.static', filename='client/js/orders/order_details.js') }}"></script>
     <script src="{{ url_for('client.static', filename='client/js/orders/activity_tab.js') }}"></script>
     <script src="{{ url_for('client.static', filename='client/js/orders/activity-tab/orderChatForm.js') }}"></script>
-    <script src="{{ url_for('client.static', filename='client/js/orders/external.js') }}"></script>
+    <script src="{{ url_for('client.static', filename='client/js/orders/external.js') }}"></script> -->
 {% endblock %}
 
 {% block content %}

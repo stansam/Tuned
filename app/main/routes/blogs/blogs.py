@@ -6,7 +6,16 @@ from flask import render_template, request
 @main_bp.route('/blogs')
 @main_bp.route('/blogs/page/<int:page>')
 def index(page=1):
-    posts_query = BlogPost.query.filter_by(is_published=True).order_by(BlogPost.published_at.desc())
+    posts_query = BlogPost.query.filter_by(is_published=True) # .order_by(BlogPost.published_at.desc())
+
+    q = request.args.get("q", "").strip()
+
+    if q:
+        posts_query = posts_query.filter(
+            BlogPost.title.ilike(f"%{q}%") | BlogPost.content.ilike(f"%{q}%")
+        )
+    posts_query = posts_query.order_by(BlogPost.published_at.desc())
+    
     pagination = posts_query.paginate(page=page, per_page=6, error_out=False)
     posts = pagination.items
 
@@ -26,6 +35,7 @@ def index(page=1):
                           recent_posts=recent_posts,
                           categories=categories,
                           request=request,
+                          q=q,
                           title="Blog")
 
 
@@ -43,7 +53,7 @@ def category(slug, page=1):
     # Get recent posts for sidebar
     recent_posts = BlogPost.query.filter_by(is_published=True).order_by(BlogPost.published_at.desc()).limit(5).all()
 
-    return render_template('blog/blog_category.html', 
+    return render_template('main/blogs/blog_category.html', 
                           category=category, 
                           posts=posts,
                           pagination=pagination,

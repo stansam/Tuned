@@ -1,0 +1,65 @@
+bundles:  
+  admin_js:
+    filters: jsmin
+    output: dist/admin.min.js
+    contents:
+      - admin/js/main.js      
+      - admin/js/chats/chat.js
+      - admin/js/notifications/notificationManager.js
+      - admin/js/socket/socket_client.js
+  
+  admin_blog_list_js:
+    filters: jsmin
+    output: dist/admin/blog_list.min.js
+    contents:
+    - admin/js/blogs/blog-man.js
+    - admin/js/blogs/list-blogs.js
+
+  admin_samples_list_js:
+    filters: jsmin
+    output: dist/admin/samples_list.min.js
+    contents:
+    - admin/js/samples/edit-sample.js
+
+  admin_orders_view_js:
+    filters: jsmin
+    output: dist/admin/orders_view.min.js
+    contents:
+    - admin/js/orders/extension.js
+    - admin/js/orders/upload-file.js
+
+  admin_dashboard_js:
+    filters: jsmin
+    output: dist/admin/dashboard.min.js
+    contents:
+    - admin/js/dashboard.js
+
+
+  admin_css:
+    filters: cssmin
+    output: dist/admin.min.css
+    contents:
+      - admin/css/main.css
+      - admin/css/navbar.css
+      - admin/css/sidebar.css
+      - admin/css/chats/chat.css
+      - admin/css/notifications/modal.css
+      - admin/css/notifications/notification-panel.css
+
+  admin_blog_list_css:
+    filters: cssmin
+    output: dist/admin/blog_list.min.css
+    contents:
+    - admin/css/blogs/list-blogs.css
+
+  admin_orders_view_css:
+    filters: cssmin
+    output: dist/admin/orders_view.min.css
+    contents:
+    - admin/css/orders/upload-modal.css
+
+  admin_dashboard_css:
+    filters: cssmin
+    output: dist/admin/dashboard.min.css
+    contents:
+    - admin/css/cards.css

@@ -2,6 +2,7 @@ from flask import Flask
 from app.config import Config
 import logging
 import os
+# from flask_assets import Environment
 
 def create_app():
     app = Flask(__name__, subdomain_matching=True, template_folder=os.path.join(os.path.dirname(__file__), 'templates'), static_folder=os.path.join(os.path.dirname(__file__), 'static'))
@@ -29,10 +30,17 @@ def create_app():
     from app.sitemap_robots import bp as sitemap_robots_bp
     app.register_blueprint(sitemap_robots_bp)
 
-    from app.main import main_bp
-    from app.client import client_bp
-    from app.admin import admin_bp
-    from app.auth import auth_bp
+    # assets = Environment()
+    # assets.init_app(app)
+
+    # from app.assets import setup_global_assets
+    # setup_global_assets(app)
+
+    # with app.app_context():
+    from app.main import main_bp, setup_main_assets
+    from app.client import client_bp, setup_client_assets
+    from app.admin import admin_bp, setup_admin_assets
+    from app.auth import auth_bp, setup_auth_assets
     from app.api import api_bp
     from app.main.routes.filters import remove_headings_filter
 
@@ -43,6 +51,12 @@ def create_app():
     app.register_blueprint(api_bp, subdomain="api")
     app.register_blueprint(client_bp, subdomain="client")
     app.register_blueprint(admin_bp, subdomain="admin")
+
+    from app.utils.assets import init_assets
+    project_root = os.path.dirname(os.path.dirname(__file__))
+    init_assets(app, project_root)
+
+
 
     content_uploads_dir = os.path.join(app.static_folder, 'uploads')
     os.makedirs(content_uploads_dir, exist_ok=True)
@@ -169,10 +183,16 @@ def create_app():
         return {
             'service_categories': ServiceCategory.query.all()
         }
+    
+    # @app.context_processor
+    # def inject_assets():
+    #     return dict(assets=assets)
 
     @login_manager.user_loader
     def load_user(user_id):
         from app.models.user import User
         return User.query.get(int(user_id))
+    
+    # assets, bundles = setup_assets(app, blueprint_name=None)
     
     return app

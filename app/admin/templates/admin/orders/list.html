@@ -3,6 +3,7 @@
 {% block title %}Orders Management - TunedEssays Admin{% endblock %}
 
 {% block styles %}
+{{ super() }}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
     .order-card {
@@ -635,6 +636,7 @@
 {% endblock %}
 
 {% block scripts %}
+{{ super() }}
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
