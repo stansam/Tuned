@@ -24,7 +24,7 @@ bundles:
     filters: jsmin
     output: dist/client/orders.min.js
     contents:
-      - client/client/js/orders.
+      - client/client/js/orders.js
       
   client_create_order_js:
     filters: jsmin
