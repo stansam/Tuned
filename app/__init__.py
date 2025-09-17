@@ -30,17 +30,10 @@ def create_app():
     from app.sitemap_robots import bp as sitemap_robots_bp
     app.register_blueprint(sitemap_robots_bp)
 
-    # assets = Environment()
-    # assets.init_app(app)
-
-    # from app.assets import setup_global_assets
-    # setup_global_assets(app)
-
-    # with app.app_context():
-    from app.main import main_bp, setup_main_assets
-    from app.client import client_bp, setup_client_assets
-    from app.admin import admin_bp, setup_admin_assets
-    from app.auth import auth_bp, setup_auth_assets
+    from app.main import main_bp
+    from app.client import client_bp
+    from app.admin import admin_bp
+    from app.auth import auth_bp
     from app.api import api_bp
     from app.main.routes.filters import remove_headings_filter
 
