@@ -224,7 +224,7 @@ def init_assets(app: Flask, project_root: str = None) -> Environment:
     return assets
 
 
-def register_assets_cli(app: Flask, assets: Environment) -> None:
-    """Attach flask-assets CLI commands to `flask`."""
-    from flask_assets import ManageAssets
-    app.cli.add_command(ManageAssets(assets), "assets")
+# def register_assets_cli(app: Flask, assets: Environment) -> None:
+#     """Attach flask-assets CLI commands to `flask`."""
+#     from flask_assets import ManageAssets
+#     app.cli.add_command(ManageAssets(assets), "assets")

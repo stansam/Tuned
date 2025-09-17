@@ -45,11 +45,11 @@ def create_app():
     app.register_blueprint(client_bp, subdomain="client")
     app.register_blueprint(admin_bp, subdomain="admin")
 
-    from app.utils.assets import init_assets, register_assets_cli
+    from app.utils.assets import init_assets #, register_assets_cli
     project_root = os.path.dirname(os.path.dirname(__file__))
     assets = init_assets(app, project_root)
 
-    register_assets_cli(app, assets)
+    # register_assets_cli(app, assets)
 
 
 
