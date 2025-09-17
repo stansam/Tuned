@@ -17,7 +17,8 @@ class Config:
             f"postgresql://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}"
             f"@{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}"
         )
-    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI', 'sqlite:///app.db')
+    else:
+        SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI', 'sqlite:///app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ALLOWED_PIC_EXT ={'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
@@ -51,6 +52,7 @@ class Config:
     ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'txt'}
 
     CACHE_TYPE = os.environ.get("CACHE_TYPE", "null")
+    CACHE_REDIS_URL = os.environ.get('CACHE_REDIS_URL') or 'redis://localhost:6379/0'
     CACHE_DEFAULT_TIMEOUT = 300
 
     SSL_REDIRECT = os.environ.get("SSL_REDIRECT", False).lower() in ['true', '1']
@@ -60,4 +62,3 @@ class Config:
 
     # Cache (for production)
     # CACHE_TYPE = "redis"
-    # CACHE_REDIS_URL = os.environ.get('CACHE_REDIS_URL') or 'redis://localhost:6379/0'

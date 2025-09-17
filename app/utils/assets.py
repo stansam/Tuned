@@ -8,6 +8,9 @@ import yaml
 from typing import Dict, List, Any
 from flask import Flask, current_app
 from flask_assets import Environment, Bundle
+from flask.cli import with_appcontext
+import click
+
 
 
 def load_yaml_config(file_path: str) -> Dict[str, Any]:
@@ -44,6 +47,12 @@ def create_bundle_from_config(bundle_name: str, bundle_config: Dict[str, Any]) -
     if isinstance(filters, list):
         filters = ','.join(filters)
     
+    if not current_app.debug and current_app.config.get('ENVIRONMENT') == 'production':
+        if 'js' in output and 'jsmin' not in filters:
+            filters = f"{filters},jsmin" if filters else "jsmin"
+        elif 'css' in output and 'cssmin' not in filters:
+            filters = f"{filters},cssmin" if filters else "cssmin"
+    
     # Create bundle with contents and configuration
     bundle = Bundle(
         *contents,
@@ -79,7 +88,7 @@ def load_blueprint_assets(blueprint_name: str, data_dir: str) -> Dict[str, Bundl
     return bundles
 
 
-def compile_global_assets(assets: Environment, data_dir: str) -> Environment:
+def compile_global_assets(assets: Environment, data_dir: str, force_build: bool = False) -> Environment:
     """
     Compile global assets that are shared across all blueprints.
     
@@ -95,18 +104,25 @@ def compile_global_assets(assets: Environment, data_dir: str) -> Environment:
         current_app.logger.info(f"Registered global bundle: {bundle_name}")
     
     # Build bundles in development environment
-    if current_app.config.get('ENVIRONMENT') == 'development' or current_app.debug:
+    should_build = (
+        force_build or 
+        current_app.config.get('ENVIRONMENT') == 'development' or 
+        current_app.debug or
+        current_app.config.get('ASSETS_AUTO_BUILD', False)
+    )
+    
+    if should_build:
         for bundle_name, bundle in global_bundles.items():
             try:
-                bundle.build()
-                current_app.logger.info(f"Built global bundle: {bundle_name}")
+                urls = bundle.build()
+                current_app.logger.info(f"Built global bundle '{bundle_name}': {urls}")
             except Exception as e:
                 current_app.logger.error(f"Error building global bundle '{bundle_name}': {e}")
     
     return assets
 
 
-def compile_blueprint_assets(assets: Environment, blueprint_name: str, data_dir: str) -> Environment:
+def compile_blueprint_assets(assets: Environment, blueprint_name: str, data_dir: str, force_build: bool = False) -> Environment:
     """
     Compile assets for a specific blueprint.
     
@@ -125,18 +141,26 @@ def compile_blueprint_assets(assets: Environment, blueprint_name: str, data_dir:
         current_app.logger.info(f"Registered {blueprint_name} bundle: {unique_bundle_name}")
     
     # Build bundles in development environment
-    if current_app.config.get('ENVIRONMENT') == 'development' or current_app.debug:
+    should_build = (
+        force_build or 
+        current_app.config.get('ENVIRONMENT') == 'development' or 
+        current_app.debug or
+        current_app.config.get('ASSETS_AUTO_BUILD', False)
+    )
+    
+    if should_build:
         for bundle_name, bundle in blueprint_bundles.items():
+            unique_bundle_name = f"{blueprint_name}_{bundle_name}"
             try:
-                bundle.build()
-                current_app.logger.info(f"Built {blueprint_name} bundle: {bundle_name}")
+                urls = bundle.build()
+                current_app.logger.info(f"Built {blueprint_name} bundle '{unique_bundle_name}': {urls}")
             except Exception as e:
                 current_app.logger.error(f"Error building {blueprint_name} bundle '{bundle_name}': {e}")
     
     return assets
 
 
-def compile_all_assets(assets: Environment, project_root: str = None) -> Environment:
+def compile_all_assets(assets: Environment, project_root: str = None, force_build: bool = False) -> Environment:
     """
     Compile all assets for the Flask application including global and blueprint-specific assets.
     
@@ -162,12 +186,12 @@ def compile_all_assets(assets: Environment, project_root: str = None) -> Environ
     try:
         # Compile global assets first
         current_app.logger.info("Compiling global assets...")
-        assets = compile_global_assets(assets, data_dir)
+        assets = compile_global_assets(assets, data_dir, force_build)
         
         # Compile blueprint-specific assets
         for blueprint_name in blueprints:
             current_app.logger.info(f"Compiling assets for blueprint: {blueprint_name}")
-            assets = compile_blueprint_assets(assets, blueprint_name, data_dir)
+            assets = compile_blueprint_assets(assets, blueprint_name, data_dir, force_build)
         
         current_app.logger.info("All assets compiled successfully!")
         
@@ -213,12 +237,17 @@ def init_assets(app: Flask, project_root: str = None) -> Environment:
     # Set up asset configuration
     app.config.setdefault('ASSETS_DEBUG', app.debug)
     app.config.setdefault('ASSETS_AUTO_BUILD', True)
+    if app.config.get('ENVIRONMENT') == 'production':
+        app.config.setdefault('ASSETS_DEBUG', False)
+        app.config.setdefault('ASSETS_AUTO_BUILD', False)
+        app.config.setdefault('ASSETS_CACHE_TIMEOUT', 31536000)
     
     with app.app_context():
-        # Compile all assets
-        assets = compile_all_assets(assets, project_root)
-        
-        # Make the get_bundle_url function available in templates
+        if app.debug or app.config.get('ASSETS_AUTO_BUILD', False):
+            assets = compile_all_assets(assets, project_root)
+        else:
+            assets = compile_all_assets(assets, project_root, force_build=False)
+
         app.jinja_env.globals['get_bundle_url'] = get_bundle_url
     
     return assets

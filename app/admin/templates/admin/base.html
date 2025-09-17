@@ -472,8 +472,8 @@
     <script>
         const currentUserId = {{ current_user.id if current_user.is_authenticated else 'null' }};
         const isAdmin = {{ 'true' if current_user.is_authenticated and current_user.is_admin else 'false' }};
-        const API_BASE_URL = "http://api.tunedessays.com:5000"
-        const ADMIN_BASE_URL = "http://admin.tunedessays.com:5000"
+        const API_BASE_URL = "https://api.tunedessays.com"
+        const ADMIN_BASE_URL = "https://admin.tunedessays.com"
     </script>
 
     {% assets "global_js" %}

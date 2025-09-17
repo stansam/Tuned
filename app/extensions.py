@@ -17,7 +17,7 @@ login_manager = LoginManager()
 mail = Mail()
 csrf = CSRFProtect()
 cors = CORS()
-socketio = SocketIO(cors_allowed_origins="*")
+socketio = SocketIO(cors_allowed_origins=[])
 
 # Rate limiter
 limiter = Limiter(
