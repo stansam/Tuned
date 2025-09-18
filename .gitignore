@@ -13,3 +13,6 @@ build/
 .webassets-cache
 *.pyc
 backups/
+*.conf
+*.service
+tunedessays
