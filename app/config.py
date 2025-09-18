@@ -9,16 +9,12 @@ class Config:
     DEBUG = os.environ.get('DEBUG', 'False').lower() in ['true', '1']
     ENVIRONMENT = os.environ.get('ENVIRONMENT', 'production')
 
-    SERVER_NAME = os.environ.get("SERVER_NAME", "tunedessays.com:5000")
+    SERVER_NAME = os.environ.get("SERVER_NAME", "tunedessays.com")
     SESSION_COOKIE_DOMAIN = os.environ.get('SESSION_COOKIE_DOMAIN', None)
 
-    if os.environ.get('ENVIRONMENT') == 'production':
-        SQLALCHEMY_DATABASE_URI = (
-            f"postgresql://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}"
-            f"@{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}"
-        )
-    else:
-        SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI', 'sqlite:///app.db')
+    
+    SQLALCHEMY_DATABASE_URI = f"postgresql://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}"
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ALLOWED_PIC_EXT ={'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
@@ -59,6 +55,3 @@ class Config:
 
     ASSETS_AUTO_BUILD = os.environ.get("ASSETS_AUTO_BUILD", True).lower() in ['true', '1']
     ASSETS_DEBUG = os.environ.get("ASSETS_DEBUG", True).lower() in ['true', '1']
-
-    # Cache (for production)
-    # CACHE_TYPE = "redis"
