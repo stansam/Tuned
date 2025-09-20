@@ -13,7 +13,7 @@ class Config:
     SESSION_COOKIE_DOMAIN = os.environ.get('SESSION_COOKIE_DOMAIN', None)
     SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", False).lower() in ['true', '1']
     REMEMBER_COOKIE_SECURE = os.environ.get("REMEMBER_COOKIE_SECURE", False).lower() in ['true', '1']
-    SESSION_COOKIE_SAMESITE = None
+    SESSION_COOKIE_SAMESITE = "None"
     WTF_CSRF_ENABLED = True
     WTF_CSRF_TRUSTED_ORIGINS = [
         "https://tunedessays.com",
