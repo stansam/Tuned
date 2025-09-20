@@ -77,78 +77,10 @@
         </div>
     </div>
     {% else %}
-    <!-- Sample orders for demonstration when no orders exist -->
-    <div class="order-card">
-        <div class="order-info">
-            <div class="order-indicator pending"></div>
-            <div class="order-details">
-                <div class="order-title">Order Titles xxx xxxx.444444444..</div>
-                <div class="order-meta">
-                    <span class="order-number">ORD-795-IAB71</span>
-                    <span class="order-pages">20 Pages</span>
-                    <span class="order-type">Research Paper</span>
-                    <span class="order-status status-pending">Pending</span>
-                </div>
-            </div>
-        </div>
-        <div class="order-actions">
-            <button class="more-actions"></button>
-        </div>
-    </div>
-
-    <div class="order-card">
-        <div class="order-info">
-            <div class="order-indicator in-progress"></div>
-            <div class="order-details">
-                <div class="order-title">Order Titles xxx xxxx.444444444..</div>
-                <div class="order-meta">
-                    <span class="order-number">ORD-795-IAB71</span>
-                    <span class="order-pages">20 Pages</span>
-                    <span class="order-type">Research Paper</span>
-                    <span class="order-status status-in-progress">In Progress</span>
-                </div>
-            </div>
-        </div>
-        <div class="order-actions">
-            <button class="more-actions"></button>
-        </div>
-    </div>
-
-    <div class="order-card">
-        <div class="order-info">
-            <div class="order-indicator completed"></div>
-            <div class="order-details">
-                <div class="order-title">Order Titles xxx xxxx.444444444..</div>
-                <div class="order-meta">
-                    <span class="order-number">ORD-795-IAB71</span>
-                    <span class="order-pages">20 Pages</span>
-                    <span class="order-type">Research Paper</span>
-                    <span class="order-status status-completed">Completed</span>
-                </div>
-            </div>
-        </div>
-        <div class="order-actions">
-            <button class="more-actions"></button>
-        </div>
-    </div>
-
-    <div class="order-card">
-        <div class="order-info">
-            <div class="order-indicator overdue"></div>
-            <div class="order-details">
-                <div class="order-title">Order Titles xxx xxxx.444444444..</div>
-                <div class="order-meta">
-                    <span class="order-number">ORD-795-IAB71</span>
-                    <span class="order-pages">20 Pages</span>
-                    <span class="order-type">Research Paper</span>
-                    <span class="order-status status-overdue">Overdue</span>
-                </div>
-            </div>
-        </div>
-        <div class="order-actions">
-            <button class="more-actions"></button>
-        </div>
-    </div>
+    <p class="no-orders-message">
+        <i class="fas fa-box-open"></i>
+        No orders found.
+    </p>
     {% endfor %}
 </div>
 
