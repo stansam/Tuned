@@ -2,7 +2,7 @@
 
 {% block title %}{{ post.title }}{% endblock %}
 
-{% block meta_description %}{{ post.excerpt }}{% endblock %}
+{% block meta_description %}{% if post.meta_description %} {{ post.meta_description }}{% else %} {{ post.excerpt }} {% endif %}{% endblock %}
 
 {% block body_class %}blog-post-page{% endblock %}
 
