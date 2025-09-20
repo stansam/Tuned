@@ -6,10 +6,16 @@ bundles:
       - client/client/js/main.js
       - client/client/js/chats/chat.js
       - client/client/js/notifications/notificationManager.js
+      - client/client/js/socket/socket_client.js
+  
+  client_dashboard_js:
+    filters: jsmin
+    output: dist/client/dashboard.min.js
+    contents:
       - client/client/js/profile/edit-profile.js
       - client/client/js/profile/refresh.js
       - client/client/js/profile/upload-profile-pic.js
-      - client/client/js/socket/socket_client.js
+      
 
   client_order_detail_js:
     filters: jsmin
