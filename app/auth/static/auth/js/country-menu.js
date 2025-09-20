@@ -314,3 +314,9 @@ window.addEventListener('DOMContentLoaded', () => {
     );
     if (defaultOption) defaultOption.click();
 });
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.select-box')) {
+        select_box.classList.remove('active');
+        selected_option.classList.remove('active');
+    }
+});
