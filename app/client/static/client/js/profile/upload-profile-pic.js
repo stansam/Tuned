@@ -100,7 +100,7 @@ async function uploadProfilePicture() {
             method: 'POST',
             credentials: 'include',
             headers: {
-                'X-CSRF-Token': document.getElementById('csrfTokenMeta').getAttribute('content')
+                'X-CSRFToken': document.getElementById('csrfTokenMeta').getAttribute('content')
             },
             body: formData
         });
@@ -149,7 +149,7 @@ async function removeProfilePicture() {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-Token': document.getElementById('csrfTokenMeta').getAttribute('content'),
+                'X-CSRFToken': document.getElementById('csrfTokenMeta').getAttribute('content'),
                 
             }
         });

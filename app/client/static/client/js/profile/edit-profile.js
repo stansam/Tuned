@@ -24,6 +24,7 @@ async function loadUserData() {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': document.getElementById('csrfTokenMeta').getAttribute('content')
             }
         });
 
@@ -126,7 +127,7 @@ document.getElementById('profileForm').addEventListener('submit', async function
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token() }}'
+                'X-CSRFToken': document.getElementById('csrfTokenMeta').getAttribute('content')
             },
             body: JSON.stringify(data)
         });
