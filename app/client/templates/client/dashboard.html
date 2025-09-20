@@ -25,7 +25,7 @@
                 <p class="profile-subtitle">Here's what's happening with your account today</p>
             </div>
             <div class="profile-actions">
-                <button type="button" class="edit-button" onclick="openProfileModal()">Edit Profile</button>
+                <button type="button" class="edit-button" onclick="openProfileModal()"><div class="pen-icon"><i class="fas fa-edit"></i></div>Edit Profile</button>
                 <button type="button" class="sync-button" onclick="refreshDashboard()"><i class="fas fa-sync-alt"></i></button>
             </div>
         </div>
@@ -40,7 +40,6 @@
                 <img src="{% if current_user.profile_pic and current_user.profile_pic != 'default.png' %}{{ current_user.get_profile_pic_url() }} {% else %} {{url_for('client.static', filename='client/assets/profile_pics/default.png')}} {% endif %} " 
                          alt="Profile Picture" 
                          class="dash-profile-pic">
-                {#{{ (current_user.first_name[0] if current_user.first_name else 'U') + (current_user.last_name[0] if current_user.last_name else '') }}#}
             </div>
 
             <div class="profile-details">

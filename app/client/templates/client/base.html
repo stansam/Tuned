@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf_token" content="{{ csrf_token() }}" id="csrfTokenMeta">
+    <link rel="shortcut icon" href="{{ url_for('client.static', filename='client/assets/Logo.svg') }}" />
     <title>{% block title %}{% endblock %} &nbsp;|&nbsp; TunedEssays </title>
     {% assets "client_client_css" %}
         <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
