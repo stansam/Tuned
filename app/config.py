@@ -10,7 +10,7 @@ class Config:
     ENVIRONMENT = os.environ.get('ENVIRONMENT', 'production')
 
     SERVER_NAME = os.environ.get("SERVER_NAME", "tunedessays.com")
-    SESSION_COOKIE_DOMAIN = os.environ.get('SESSION_COOKIE_DOMAIN', None)
+    SESSION_COOKIE_DOMAIN = os.environ.get('SESSION_COOKIE_DOMAIN', '.tunedessays.com')
     SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", False).lower() in ['true', '1']
     REMEMBER_COOKIE_SECURE = os.environ.get("REMEMBER_COOKIE_SECURE", False).lower() in ['true', '1']
     SESSION_COOKIE_SAMESITE = "None"
