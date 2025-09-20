@@ -53,7 +53,7 @@ class Config:
     MAX_CONTENT_LENGTH = 50 * 1024 * 1024
     MAX_IMAGE_SIZE = (800, 800)
 
-    ALLOWED_PIC_EXTENSIONS ={'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.webp', '.svg', '.ico'}
+    ALLOWED_PIC_EXTENSIONS ={'jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp', 'svg', 'ico'}
     ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'txt'}
 
     CACHE_TYPE = os.environ.get("CACHE_TYPE", "null")
