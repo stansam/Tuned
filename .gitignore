@@ -18,3 +18,7 @@ backups/
 tunedessays
 *1.js
 *1.css
+*.json
+tail_src/
+node_modules
+*.congig.js
