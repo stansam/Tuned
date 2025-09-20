@@ -22,4 +22,4 @@ tunedessays
 *.json
 tail_src/
 node_modules
-*.congig.js
+*.config.js
