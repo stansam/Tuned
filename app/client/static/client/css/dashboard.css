@@ -42,6 +42,13 @@
     margin-bottom: 16px;
 }
 
+.profile-actions {
+    display: flex;
+    gap: 0.875rem;
+    flex-direction: row;
+    align-items: center;
+}
+
 .edit-button {
     background-color: #27ae60;
     color: white;
