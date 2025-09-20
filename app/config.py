@@ -13,7 +13,7 @@ class Config:
     SESSION_COOKIE_DOMAIN = os.environ.get('SESSION_COOKIE_DOMAIN', '.tunedessays.com')
     SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", False).lower() in ['true', '1']
     REMEMBER_COOKIE_SECURE = os.environ.get("REMEMBER_COOKIE_SECURE", False).lower() in ['true', '1']
-    SESSION_COOKIE_SAMESITE = "None"
+    SESSION_COOKIE_SAMESITE = "Lax"
     WTF_CSRF_ENABLED = True
     WTF_CSRF_TRUSTED_ORIGINS = [
         "https://tunedessays.com",
@@ -22,6 +22,8 @@ class Config:
         "https://auth.tunedessays.com",
         "https://admin.tunedessays.com",
     ]
+    WTF_CSRF_SSL_STRICT = False  
+    WTF_CSRF_TIME_LIMIT = None
     
     SQLALCHEMY_DATABASE_URI = f"postgresql://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}"
     
