@@ -126,16 +126,10 @@ input, select, textarea {
     color: #333;
 }
 
-/* .step-header::before {
-    content: url("{{url_for('static', filename='assets/images.jpeg')}}");
-    
-    width: ;
-    height: ;
-} */
 .step-header::before {
     content: "";
     display: inline-block;
-    background-image: url("/static/client/assets/images.jpeg");
+    background-image: url("https://app.tunedessays.com/static/client/assets/images.jpeg");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

@@ -21,7 +21,7 @@
 <div class="orders-header">
     <h1 class="orders-title">My Orders</h1>
     <div style="display: flex; align-items: center;">
-        <a href="{{ url_for('client.create_order') }}" class="new-order-btn">
+        <a href="{{ url_for('client.create_order') }}" class="new-orders-btn">
             New Order
         </a>
         <button class="refresh-btn" onclick="refreshOrders()"><i class="fas fa-sync-alt"></i> </button>
@@ -29,10 +29,10 @@
 </div>
 
 <div class="filter-tabs">
-    <a href="?status=active" class="filter-tab {{ 'active' if current_status == 'active' else '' }}">Active</a>
-    <a href="?status=pending" class="filter-tab {{ 'active' if current_status == 'pending' else '' }}">Pending</a>
-    <a href="?status=completed" class="filter-tab {{ 'active' if current_status == 'completed' else '' }}">Completed</a>
-    <a href="?status=overdue" class="filter-tab {{ 'active' if current_status == 'overdue' else '' }}">Overdue</a>
+    <a href="?status=active" class="filter-tab {{ 'active' if current_status == 'active' else '' }}" title="Active orders">Active</a>
+    <a href="?status=pending" class="filter-tab {{ 'active' if current_status == 'pending' else '' }}" title="Pending orders">Pending</a>
+    <a href="?status=completed" class="filter-tab {{ 'active' if current_status == 'completed' else '' }}" title="Completed orders">Completed</a>
+    <a href="?status=overdue" class="filter-tab {{ 'active' if current_status == 'overdue' else '' }}" title="Overdue orders">Overdue</a>
 </div>
 
 <div class="controls-row">
