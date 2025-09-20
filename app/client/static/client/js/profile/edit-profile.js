@@ -21,7 +21,7 @@ async function loadUserData() {
     try {
         const response = await fetch(`${API_BASE_URL}/profile`, {
             method: 'GET',
-            credentials: include,
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -123,7 +123,7 @@ document.getElementById('profileForm').addEventListener('submit', async function
     try {
         const response = await fetch(`${API_BASE_URL}/profile`, {
             method: 'PUT',
-            credentials: include,
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': '{{ csrf_token() }}'
