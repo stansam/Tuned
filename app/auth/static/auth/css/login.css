@@ -68,6 +68,12 @@
 .form-input:focus {
     outline: none;
     border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.form-input:focus.error {
+    border-color: #ff4444;
+    box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
 }
 
 .input-icon {
@@ -91,13 +97,18 @@
     color: white;
     padding: 4px 8px;
     border-radius: 4px;
-    font-size: 10px;
+    font-size: 0.75rem;
     white-space: nowrap;
     display: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
 }
 
 .input-wrapper:hover .tooltip {
-    display: block;
+    /* display: block; */
+    opacity: 1;
 }
 
 .checkbox-group {
@@ -174,3 +185,14 @@
         height: 200px;
     }
 }
+
+.form-input.error {
+    border-color: #ff4444 !important;
+    box-shadow: 0 0 5px rgba(255, 68, 68, 0.3);
+}
+
+.form-input.success {
+    border-color: #4CAF50 !important;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+

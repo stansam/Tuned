@@ -1,12 +1,7 @@
-// Profile Picture Upload Functionality
-// This script handles profile picture upload, preview, and removal
-
-// Global variables for profile picture functionality
 let profilePicFile = null;
 let profilePicPreviewUrl = null;
 let isUploadingProfilePic = false;
 
-// Initialize profile picture functionality
 function initializeProfilePicUpload() {
     const profilePicInput = document.getElementById('profilePicInput');
     const profilePicPreview = document.getElementById('profilePicPreview');
@@ -16,17 +11,13 @@ function initializeProfilePicUpload() {
         return;
     }
 
-    // Handle file input change
     profilePicInput.addEventListener('change', handleProfilePicSelection);
     
-    // Add remove picture button if it doesn't exist
     addRemovePictureButton();
     
-    // Load current profile picture when modal opens
     loadCurrentProfilePicture();
 }
 
-// Handle profile picture file selection
 function handleProfilePicSelection(event) {
     const file = event.target.files[0];
     
@@ -35,7 +26,6 @@ function handleProfilePicSelection(event) {
         return;
     }
     
-    // Validate file before preview
     const validation = validateProfilePicFile(file);
     if (!validation.isValid) {
         showProfilePicError(validation.message);
@@ -48,9 +38,7 @@ function handleProfilePicSelection(event) {
     clearProfilePicError();
 }
 
-// Validate profile picture file
 function validateProfilePicFile(file) {
-    // Check file size (5MB limit based on your config)
     const maxSize = 5 * 1024 * 1024; // 5MB in bytes
     if (file.size > maxSize) {
         return {
@@ -59,7 +47,6 @@ function validateProfilePicFile(file) {
         };
     }
     
-    // Check file type
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
         return {
@@ -71,7 +58,6 @@ function validateProfilePicFile(file) {
     return { isValid: true };
 }
 
-// Preview selected profile picture
 function previewProfilePicture(file) {
     const reader = new FileReader();
     const profilePicPreview = document.getElementById('profilePicPreview');
@@ -81,7 +67,6 @@ function previewProfilePicture(file) {
         profilePicPreview.src = profilePicPreviewUrl;
         profilePicPreview.style.opacity = '1';
         
-        // Show upload button
         showUploadButton();
     };
     
@@ -115,7 +100,7 @@ async function uploadProfilePicture() {
             method: 'POST',
             credentials: 'include',
             headers: {
-                'X-CSRF-Token': document.getElementById('csrfToken').value
+                'X-CSRF-Token': document.getElementById('csrfTokenMeta').getAttribute('content')
             },
             body: formData
         });
@@ -123,18 +108,14 @@ async function uploadProfilePicture() {
         const result = await response.json();
         
         if (response.ok && result.success) {
-            // Update preview with server URL
             const profilePicPreview = document.getElementById('profilePicPreview');
             profilePicPreview.src = result.data.profile_pic_url;
             
-            // Show success message
             showProfilePicSuccess('Profile picture updated successfully!');
             
-            // Reset file input and hide upload button
             resetProfilePicInput();
             hideUploadButton();
             
-            // Update any other profile pictures on the page
             updateAllProfilePictures(result.data.profile_pic_url);
             
             return true;
@@ -150,13 +131,11 @@ async function uploadProfilePicture() {
     }
 }
 
-// Remove profile picture
 async function removeProfilePicture() {
     if (isUploadingProfilePic) {
         return false;
     }
     
-    // Confirm removal
     if (!confirm('Are you sure you want to remove your profile picture?')) {
         return false;
     }
@@ -170,6 +149,7 @@ async function removeProfilePicture() {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRF-Token': document.getElementById('csrfTokenMeta').getAttribute('content'),
                 
             }
         });
@@ -177,19 +157,15 @@ async function removeProfilePicture() {
         const result = await response.json();
         
         if (response.ok && result.success) {
-            // Update preview with default image
             const profilePicPreview = document.getElementById('profilePicPreview');
             profilePicPreview.src = result.data.profile_pic_url;
             
-            // Show success message
             showProfilePicSuccess('Profile picture removed successfully!');
             
-            // Reset file input and hide buttons
             resetProfilePicInput();
             hideUploadButton();
             hideRemoveButton();
             
-            // Update any other profile pictures on the page
             updateAllProfilePictures(result.data.profile_pic_url);
             
             return true;
@@ -205,25 +181,18 @@ async function removeProfilePicture() {
     }
 }
 
-// Load current profile picture when modal opens
 function loadCurrentProfilePicture() {
-    // This function integrates with your existing loadUserData function
-    // We'll modify the populateForm function to also update the profile picture
 }
 
-// Enhanced populateForm function (to be used with your existing one)
 function populateFormWithProfilePic(userData) {
-    // Call your existing populateForm function
     if (typeof populateForm === 'function') {
         populateForm(userData);
     }
     
-    // Update profile picture
     const profilePicPreview = document.getElementById('profilePicPreview');
     if (profilePicPreview && userData.profile_pic_url) {
         profilePicPreview.src = userData.profile_pic_url;
         
-        // Show remove button if not default picture
         if (userData.profile_pic && userData.profile_pic !== 'default.png') {
             showRemoveButton();
         } else {
@@ -232,12 +201,10 @@ function populateFormWithProfilePic(userData) {
     }
 }
 
-// Add remove picture button dynamically
 function addRemovePictureButton() {
     const profilePicActions = document.querySelector('.profile-pic-actions');
     if (!profilePicActions) return;
     
-    // Check if remove button already exists
     if (document.getElementById('removePicBtn')) return;
     
     const removeBtn = document.createElement('button');
@@ -250,7 +217,6 @@ function addRemovePictureButton() {
     
     profilePicActions.appendChild(removeBtn);
     
-    // Add upload button if it doesn't exist
     if (!document.getElementById('uploadPicBtn')) {
         const uploadBtn = document.createElement('button');
         uploadBtn.type = 'button';
@@ -264,7 +230,6 @@ function addRemovePictureButton() {
     }
 }
 
-// Show/Hide upload button
 function showUploadButton() {
     const uploadBtn = document.getElementById('uploadPicBtn');
     if (uploadBtn) {
@@ -279,7 +244,6 @@ function hideUploadButton() {
     }
 }
 
-// Show/Hide remove button
 function showRemoveButton() {
     const removeBtn = document.getElementById('removePicBtn');
     if (removeBtn) {
@@ -294,7 +258,6 @@ function hideRemoveButton() {
     }
 }
 
-// Set loading state for profile picture operations
 function setProfilePicUploadLoading(loading) {
     isUploadingProfilePic = loading;
     const uploadBtn = document.getElementById('uploadPicBtn');
@@ -326,7 +289,6 @@ function setProfilePicUploadLoading(loading) {
     }
 }
 
-// Reset profile picture input
 function resetProfilePicInput() {
     const profilePicInput = document.getElementById('profilePicInput');
     if (profilePicInput) {
@@ -336,7 +298,6 @@ function resetProfilePicInput() {
     profilePicPreviewUrl = null;
 }
 
-// Reset profile picture preview to current/default
 function resetProfilePicPreview() {
     const profilePicPreview = document.getElementById('profilePicPreview');
     if (profilePicPreview && profilePicPreview.dataset.originalSrc) {
@@ -345,9 +306,7 @@ function resetProfilePicPreview() {
     hideUploadButton();
 }
 
-// Show profile picture error
 function showProfilePicError(message) {
-    // Create error element if it doesn't exist
     let errorElement = document.getElementById('profilePicError');
     if (!errorElement) {
         errorElement = document.createElement('div');
@@ -364,9 +323,7 @@ function showProfilePicError(message) {
     errorElement.classList.add('show');
 }
 
-// Show profile picture success
 function showProfilePicSuccess(message) {
-    // Create success element if it doesn't exist
     let successElement = document.getElementById('profilePicSuccess');
     if (!successElement) {
         successElement = document.createElement('div');
@@ -382,13 +339,11 @@ function showProfilePicSuccess(message) {
     successElement.textContent = message;
     successElement.classList.add('show');
     
-    // Auto-hide after 3 seconds
     setTimeout(() => {
         successElement.classList.remove('show');
     }, 3000);
 }
 
-// Clear profile picture error
 function clearProfilePicError() {
     const errorElement = document.getElementById('profilePicError');
     if (errorElement) {
@@ -397,7 +352,6 @@ function clearProfilePicError() {
     }
 }
 
-// Update all profile pictures on the page
 function updateAllProfilePictures(newUrl) {
     const profilePics = document.querySelectorAll('img[alt*="Profile"], .profile-pic, .user-avatar');
     profilePics.forEach(img => {
@@ -407,7 +361,6 @@ function updateAllProfilePictures(newUrl) {
     });
 }
 
-// Enhanced clear form function (extends your existing one)
 function clearProfilePicForm() {
     resetProfilePicInput();
     resetProfilePicPreview();
@@ -420,29 +373,22 @@ function clearProfilePicForm() {
     }
 }
 
-// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize profile picture functionality
     initializeProfilePicUpload();
 });
 
-// Hook into existing modal functions
-// Extend your existing openProfileModal function
 const originalOpenProfileModal = window.openProfileModal;
 window.openProfileModal = function() {
     if (originalOpenProfileModal) {
         originalOpenProfileModal();
     }
-    // Initialize profile pic functionality when modal opens
     setTimeout(() => {
         initializeProfilePicUpload();
     }, 100);
 };
 
-// Extend your existing closeProfileModal function
 const originalCloseProfileModal = window.closeProfileModal;
 window.closeProfileModal = function() {
-    // Clear profile pic form
     clearProfilePicForm();
     
     if (originalCloseProfileModal) {
@@ -450,7 +396,6 @@ window.closeProfileModal = function() {
     }
 };
 
-// Extend your existing clearForm function
 const originalClearForm = window.clearForm;
 window.clearForm = function() {
     if (originalClearForm) {
@@ -459,7 +404,6 @@ window.clearForm = function() {
     clearProfilePicForm();
 };
 
-// Handle drag and drop functionality (bonus feature)
 function initializeDragAndDrop() {
     const profilePicWrapper = document.querySelector('.profile-pic-wrapper');
     if (!profilePicWrapper) return;
@@ -485,9 +429,7 @@ function initializeDragAndDrop() {
         if (files.length > 0) {
             const profilePicInput = document.getElementById('profilePicInput');
             if (profilePicInput) {
-                // Create a new FileList with the dropped file
                 profilePicInput.files = files;
-                // Trigger the change event
                 const event = new Event('change', { bubbles: true });
                 profilePicInput.dispatchEvent(event);
             }
@@ -495,7 +437,6 @@ function initializeDragAndDrop() {
     });
 }
 
-// Initialize drag and drop when modal opens
 setTimeout(() => {
     initializeDragAndDrop();
 }, 200);

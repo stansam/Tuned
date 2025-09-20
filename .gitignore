@@ -16,3 +16,5 @@ backups/
 *.conf
 *.service
 tunedessays
+*1.js
+*1.css
