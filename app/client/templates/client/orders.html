@@ -156,13 +156,13 @@
 {% if orders and orders.pages > 1 %}
 <div class="pagination">
     {% if orders.has_prev %}
-        <a href="{#{{ url_for('orders.list_orders', page=orders.prev_num, status=current_status, sort_by=sort_by, search=search_query) }}#}">Previous</a>
+        <a href="{#{{ url_for('client.list_orders', page=orders.prev_num, status=current_status, sort_by=sort_by, search=search_query) }}#}">Previous</a>
     {% endif %}
     
     {% for page_num in orders.iter_pages() %}
         {% if page_num %}
             {% if page_num != orders.page %}
-                <a href="{#{{ url_for('orders.list_orders', page=page_num, status=current_status, sort_by=sort_by, search=search_query) }}#}">{{ page_num }}</a>
+                <a href="{#{{ url_for('client.list_orders', page=page_num, status=current_status, sort_by=sort_by, search=search_query) }}#}">{{ page_num }}</a>
             {% else %}
                 <strong>{{ page_num }}</strong>
             {% endif %}
@@ -172,7 +172,7 @@
     {% endfor %}
     
     {% if orders.has_next %}
-        <a href="{#{{ url_for('orders.list_orders', page=orders.next_num, status=current_status, sort_by=sort_by, search=search_query) }}#}">Next</a>
+        <a href="{#{{ url_for('client.list_orders', page=orders.next_num, status=current_status, sort_by=sort_by, search=search_query) }}#}">Next</a>
     {% endif %}
 </div>
 {% endif %}
