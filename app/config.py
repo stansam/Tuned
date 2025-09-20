@@ -11,7 +11,17 @@ class Config:
 
     SERVER_NAME = os.environ.get("SERVER_NAME", "tunedessays.com")
     SESSION_COOKIE_DOMAIN = os.environ.get('SESSION_COOKIE_DOMAIN', None)
-
+    SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", False).lower() in ['true', '1']
+    REMEMBER_COOKIE_SECURE = os.environ.get("REMEMBER_COOKIE_SECURE", False).lower() in ['true', '1']
+    SESSION_COOKIE_SAMESITE = None
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_TRUSTED_ORIGINS = [
+        "https://tunedessays.com",
+        "https://app.tunedessays.com",
+        "https://api.tunedessays.com",
+        "https://auth.tunedessays.com",
+        "https://admin.tunedessays.com",
+    ]
     
     SQLALCHEMY_DATABASE_URI = f"postgresql://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}"
     
@@ -32,10 +42,7 @@ class Config:
         'pool_pre_ping': True,
         'pool_recycle': 300,
     }
-
-    SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", False).lower() in ['true', '1']
-    WTF_CSRF_ENABLED = True
-
+  
     RATELIMIT_ENABLED = os.environ.get("RATELIMIT_ENABLED", False).lower() in ['true', '1']
 
     UPLOAD_FOLDER = 'uploads'
