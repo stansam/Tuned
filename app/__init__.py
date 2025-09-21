@@ -64,13 +64,13 @@ def create_app():
     from app.utils.assets import init_assets #, register_assets_cli
     from app.cli.utils.init_assets import register_assets_cli
 
-    if app.config.get('ENVIRONMENT') == 'production':
-        register_assets_cli(app)
-    else:    
-        project_root = os.path.dirname(os.path.dirname(__file__))
-        assets = init_assets(app, project_root)
+    # if app.config.get('ENVIRONMENT') == 'production':
+    #     register_assets_cli(app)
+    # else:    
+    project_root = os.path.dirname(os.path.dirname(__file__))
+    assets = init_assets(app, project_root)
 
-    # register_assets_cli(app, assets)
+    register_assets_cli(app)
 
 
 
