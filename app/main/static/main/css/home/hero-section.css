@@ -34,7 +34,7 @@
     left: var(--left);
     width: var(--width);
     height: var(--height);
-    background-image: url('http://tunedessays.com:5000/static/main/main/assets/8850917-min.jpg');
+    background-image: url('https://tunedessays.com/static/main/main/assets/8850917-min.jpg');
 }
 
 .dynamic-bg-image:nth-child(2) {
@@ -47,7 +47,7 @@
     left: var(--left);
     width: var(--width);
     height: var(--height);
-    background-image: url('http://tunedessays.com:5000/static/main/main/assets/4099582-min.jpg');
+    background-image: url('https://tunedessays.com/static/main/main/assets/4099582-min.jpg');
 }
 
 .dynamic-bg-image:nth-child(3) {
@@ -60,7 +60,7 @@
     right: var(--right);
     width: var(--width);
     height: var(--height);
-    background-image: url('http://tunedessays.com:5000/static/main/main/assets/4038766-min.jpg');
+    background-image: url('https://tunedessays.com/static/main/main/assets/4038766-min.jpg');
 }
 
 .dynamic-bg-image:nth-child(4) {
@@ -73,7 +73,7 @@
     left: var(--left);
     width: var(--width);
     height: var(--height);
-    background-image: url('http://tunedessays.com:5000/static/main/main/assets/8767132-min.jpg');
+    background-image: url('https://tunedessays.com/static/main/main/assets/8767132-min.jpg');
 }
 .dropdown-toggle::after {
     content: "";
