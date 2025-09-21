@@ -1,5 +1,5 @@
 from flask import Flask
-from app.config import Config
+from app.config import get_config
 import logging
 import os
 # from flask_assets import Environment
@@ -7,7 +7,7 @@ import os
 def create_app():
     app = Flask(__name__, subdomain_matching=True, template_folder=os.path.join(os.path.dirname(__file__), 'templates'), static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 
-    app.config.from_object(Config)
+    app.config.from_object(get_config())
     from app.extensions import (
         db, migrate, csrf, mail, limiter, login_manager, cors, socketio
     )
@@ -18,13 +18,28 @@ def create_app():
     mail.init_app(app)
     #limiter.init_app(app)
     socketio.init_app(app, async_mode='eventlet')
-    cors.init_app(app, supports_credentials=True, origins=[
+
+    DEV_ORIGINS = [
+        "http://tunedessays.com:5000",
+        "http://app.tunedessays.com:5000",
+        "http://api.tunedessays.com:5000",
+        "http://auth.tunedessays.com:5000",
+        "http://admin.tunedessays.com:5000",
+    ]
+
+    PROD_ORIGINS = [
         "https://tunedessays.com",
         "https://app.tunedessays.com",
         "https://api.tunedessays.com",
         "https://auth.tunedessays.com",
-        "https://admin.tunedessays.com"
-    ])
+        "https://admin.tunedessays.com",
+    ]
+    if app.config.get("ENVIRONMENT") == "development":
+        origins = DEV_ORIGINS
+    else:
+        origins = PROD_ORIGINS
+
+    cors.init_app(app, supports_credentials=True, origins=origins)
     from app.sockets import init_socketio_events
     init_socketio_events(socketio)
 
@@ -49,7 +64,7 @@ def create_app():
     from app.utils.assets import init_assets #, register_assets_cli
     from app.cli.utils.init_assets import register_assets_cli
 
-    if app.config.get('ENVIRONMENT') == 'development':
+    if app.config.get('ENVIRONMENT') == 'production':
         register_assets_cli(app)
     else:    
         project_root = os.path.dirname(os.path.dirname(__file__))

@@ -4,6 +4,7 @@ bundles:
     output: dist/global.min.js
     contents:
       - js/lazy.js
+      - js/config.js
   # global_css:
   #   filters: cssmin
   #   output: dist/global.min.css

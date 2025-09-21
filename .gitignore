@@ -20,7 +20,9 @@ tunedessays
 *1.js
 *1.css
 *1.html
+*1.py
 *.json
 tail_src/
 node_modules
-*.config.js
+*.config.
+config/

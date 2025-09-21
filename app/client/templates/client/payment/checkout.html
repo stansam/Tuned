@@ -109,10 +109,14 @@
         </div>
     </div>
 
+    {% assets "global_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
     <script>
         // Configuration
         const CONFIG = {
-            API_BASE_URL: "https://api.tunedessays.com", 
+            API_BASE_URL: AppConfig.API_BASE_URL, 
             TIMEOUT: 30000, 
             MAX_RETRIES: 3
         };

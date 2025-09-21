@@ -35,16 +35,15 @@
     {% include 'client/notifications/notifications_modal.html' %}
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
-    <script>
-        const API_BASE_URL = "https://api.tunedessays.com"
-        const currentUserId = {{ current_user.id if current_user.is_authenticated else 'null' }};
-        const isAdmin = {{ 'true' if current_user.is_authenticated and current_user.is_admin else 'false' }};
-    </script>
-    
+        
     {% assets "global_js" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
-
+    <script>
+        const API_BASE_URL = AppConfig.API_BASE_URL;
+        const currentUserId = {{ current_user.id if current_user.is_authenticated else 'null' }};
+        const isAdmin = {{ 'true' if current_user.is_authenticated and current_user.is_admin else 'false' }};
+    </script>
     {% assets "client_client_js" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}

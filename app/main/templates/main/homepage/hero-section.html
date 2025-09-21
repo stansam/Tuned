@@ -1,141 +1,142 @@
 <div class="hero-container" style="overflow: hidden;" >
 
-  <div class="hero-overlay"style="position: absolute; top:0; left:10px; width: 200px; height: 150px;"><img loading="lazy" src="{{url_for('main.static', filename='main/assets/8850917-min.jpg')}}" ></div>
-  <div class="hero-overlay"style="position: absolute; top:80px; left:370px; width: 350px; height: 150px;"><img loading="lazy" src="{{url_for('main.static', filename='main/assets/4099582-min.jpg')}}" ></div>
-  <div class="hero-overlay"style="position: absolute; top:10px; right:10px; width: 390px; height: 200px;"><img loading="lazy" src="{{url_for('main.static', filename='main/assets/4038766-min.jpg')}}" ></div>
-  <div class="hero-overlay"style="position: absolute; bottom:150px; left:10px; width: 390px; height: 180px;overlay:hidden;"><img loading="lazy" src="{{url_for('main.static', filename='main/assets/8767132-min.jpg')}}" ></div>
+    <div class="dynamic-bg-image"></div>
+        <div class="dynamic-bg-image"></div>
+        <div class="dynamic-bg-image"></div>
+        <div class="dynamic-bg-image"></div>
 
-  <div class="hero" style="background-color: rgba(48, 54, 87, 0.7);" >
-
-    <div class="hero-content" >
-
-      <div class="hero-header">
-        <h1 class="hero-title">Your Trusted Writer & Editor</h1>
-        <div class="hero-subtitle">Your love letter to the very essence of writing</div>
-      </div>
+        <div class="hero" style="background-color: rgba(48, 54, 87, 0.7);" >
     
-      <div class="search-container">
-        <!-- Desktop Search Form -->
-        <form class="search-bar" method="GET" action="{{ url_for('main.search') }}">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="text" class="search-input" name="q" 
-                  placeholder="What are you looking for?" 
-                  autocomplete="off"
-                  value="{{ request.args.get('q', '') }}">
-            <button style="display:none;" type="submit" class="search-btn" aria-label="Search">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="M21 21l-4.35-4.35"></path>
-                </svg>
-            </button>
-        </form>
-
-        <!-- Mobile Search Form -->
-        <form class="mobile-search-bar" method="GET" action="{{ url_for('main.search') }}">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="text" name="q" class="mobile-search-input" 
-                  placeholder="What are you looking for?" 
-                  autocomplete="off"
-                  value="{{ request.args.get('q', '') }}">
-        </form>
-
-      </div>
-    
-    </div>
-
-    <div class="form-container">
-
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-      <div class="content">
-
-        <div class="header">
-          AI & Plagiarism free services
-          <p>Get a custom quote now</p>
-        </div>
-
-        <div class="service-tabs">
-            <div class="tab active">Writing</div>
-            <div class="tab ">Proofreading</div>
-            <div class="tab">Technical</div>
-        </div>
-
-        <div class="form-content">
-
-          <div class="custom-select-wrapper">
-              <select id="paperType"  class="form-select original-select">
-                  <option value="">Choose a service</option>
-              </select>
-              <div class="custom-select-display" id="customPaperType">Choose a service</div>
-              <div class="custom-select-options" id="customPaperOptions"></div>
-          </div>
-
-          <div class="custom-select-wrapper">
-            <select id="proofType" class="form-select original-select">
-                <option value="">Choose a service</option>
-            </select>
-            <div class="custom-select-display" id="customProofType">Choose a service</div>
-            <div class="custom-select-options" id="customProofOptions"></div>
-          </div>
-
-          <div class="custom-select-wrapper">
-            <select id="techType" class="form-select original-select">
-                  <option value="">Choose a service</option>
-            </select>
-            <div class="custom-select-display" id="customTechType">Choose a service</div>
-            <div class="custom-select-options" id="customTechOptions"></div>
-          </div>
-          
-          <div class="select-row">
-
-            <div class="custom-select-wrapper">
-                <select id="academicLevel" class="form-select original-select">
-                    <option value="">Project-Level</option>
-                </select>
-                <div class="custom-select-display" id="customAcademicLevel">Level</div>
-                <div class="custom-select-options" id="customAcademicOptions"></div>
-            </div>
+            <div class="hero-content" >
+        
+                <div class="hero-header">
+                    <h1 class="hero-title">Your Trusted Writer & Editor</h1>
+                    <div class="hero-subtitle">Your love letter to the very essence of writing</div>
+                </div>
             
-            <div class="custom-select-wrapper">
-              <div class="datetime-container">
-                  <div class="datetime-input desktop-picker">
-                      <input type="text" class="due-date-input form-control" id="deadline_picker" name="deadline_picker" required readonly>
-                  </div>
-
-                  <div class="datetime-input mobile-picker" style="display:none;">
-                    <input type="datetime-local" class=" due-date-input form-control" 
-                           id="mobile_deadline_picker" 
-                           name="mobile_deadline_picker" 
-                           required>
-                  </div>
-
-                  <input type="hidden" id="deadline" name="deadline" value="{{ selected_deadline.id if selected_deadline else ''  }}">
-                  <input type="hidden" id="dateDue" name="due_date" value="">
-              </div>
+                <div class="search-container">
+                    <!-- Desktop Search Form -->
+                    <form class="search-bar" method="GET" action="{{ url_for('main.search') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="text" class="search-input" name="q" 
+                                placeholder="What are you looking for?" 
+                                autocomplete="off"
+                                value="{{ request.args.get('q', '') }}">
+                        <button style="display:none;" type="submit" class="search-btn" aria-label="Search">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="M21 21l-4.35-4.35"></path>
+                            </svg>
+                        </button>
+                    </form>
+            
+                    <!-- Mobile Search Form -->
+                    <form class="mobile-search-bar" method="GET" action="{{ url_for('main.search') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="text" name="q" class="mobile-search-input" 
+                                placeholder="What are you looking for?" 
+                                autocomplete="off"
+                                value="{{ request.args.get('q', '') }}">
+                    </form>
+        
+                </div>
+            
             </div>
-
-          </div>
-          
-          <div class="pages-control">
-              <button id="decreasePages">-</button>
-              <div class="pages-text pages-default" id="pagesText">1 page / 275 words</div>
-              <button id="increasePages">+</button>
-          </div>
-
-          <div class="form-end">
-            <div class="price-info">
-              <div class="price-text">Approx-Price:</div>
-              <div class="price-display" id="priceDisplay"><span id="totalPrice">$0.00</span></div>
+    
+            <div class="form-container">
+        
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
+                <div class="content">
+        
+                    <div class="header">
+                        AI & Plagiarism free services
+                        <p>Get a custom quote now</p>
+                    </div>
+        
+                    <div class="service-tabs">
+                        <div class="tab active">Writing</div>
+                        <div class="tab ">Proofreading</div>
+                        <div class="tab">Technical</div>
+                    </div>
+        
+                    <div class="form-content">
+            
+                        <div class="custom-select-wrapper">
+                            <select id="paperType"  class="form-select original-select">
+                                <option value="">Choose a service</option>
+                            </select>
+                            <div class="custom-select-display" id="customPaperType">Choose a service</div>
+                            <div class="custom-select-options" id="customPaperOptions"></div>
+                        </div>
+            
+                        <div class="custom-select-wrapper">
+                        <select id="proofType" class="form-select original-select">
+                            <option value="">Choose a service</option>
+                        </select>
+                        <div class="custom-select-display" id="customProofType">Choose a service</div>
+                        <div class="custom-select-options" id="customProofOptions"></div>
+                        </div>
+            
+                        <div class="custom-select-wrapper">
+                        <select id="techType" class="form-select original-select">
+                                <option value="">Choose a service</option>
+                        </select>
+                        <div class="custom-select-display" id="customTechType">Choose a service</div>
+                        <div class="custom-select-options" id="customTechOptions"></div>
+                        </div>
+                        
+                        <div class="select-row">
+            
+                        <div class="custom-select-wrapper">
+                            <select id="academicLevel" class="form-select original-select">
+                                <option value="">Project-Level</option>
+                            </select>
+                            <div class="custom-select-display" id="customAcademicLevel">Level</div>
+                            <div class="custom-select-options" id="customAcademicOptions"></div>
+                        </div>
+                        
+                        <div class="custom-select-wrapper">
+                            <div class="datetime-container">
+                                <div class="datetime-input desktop-picker">
+                                    <input type="text" class="due-date-input form-control" id="deadline_picker" name="deadline_picker" required readonly>
+                                </div>
+            
+                                <div class="datetime-input mobile-picker" style="display:none;">
+                                <input type="datetime-local" class=" due-date-input form-control" 
+                                        id="mobile_deadline_picker" 
+                                        name="mobile_deadline_picker" 
+                                        required>
+                                </div>
+            
+                                <input type="hidden" id="deadline" name="deadline" value="{{ selected_deadline.id if selected_deadline else ''  }}">
+                                <input type="hidden" id="dateDue" name="due_date" value="">
+                            </div>
+                        </div>
+            
+                        </div>
+                        
+                        <div class="pages-control">
+                            <button id="decreasePages">-</button>
+                            <div class="pages-text pages-default" id="pagesText">1 page / 275 words</div>
+                            <button id="increasePages">+</button>
+                        </div>
+            
+                        <div class="form-end">
+                        <div class="price-info">
+                            <div class="price-text">Approx-Price:</div>
+                            <div class="price-display" id="priceDisplay"><span id="totalPrice">$0.00</span></div>
+                        </div>
+                        <button class="continue-btn" id="continueBtn">Continue</button>
+                        </div>
+            
+                    </div>
+        
+                </div>
+        
             </div>
-            <button class="continue-btn" id="continueBtn">Continue</button>
-          </div>
-
+    
         </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
+  
+    </div> 
 </div> 

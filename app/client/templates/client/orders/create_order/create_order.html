@@ -269,7 +269,7 @@
         </form>
     </div>
     <script>
-        const API_BASE_URL = "https://api.tunedessays.com"
+        const API_BASE_URL = AppConfig.API_BASE_URL;
         window.TEMPLATE_VARS = {
             selected_service: {{ selected_service|tojson if selected_service else 'null' }},
             selected_academic_level: {{ selected_academic_level|tojson if selected_academic_level else 'null' }},
