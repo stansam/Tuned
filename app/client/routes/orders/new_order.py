@@ -92,17 +92,25 @@ def create_order():
                         return redirect(url_for('client.create_order'))
 
                 if due_date:
-                    try:
-                        date_due = datetime.strptime(due_date, "%Y-%m-%d %H:%M")
-                    except ValueError:
+                    formats = [
+                        "%Y-%m-%d %H:%M",
+                        "%Y-%m-%d, %H:%M",
+                        "%Y-%m-%d,%H:%M",
+                    ]
+                    date_due = None
+                    for fmt in formats:
                         try:
-                            date_due = datetime.strptime(due_date, "%Y-%m-%d, %H:%M")
+                            date_due = datetime.strptime(due_date.strip(), fmt)
+                            break
                         except ValueError:
-                            if request.headers.get("X-Requested-With") == "XMLHttpRequest" or request.is_json:
-                                return jsonify({"success": False, "message": "Invalid due date format"}), 404
-                            else:
-                                flash('Invalid due date format', 'danger')
-                                return redirect(url_for('client.create_order'))
+                            continue
+                    
+                    if not date_due:
+                        if request.headers.get("X-Requested-With") == "XMLHttpRequest" or request.is_json:
+                            return jsonify({"success": False, "message": "Invalid due date format"}), 404
+                        else:
+                            flash('Invalid due date format', 'danger')
+                            return redirect(url_for('client.create_order'))
                 else:
                     date_due = datetime.now() + timedelta(hours=deadline.hours)
 

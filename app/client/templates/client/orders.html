@@ -21,7 +21,7 @@
 <div class="orders-header">
     <h1 class="orders-title">My Orders</h1>
     <div style="display: flex; align-items: center;">
-        <a href="{{ url_for('client.new_order') }}" class="new-order-btn">
+        <a href="{{ url_for('client.create_order') }}" class="new-orders-btn">
             New Order
         </a>
         <button class="refresh-btn" onclick="refreshOrders()"><i class="fas fa-sync-alt"></i> </button>
@@ -29,10 +29,10 @@
 </div>
 
 <div class="filter-tabs">
-    <a href="?status=active" class="filter-tab {{ 'active' if current_status == 'active' else '' }}">Active</a>
-    <a href="?status=pending" class="filter-tab {{ 'active' if current_status == 'pending' else '' }}">Pending</a>
-    <a href="?status=completed" class="filter-tab {{ 'active' if current_status == 'completed' else '' }}">Completed</a>
-    <a href="?status=overdue" class="filter-tab {{ 'active' if current_status == 'overdue' else '' }}">Overdue</a>
+    <a href="?status=active" class="filter-tab {{ 'active' if current_status == 'active' else '' }}" title="Active orders">Active</a>
+    <a href="?status=pending" class="filter-tab {{ 'active' if current_status == 'pending' else '' }}" title="Pending orders">Pending</a>
+    <a href="?status=completed" class="filter-tab {{ 'active' if current_status == 'completed' else '' }}" title="Completed orders">Completed</a>
+    <a href="?status=overdue" class="filter-tab {{ 'active' if current_status == 'overdue' else '' }}" title="Overdue orders">Overdue</a>
 </div>
 
 <div class="controls-row">
@@ -77,78 +77,10 @@
         </div>
     </div>
     {% else %}
-    <!-- Sample orders for demonstration when no orders exist -->
-    <div class="order-card">
-        <div class="order-info">
-            <div class="order-indicator pending"></div>
-            <div class="order-details">
-                <div class="order-title">Order Titles xxx xxxx.444444444..</div>
-                <div class="order-meta">
-                    <span class="order-number">ORD-795-IAB71</span>
-                    <span class="order-pages">20 Pages</span>
-                    <span class="order-type">Research Paper</span>
-                    <span class="order-status status-pending">Pending</span>
-                </div>
-            </div>
-        </div>
-        <div class="order-actions">
-            <button class="more-actions"></button>
-        </div>
-    </div>
-
-    <div class="order-card">
-        <div class="order-info">
-            <div class="order-indicator in-progress"></div>
-            <div class="order-details">
-                <div class="order-title">Order Titles xxx xxxx.444444444..</div>
-                <div class="order-meta">
-                    <span class="order-number">ORD-795-IAB71</span>
-                    <span class="order-pages">20 Pages</span>
-                    <span class="order-type">Research Paper</span>
-                    <span class="order-status status-in-progress">In Progress</span>
-                </div>
-            </div>
-        </div>
-        <div class="order-actions">
-            <button class="more-actions"></button>
-        </div>
-    </div>
-
-    <div class="order-card">
-        <div class="order-info">
-            <div class="order-indicator completed"></div>
-            <div class="order-details">
-                <div class="order-title">Order Titles xxx xxxx.444444444..</div>
-                <div class="order-meta">
-                    <span class="order-number">ORD-795-IAB71</span>
-                    <span class="order-pages">20 Pages</span>
-                    <span class="order-type">Research Paper</span>
-                    <span class="order-status status-completed">Completed</span>
-                </div>
-            </div>
-        </div>
-        <div class="order-actions">
-            <button class="more-actions"></button>
-        </div>
-    </div>
-
-    <div class="order-card">
-        <div class="order-info">
-            <div class="order-indicator overdue"></div>
-            <div class="order-details">
-                <div class="order-title">Order Titles xxx xxxx.444444444..</div>
-                <div class="order-meta">
-                    <span class="order-number">ORD-795-IAB71</span>
-                    <span class="order-pages">20 Pages</span>
-                    <span class="order-type">Research Paper</span>
-                    <span class="order-status status-overdue">Overdue</span>
-                </div>
-            </div>
-        </div>
-        <div class="order-actions">
-            <button class="more-actions"></button>
-        </div>
-    </div>
+    <p class="no-orders-message">
+        <i class="fas fa-box-open"></i>
+        No orders found.
+    </p>
     {% endfor %}
 </div>
 
@@ -156,13 +88,13 @@
 {% if orders and orders.pages > 1 %}
 <div class="pagination">
     {% if orders.has_prev %}
-        <a href="{#{{ url_for('orders.list_orders', page=orders.prev_num, status=current_status, sort_by=sort_by, search=search_query) }}#}">Previous</a>
+        <a href="{#{{ url_for('client.list_orders', page=orders.prev_num, status=current_status, sort_by=sort_by, search=search_query) }}#}">Previous</a>
     {% endif %}
     
     {% for page_num in orders.iter_pages() %}
         {% if page_num %}
             {% if page_num != orders.page %}
-                <a href="{#{{ url_for('orders.list_orders', page=page_num, status=current_status, sort_by=sort_by, search=search_query) }}#}">{{ page_num }}</a>
+                <a href="{#{{ url_for('client.list_orders', page=page_num, status=current_status, sort_by=sort_by, search=search_query) }}#}">{{ page_num }}</a>
             {% else %}
                 <strong>{{ page_num }}</strong>
             {% endif %}
@@ -172,7 +104,7 @@
     {% endfor %}
     
     {% if orders.has_next %}
-        <a href="{#{{ url_for('orders.list_orders', page=orders.next_num, status=current_status, sort_by=sort_by, search=search_query) }}#}">Next</a>
+        <a href="{#{{ url_for('client.list_orders', page=orders.next_num, status=current_status, sort_by=sort_by, search=search_query) }}#}">Next</a>
     {% endif %}
 </div>
 {% endif %}

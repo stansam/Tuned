@@ -12,27 +12,29 @@
     color: #2c3e50;
 }
 
-.new-order-btn {
-    background-color: #27ae60;
+.new-orders-btn {
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
     color: white;
     border: none;
-    padding: 12px 20px;
-    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: bold;
     font-size: 14px;
-    font-weight: 500;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
+    transition: all 0.3s;
     text-decoration: none;
-    transition: background-color 0.2s;
 }
 
-.new-order-btn:hover {
-    background-color: #219a52;
+.new-orders-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+    color: white;
 }
 
-.new-order-btn::before {
+.new-orders-btn::before {
     content: '+';
     font-size: 16px;
     font-weight: bold;
@@ -289,6 +291,27 @@
     font-weight: bold;
 }
 
+.no-orders-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #6c757d;
+    padding: 2rem 1rem;
+    margin: 1.5rem 0;
+    background: #f8f9fa;
+    border: 1px dashed #d6d8db;
+    border-radius: 8px;
+}
+
+.no-orders-message i {
+    font-size: 3rem;
+    color: #adb5bd; 
+    margin-bottom: 0.75rem;
+}
 /* Responsive */
 @media (max-width: 768px) {
     .orders-header {

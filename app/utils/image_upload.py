@@ -20,7 +20,7 @@ def validate_image(file):
         return False, f"File type not allowed. Allowed types: {', '.join(Config.ALLOWED_PIC_EXTENSIONS)}"
     
     # Check file size
-    file.seek(0, os.SEEK_END)
+    file.seek(0, os.SEEK_END) 
     file_size = file.tell()
     file.seek(0)  # Reset file pointer
     

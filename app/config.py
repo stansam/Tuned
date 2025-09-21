@@ -9,15 +9,24 @@ class Config:
     DEBUG = os.environ.get('DEBUG', 'False').lower() in ['true', '1']
     ENVIRONMENT = os.environ.get('ENVIRONMENT', 'production')
 
-    SERVER_NAME = os.environ.get("SERVER_NAME", "tunedessays.com:5000")
-    SESSION_COOKIE_DOMAIN = os.environ.get('SESSION_COOKIE_DOMAIN', None)
-
-    if os.environ.get('ENVIRONMENT') == 'production':
-        SQLALCHEMY_DATABASE_URI = (
-            f"postgresql://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}"
-            f"@{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}"
-        )
-    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI', 'sqlite:///app.db')
+    SERVER_NAME = os.environ.get("SERVER_NAME", "tunedessays.com")
+    SESSION_COOKIE_DOMAIN = os.environ.get('SESSION_COOKIE_DOMAIN', '.tunedessays.com')
+    SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", False).lower() in ['true', '1']
+    REMEMBER_COOKIE_SECURE = os.environ.get("REMEMBER_COOKIE_SECURE", False).lower() in ['true', '1']
+    SESSION_COOKIE_SAMESITE = "Lax"
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_TRUSTED_ORIGINS = [
+        "https://tunedessays.com",
+        "https://app.tunedessays.com",
+        "https://api.tunedessays.com",
+        "https://auth.tunedessays.com",
+        "https://admin.tunedessays.com",
+    ]
+    WTF_CSRF_SSL_STRICT = False  
+    WTF_CSRF_TIME_LIMIT = None
+    
+    SQLALCHEMY_DATABASE_URI = f"postgresql://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}"
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ALLOWED_PIC_EXT ={'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
@@ -35,10 +44,7 @@ class Config:
         'pool_pre_ping': True,
         'pool_recycle': 300,
     }
-
-    SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", False).lower() in ['true', '1']
-    WTF_CSRF_ENABLED = True
-
+  
     RATELIMIT_ENABLED = os.environ.get("RATELIMIT_ENABLED", False).lower() in ['true', '1']
 
     UPLOAD_FOLDER = 'uploads'
@@ -47,17 +53,14 @@ class Config:
     MAX_CONTENT_LENGTH = 50 * 1024 * 1024
     MAX_IMAGE_SIZE = (800, 800)
 
-    ALLOWED_PIC_EXTENSIONS ={'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff', '.webp', '.svg', '.ico'}
+    ALLOWED_PIC_EXTENSIONS ={'jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp', 'svg', 'ico'}
     ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'txt'}
 
     CACHE_TYPE = os.environ.get("CACHE_TYPE", "null")
+    CACHE_REDIS_URL = os.environ.get('CACHE_REDIS_URL') or 'redis://localhost:6379/0'
     CACHE_DEFAULT_TIMEOUT = 300
 
     SSL_REDIRECT = os.environ.get("SSL_REDIRECT", False).lower() in ['true', '1']
 
     ASSETS_AUTO_BUILD = os.environ.get("ASSETS_AUTO_BUILD", True).lower() in ['true', '1']
     ASSETS_DEBUG = os.environ.get("ASSETS_DEBUG", True).lower() in ['true', '1']
-
-    # Cache (for production)
-    # CACHE_TYPE = "redis"
-    # CACHE_REDIS_URL = os.environ.get('CACHE_REDIS_URL') or 'redis://localhost:6379/0'

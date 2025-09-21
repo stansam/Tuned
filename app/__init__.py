@@ -17,12 +17,13 @@ def create_app():
     csrf.init_app(app)
     mail.init_app(app)
     #limiter.init_app(app)
-    socketio.init_app(app)
+    socketio.init_app(app, async_mode='eventlet')
     cors.init_app(app, supports_credentials=True, origins=[
-        "http://tunedessays.com:5000",
-        "http://client.tunedessays.com:5000",
-        "http://api.tunedessays.com:5000",
-        "http://admin.tunedessays.com:5000"
+        "https://tunedessays.com",
+        "https://app.tunedessays.com",
+        "https://api.tunedessays.com",
+        "https://auth.tunedessays.com",
+        "https://admin.tunedessays.com"
     ])
     from app.sockets import init_socketio_events
     init_socketio_events(socketio)
@@ -42,12 +43,17 @@ def create_app():
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, subdomain="auth")
     app.register_blueprint(api_bp, subdomain="api")
-    app.register_blueprint(client_bp, subdomain="client")
+    app.register_blueprint(client_bp, subdomain="app")
     app.register_blueprint(admin_bp, subdomain="admin")
 
     from app.utils.assets import init_assets #, register_assets_cli
-    project_root = os.path.dirname(os.path.dirname(__file__))
-    assets = init_assets(app, project_root)
+    from app.cli.utils.init_assets import register_assets_cli
+
+    if app.config.get('ENVIRONMENT') == 'development':
+        register_assets_cli(app)
+    else:    
+        project_root = os.path.dirname(os.path.dirname(__file__))
+        assets = init_assets(app, project_root)
 
     # register_assets_cli(app, assets)
 

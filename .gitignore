@@ -6,6 +6,7 @@ venv/
 __pycache__/
 test/
 uploads/
+profile_pics/
 Flask-Seo/
 ngrok.exe
 dist/
@@ -13,3 +14,13 @@ build/
 .webassets-cache
 *.pyc
 backups/
+*.conf
+*.service
+tunedessays
+*1.js
+*1.css
+*1.html
+*.json
+tail_src/
+node_modules
+*.config.js

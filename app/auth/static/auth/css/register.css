@@ -19,6 +19,21 @@
     margin-bottom: 0;
 }
 
+.phone-input.error {
+    border-color: #ff4444 !important;
+    box-shadow: 0 0 5px rgba(255, 68, 68, 0.3);
+}
+
+.phone-input.success {
+    border-color: #4CAF50 !important;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+.gender-options.error .gender-badge {
+    border-color: #ff4444;
+    box-shadow: 0 0 5px rgba(255, 68, 68, 0.3);
+}
+
 .gender-options {
     display: flex;
     gap: 8px;

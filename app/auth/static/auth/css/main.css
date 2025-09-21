@@ -13,28 +13,42 @@ body {
 }
 
 /* Snow animation background */
-body::before {
-    content: '';
-    position: absolute;
+.css-snow {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.3) 2px, transparent 2px),
-        radial-gradient(circle at 80% 40%, rgba(255,255,255,0.2) 1px, transparent 1px),
-        radial-gradient(circle at 40% 60%, rgba(255,255,255,0.4) 1.5px, transparent 1.5px),
-        radial-gradient(circle at 90% 80%, rgba(255,255,255,0.3) 2px, transparent 2px),
-        radial-gradient(circle at 10% 90%, rgba(255,255,255,0.2) 1px, transparent 1px);
-    background-size: 100px 100px, 150px 150px, 200px 200px, 120px 120px, 180px 180px;
-    animation: snowfall 20s linear infinite;
     pointer-events: none;
-    z-index: 1;
+    z-index: 0;
+    background-image: 
+        radial-gradient(circle at 10% 10%, rgba(255,255,255,0.4) 1px, transparent 1px),
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 1.5px, transparent 1.5px),
+        radial-gradient(circle at 70% 20%, rgba(255,255,255,0.5) 1px, transparent 1px),
+        radial-gradient(circle at 90% 40%, rgba(255,255,255,0.3) 2px, transparent 2px),
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.4) 1px, transparent 1px),
+        radial-gradient(circle at 60% 90%, rgba(255,255,255,0.3) 1.5px, transparent 1.5px);
+    background-size: 200px 300px, 250px 400px, 180px 250px, 220px 350px, 190px 280px, 210px 320px;
+    animation: 
+        snow-layer-1 15s linear infinite,
+        snow-layer-2 20s linear infinite,
+        snow-layer-3 25s linear infinite;
+    opacity: 0.6;
 }
 
-@keyframes snowfall {
-    0% { transform: translateY(-100vh); }
-    100% { transform: translateY(100vh); }
+@keyframes snow-layer-1 {
+    0% { background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px; }
+    100% { background-position: 50px 300px, 30px 400px, -20px 250px, 40px 350px, 25px 280px, 35px 320px; }
+}
+
+@keyframes snow-layer-2 {
+    0% { background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px; }
+    100% { background-position: -30px 400px, 20px 500px, 40px 350px, -25px 450px, -15px 380px, 45px 420px; }
+}
+
+@keyframes snow-layer-3 {
+    0% { background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px; }
+    100% { background-position: 25px 500px, -35px 600px, 30px 450px, 35px 550px, 40px 480px, -20px 520px; }
 }
 
 /* Header */
@@ -312,6 +326,59 @@ body::before {
   opacity: 1;
 }
 
+.field-error {
+    color: #ff4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    animation: slideInError 0.3s ease-out;
+}
+
+.field-error::before {
+    content: '⚠';
+    margin-right: 0.5rem;
+    color: #ff4444;
+    font-weight: bold;
+}
+
+@keyframes slideInError {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-submitting {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.form-submitting::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid #4CAF50;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
 
 @media (max-width: 768px) {
     .main-content {
@@ -348,6 +415,14 @@ body::before {
     .login-section {
         order: 1;
     }
+    .field-error {
+        font-size: 0.8rem;
+    }
+    
+    .field-error::before {
+        margin-right: 0.25rem;
+    }
+
 }
 
 @media (max-width: 480px) {
@@ -378,3 +453,4 @@ body::before {
         flex-grow: 2;
     }
 }
+
