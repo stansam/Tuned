@@ -469,17 +469,16 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    {% assets "global_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
     <script>
         const currentUserId = {{ current_user.id if current_user.is_authenticated else 'null' }};
         const isAdmin = {{ 'true' if current_user.is_authenticated and current_user.is_admin else 'false' }};
         const API_BASE_URL = AppConfig.API_BASE_URL;
         const ADMIN_BASE_URL = AppConfig.ADMIN_BASE_URL;
     </script>
-
-    {% assets "global_js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-
+    
     {% assets "admin_admin_js" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
