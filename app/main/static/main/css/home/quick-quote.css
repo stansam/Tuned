@@ -61,7 +61,7 @@
 
 .tab:first-child {
     border-bottom-right-radius: 20px;
-    /* border-top-left-radius: 20px; */
+    border-top-left-radius: 20px;
 }
 
 .tab:nth-child(2) {
@@ -287,6 +287,9 @@
   margin-bottom: 15px;
 }
 
+.deadline-info {
+    font-size: 1rem;
+}
 .custom-select-display {
     width: 100%;
     padding: 12px 16px;
@@ -340,6 +343,9 @@
         .form-container {
         margin-right: 0;
     }
+    .custom-select-options {
+        font-size: 0.875rem;
+    }
 }
 
 @media screen and (max-width: 1200px) {
@@ -383,6 +389,12 @@
     .custom-select-display {
         font-size: 0.75rem;
     }
+    .custom-select-options {
+        font-size: 0.875rem;
+    }
+    .daadline-info {
+        font-size: 0.75rem;
+    }
     .due-date-input {
         font-size: 0.75rem;
     }
@@ -406,6 +418,9 @@
     }
     .continue-btn {
         width: 100%;
+    }
+    .deadline-info {
+        font-size: 0.875rem;
     }
 }
   
@@ -432,6 +447,11 @@
         font-size: 14px;
         padding: 10px;
     }
+
+    .custom-select-options {
+        font-size: 0.875rem;
+    }
+
     .pages-text {
         font-size: 12px;
     }
@@ -441,6 +461,9 @@
     .continue-btn {
         font-size: 14px;
         padding: 10px;
+    }
+    .deadline-info {
+        font-size: 0.875rem;
     }
 }
 
@@ -463,6 +486,9 @@
         font-size: 13px;
         padding: 8px;
     }
+    .custom-select-options {
+        font-size: 0.75rem;
+    }
     .pages-control {
         padding: 3px 6px;
     }
@@ -474,5 +500,8 @@
     .continue-btn {
         font-size: 13px;
         padding: 8px;
+    }
+    .deadline-info {
+        font-size: 0.875rem;
     }
 }
