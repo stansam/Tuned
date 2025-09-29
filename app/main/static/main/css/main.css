@@ -16,7 +16,8 @@ body {
 .back-to-top {
     position: fixed;
     bottom: 30px;
-    right: 30px;
+    left: 50%;
+    transform: translate(-50%);
     background: linear-gradient(135deg, #4CAF50, #45a049);
     color: white;
     border: none;
@@ -26,6 +27,7 @@ body {
     display: none;
     align-items: center;
     justify-content: center;
+    opacity: 0.8;
     font-size: 1.2rem;
     z-index: 1000;
     transition: all 0.3s ease;
@@ -33,7 +35,7 @@ body {
 }
 
 .back-to-top:hover {
-    transform: translateY(-3px);
+    transform: translate(-50%, -3px);
     box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
     color: white;
 }
