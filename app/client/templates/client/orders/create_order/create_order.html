@@ -268,6 +268,12 @@
             </div>
         </form>
     </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    {% assets "global_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
     <script>
         const API_BASE_URL = AppConfig.API_BASE_URL;
         window.TEMPLATE_VARS = {
@@ -279,11 +285,6 @@
             due_date: {{ due_date|tojson if due_date else 'null' }}
         };
     </script> 
-    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    {% assets "global_js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
     {% assets "client_client_create_order_js" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
