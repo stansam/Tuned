@@ -1,4 +1,4 @@
-from flask import url_for, current_app, render_template
+from flask import render_template_string, url_for, current_app, render_template
 from app.extensions import mail, get_token_serializer
 from flask_mail import Message
 import logging
@@ -81,7 +81,7 @@ def send_order_confirmation(order, user):
         user=user,
         order=order,
         order_url=order_url,
-        base_url=os.environ.get('BASE_URL', 'https://tunedessays.com')
+        base_url=os.environ.get('BASE_URL', 'https://app.tunedessays.com')
     )
     msg.body = f'''
 Hello {user.get_name()},
@@ -146,7 +146,7 @@ def send_welcome_email(user):
         # Template variables
         template_vars = {
             'user_name': getattr(user, 'username', None),
-            'account_url': f"{os.environ.get('BASE_URL', 'https://tunedessays.com')}/client",
+            'account_url': f"{os.environ.get('BASE_URL', 'https://app.tunedessays.com')}",
             'base_url': os.environ.get('BASE_URL', 'https://tunedessays.com')
         }
         
@@ -181,7 +181,7 @@ def send_payment_completion_email(user, payment_url, order) -> bool:
     """
     try:
         if not payment_url:
-            payment_url = f"https://tunedessays.com/payment/checkout/{order.id}"
+            payment_url = f"https://app.tunedessays.com/payment/checkout/{order.id}"
         
         # Render template from file (create templates/email_payment_completion.html)
         html_content = render_template(
@@ -449,4 +449,265 @@ def send_anything_else_email(user):
         
     except Exception as e:
         print(f"Failed to send email to {user.email}: {str(e)}")
+        return False
+
+def send_admin_confirm_payment_email(admin_user, order, support_ticket):
+    """
+    Send email notification to admin about a new payment confirmation request.
+    
+    Args:
+        admin_user: User object for the admin
+        order: Order object for which payment confirmation was submitted
+        support_ticket: SupportTicket object associated with the payment confirmation
+    """
+    try:
+        # Email subject
+        subject = f"Payment Confirmation Required - Order #{order.order_number}"
+        
+        # Get client information
+        client = order.client
+        client_name = client.get_name() if client else "Unknown Client"
+        client_email = client.email if client else "N/A"
+        
+        # HTML email template
+        html_body = render_template_string("""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }
+                .header {
+                    background-color: #007bff;
+                    color: white;
+                    padding: 20px;
+                    text-align: center;
+                    border-radius: 5px 5px 0 0;
+                }
+                .content {
+                    background-color: #f9f9f9;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                    border-top: none;
+                }
+                .info-section {
+                    background-color: white;
+                    padding: 15px;
+                    margin: 15px 0;
+                    border-left: 4px solid #007bff;
+                    border-radius: 3px;
+                }
+                .info-row {
+                    margin: 10px 0;
+                    padding: 5px 0;
+                    border-bottom: 1px solid #eee;
+                }
+                .info-row:last-child {
+                    border-bottom: none;
+                }
+                .label {
+                    font-weight: bold;
+                    color: #555;
+                    display: inline-block;
+                    min-width: 150px;
+                }
+                .value {
+                    color: #333;
+                }
+                .button {
+                    display: inline-block;
+                    padding: 12px 30px;
+                    background-color: #007bff;
+                    color: white !important;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    margin: 20px 0;
+                    text-align: center;
+                }
+                .button:hover {
+                    background-color: #0056b3;
+                }
+                .footer {
+                    text-align: center;
+                    margin-top: 20px;
+                    padding-top: 20px;
+                    border-top: 1px solid #ddd;
+                    color: #777;
+                    font-size: 12px;
+                }
+                .alert-box {
+                    background-color: #fff3cd;
+                    border: 1px solid #ffc107;
+                    padding: 15px;
+                    border-radius: 5px;
+                    margin: 15px 0;
+                }
+                .message-box {
+                    background-color: #e7f3ff;
+                    border-left: 4px solid #2196F3;
+                    padding: 15px;
+                    margin: 15px 0;
+                    border-radius: 3px;
+                    font-style: italic;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h2>🔔 Payment Confirmation Request</h2>
+            </div>
+            
+            <div class="content">
+                <div class="alert-box">
+                    <strong>⚠️ Action Required:</strong> A client has submitted a payment confirmation request that requires your review.
+                </div>
+                
+                <div class="info-section">
+                    <h3>Order Information</h3>
+                    <div class="info-row">
+                        <span class="label">Order Number:</span>
+                        <span class="value">#{{ order.order_number }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Order Date:</span>
+                        <span class="value">{{ order.created_at.strftime('%B %d, %Y at %I:%M %p') if order.created_at else 'N/A' }}</span>
+                    </div>
+                    {% if order.total_amount %}
+                    <div class="info-row">
+                        <span class="label">Order Amount:</span>
+                        <span class="value">KSh {{ "{:,.2f}".format(order.total_amount) }}</span>
+                    </div>
+                    {% endif %}
+                    {% if order.status %}
+                    <div class="info-row">
+                        <span class="label">Order Status:</span>
+                        <span class="value">{{ order.status|title }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="info-section">
+                    <h3>Client Information</h3>
+                    <div class="info-row">
+                        <span class="label">Client Name:</span>
+                        <span class="value">{{ client_name }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Email:</span>
+                        <span class="value">{{ client_email }}</span>
+                    </div>
+                    {% if client.phone_number %}
+                    <div class="info-row">
+                        <span class="label">Phone:</span>
+                        <span class="value">{{ client.phone_number }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="info-section">
+                    <h3>Support Ticket Details</h3>
+                    <div class="info-row">
+                        <span class="label">Ticket ID:</span>
+                        <span class="value">#{{ support_ticket.id }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Subject:</span>
+                        <span class="value">{{ support_ticket.subject }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Submitted:</span>
+                        <span class="value">{{ support_ticket.created_at.strftime('%B %d, %Y at %I:%M %p') if support_ticket.created_at else 'N/A' }}</span>
+                    </div>
+                </div>
+                
+                {% if support_ticket.message %}
+                <div class="message-box">
+                    <strong>Client Message:</strong><br>
+                    {{ support_ticket.message }}
+                </div>
+                {% endif %}
+                
+                <div style="text-align: center;">
+                    <a href="{{ order_url }}" class="button">
+                        Review Order & Confirm Payment
+                    </a>
+                </div>
+                
+                <p style="margin-top: 20px; color: #666;">
+                    Please review the payment details and confirm the payment status in the admin dashboard.
+                </p>
+            </div>
+            
+            <div class="footer">
+                <p>This is an automated notification from your order management system.</p>
+                <p>Please do not reply to this email.</p>
+            </div>
+        </body>
+        </html>
+        """,
+            admin_user=admin_user,
+            order=order,
+            client=client,
+            client_name=client_name,
+            client_email=client_email,
+            support_ticket=support_ticket,
+            order_url=url_for('admin.view_order', order_id=order.id, _external=True)
+        )
+        
+        # Plain text version (fallback)
+        text_body = f"""
+Payment Confirmation Request
+
+ACTION REQUIRED: A client has submitted a payment confirmation request.
+
+Order Information:
+- Order Number: #{order.order_number}
+- Order Date: {order.created_at.strftime('%B %d, %Y at %I:%M %p') if order.created_at else 'N/A'}
+{'- Order Amount: KSh {:,.2f}'.format(order.total_amount) if hasattr(order, 'total_amount') and order.total_amount else ''}
+{'- Order Status: ' + order.status.title() if hasattr(order, 'status') and order.status else ''}
+
+Client Information:
+- Client Name: {client_name}
+- Email: {client_email}
+{f'- Phone: {client.phone_number}' if client and client.phone_number else ''}
+
+Support Ticket Details:
+- Ticket ID: #{support_ticket.id}
+- Subject: {support_ticket.subject}
+- Submitted: {support_ticket.created_at.strftime('%B %d, %Y at %I:%M %p') if support_ticket.created_at else 'N/A'}
+
+Client Message:
+{support_ticket.message if support_ticket.message else 'No message provided'}
+
+Review Order: {url_for('admin.view_order', order_id=order.id, _external=True)}
+
+Please review the payment details and confirm the payment status in the admin dashboard.
+
+---
+This is an automated notification from your order management system.
+        """
+        
+        # Create and send the email
+        msg = Message(
+            subject=subject,
+            sender=current_app.config.get('MAIL_DEFAULT_SENDER', 'noreply@yourdomain.com'),
+            recipients=[admin_user.email],
+            body=text_body,
+            html=html_body
+        )
+        
+        mail.send(msg)
+        
+        return True
+        
+    except Exception as e:
+        # Log the error for debugging
+        current_app.logger.error(f"Failed to send payment confirmation email to admin: {str(e)}")
+        # Don't raise the exception - we don't want email failures to break the payment flow
         return False

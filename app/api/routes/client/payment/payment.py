@@ -180,15 +180,14 @@ Payoneer Payment Instructions:
         """Send notifications about the payment confirmation"""
         try:
             from app.models.user import User
-            # from app.routes.main import notify
-            # from app.utils.emails import send_email
-            # notify(user, "Payment Confirmation Request", f"Your payment confirmation for Order #{order.order_number} has been sent and is under review.", type='info')
+            from app.sockets.utils import send_system_notification as notify
+            from app.utils.emails import send_admin_confirm_payment_email as send_email
 
             # Notify the admin about the payment request for a particular order
             admin_user = User.query.filter_by(is_admin=True).first()  
-            # if admin_user:
-            #     notify(admin_user, "New Payment Confirmation", f"A payment confirmation has been submitted for Order #{order.order_number} by {user.full_name}.", type='alert', link=f"/admin/orders/{order.id}")
-
+            if admin_user:
+                notify(admin_user.id, "New Payment Confirmation", f"A payment confirmation has been submitted for Order #{order.order_number} by {user.full_name}.", type='alert', link=f"/admin/orders/{order.id}")
+            send_email(admin_user, order, support_ticket)
             
             current_app.logger.info(f"Notifications sent for support ticket {support_ticket.id}")
             
