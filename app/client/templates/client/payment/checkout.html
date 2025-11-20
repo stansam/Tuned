@@ -140,7 +140,7 @@
                 try {
                     fetch(`${CONFIG.API_BASE_URL}/client/logs`, {
                         method: 'POST',
-                        credentials: include,
+                        credentials: 'include',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-Token': '{{ csrf_token() }}', 
