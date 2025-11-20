@@ -326,6 +326,42 @@
         font-size: 11px;
         opacity: 0.8;
     }
+
+    /* Ticket status badges */
+.badge.bg-warning {
+    color: #000;
+}
+
+/* Action buttons hover effects */
+.btn-group .btn {
+    transition: all 0.3s ease;
+}
+
+.btn-group .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Ticket details card */
+.card-header.bg-light {
+    border-bottom: 2px solid #e9ecef;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.fa-spinner.fa-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Toast improvements */
+.toast-header.bg-success .btn-close,
+.toast-header.bg-danger .btn-close {
+    filter: brightness(0) invert(1);
+}
 </style>
 {% endblock %}
 
@@ -466,10 +502,20 @@
                                 <i class="fas fa-credit-card me-2"></i>Payments
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <!-- <li class="nav-item" role="presentation">
                             <button class="nav-link" id="revision-tab" data-bs-toggle="tab" data-bs-target="#revision" type="button" role="tab" aria-controls="plagiarism" aria-selected="false">
                                 <i class="fas fa-search me-2"></i>Tickets
                                 <span class="badge bg-primary rounded-pill ms-1"></span>
+                            </button>
+                        </li> -->
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="revision-tab" data-bs-toggle="tab" data-bs-target="#revision" type="button" role="tab" aria-controls="revision" aria-selected="false">
+                                <i class="fas fa-ticket-alt me-2"></i>Tickets
+                                {% if support_ticket %}
+                                    <span class="badge bg-{{ 'success' if support_ticket.status == 'closed' else 'warning' if support_ticket.status == 'in_progress' else 'danger' }} rounded-pill ms-1">1</span>
+                                {% else %}
+                                    <span class="badge bg-secondary rounded-pill ms-1">0</span>
+                                {% endif %}
                             </button>
                         </li>
                     </ul>
@@ -1051,103 +1097,154 @@
                         </div> -->
                         <div class="tab-pane fade" id="revision" role="tabpanel" aria-labelledby="revision-tab">
                             <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h5 class="card-title mb-0">Revision Request</h5>
-                                {% if support_ticket and support_ticket.status == 'open' %}
-                                    <button class="btn btn-sm btn-success" id="resolveRevisionBtn">
-                                        <i class="fas fa-check me-1"></i> Mark as Resolved
-                                    </button>
+                                <h5 class="card-title mb-0">Support Tickets</h5>
+                                {% if support_ticket and support_ticket.status != 'closed' %}
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-sm btn-success" 
+                                                onclick="updateTicketStatus('closed', {{ support_ticket.id }})">
+                                            <i class="fas fa-check me-1"></i> Mark as Resolved
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" 
+                                                onclick="deleteTicket({{ support_ticket.id }})">
+                                            <i class="fas fa-trash me-1"></i> Delete
+                                        </button>
+                                    </div>
                                 {% endif %}
                             </div>
                             
                             {% if support_ticket %}
+                                <!-- Status Badge -->
                                 <div class="d-flex align-items-center mb-4">
-                                    {% set status_class = 'badge-success' if support_ticket.status == 'closed' else 'badge-warning' if support_ticket.status == 'in_progress' else 'badge-danger' %}
+                                    {% set status_class = 'bg-success' if support_ticket.status == 'closed' else 'bg-warning' if support_ticket.status == 'in_progress' else 'bg-danger' %}
+                                    {% set status_icon = 'check-circle' if support_ticket.status == 'closed' else 'clock' if support_ticket.status == 'in_progress' else 'exclamation-circle' %}
+                                    
                                     <span class="badge {{ status_class }} me-3 px-3 py-2" style="font-size: 0.9rem;">
-                                        {% if support_ticket.status == 'open' %}
-                                            <i class="fas fa-exclamation-circle me-1"></i> Open
-                                        {% elif support_ticket.status == 'in_progress' %}
-                                            <i class="fas fa-clock me-1"></i> In Progress
-                                        {% else %}
-                                            <i class="fas fa-check-circle me-1"></i> Resolved
-                                        {% endif %}
+                                        <i class="fas fa-{{ status_icon }} me-1"></i> 
+                                        {{ support_ticket.status|replace('_', ' ')|title }}
                                     </span>
                                     <div>
                                         <h6 class="mb-1">{{ support_ticket.subject }}</h6>
                                         <p class="text-muted mb-0">
-                                            Submitted on {{ support_ticket.created_at.strftime('%B %d, %Y at %H:%M') }}
-                                            {% if support_ticket.updated_at != support_ticket.created_at %}
-                                                • Last updated on {{ support_ticket.updated_at.strftime('%B %d, %Y at %H:%M') }}
-                                            {% endif %}
+                                            <small>
+                                                <i class="fas fa-calendar me-1"></i>
+                                                Submitted: {{ support_ticket.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+                                                {% if support_ticket.updated_at != support_ticket.created_at %}
+                                                    <span class="mx-2">•</span>
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    Updated: {{ support_ticket.updated_at.strftime('%B %d, %Y at %I:%M %p') }}
+                                                {% endif %}
+                                            </small>
                                         </p>
                                     </div>
                                 </div>
                                 
+                                <!-- Ticket Details Card -->
                                 <div class="card mb-4">
-                                    <div class="card-header">
-                                        <h6 class="mb-0">Revision Details</h6>
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            Ticket Details
+                                        </h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <strong>Order ID:</strong> #{{ support_ticket.order_id }}
+                                            <div class="col-md-4">
+                                                <strong class="text-muted d-block mb-1">Ticket ID:</strong>
+                                                <span class="badge bg-primary">#{{ support_ticket.id }}</span>
                                             </div>
-                                            <div class="col-md-6">
-                                                <strong>Customer:</strong> {{ support_ticket.user.username if support_ticket.user else 'N/A' }}
+                                            <div class="col-md-4">
+                                                <strong class="text-muted d-block mb-1">Order ID:</strong>
+                                                <a href="{{ url_for('admin.view_order', order_id=support_ticket.order_id) }}" 
+                                                   class="badge bg-info text-decoration-none">
+                                                    #{{ support_ticket.order_id }}
+                                                </a>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <strong class="text-muted d-block mb-1">Customer:</strong>
+                                                {% if support_ticket.user %}
+                                                    <a href="{{ url_for('admin.view_user', user_id=support_ticket.user_id) }}">
+                                                        {{ support_ticket.user.username }}
+                                                    </a>
+                                                {% else %}
+                                                    <span class="text-muted">N/A</span>
+                                                {% endif %}
                                             </div>
                                         </div>
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <strong>Subject:</strong> {{ support_ticket.subject }}
-                                            </div>
-                                            <div class="col-md-6">
-                                                <strong>Status:</strong> 
-                                                <span class="badge text-black {{ status_class }}">
-                                                    {{ support_ticket.status }}
-                                                </span>
-                                            </div>
-                                        </div>
+                                        
+                                        <hr>
+                                        
                                         <div class="mb-3">
-                                            <strong>Message:</strong>
-                                            <div class="mt-2 p-3 bg-light text-black rounded">
+                                            <strong class="text-muted d-block mb-2">
+                                                <i class="fas fa-envelope me-2"></i>Subject:
+                                            </strong>
+                                            <p class="mb-0">{{ support_ticket.subject }}</p>
+                                        </div>
+                                        
+                                        <div class="mb-0">
+                                            <strong class="text-muted d-block mb-2">
+                                                <i class="fas fa-comment-dots me-2"></i>Message:
+                                            </strong>
+                                            <div class="p-3 bg-light rounded">
                                                 {{ support_ticket.message|safe }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 
+                                <!-- Actions Card -->
                                 {% if support_ticket.status != 'closed' %}
-                                    <div class="card mb-4">
-                                        <div class="card-header">
-                                            <h6 class="mb-0">Actions</h6>
+                                    <div class="card mb-4 border-primary">
+                                        <div class="card-header bg-primary text-white">
+                                            <h6 class="mb-0">
+                                                <i class="fas fa-tasks me-2"></i>
+                                                Available Actions
+                                            </h6>
                                         </div>
                                         <div class="card-body">
-                                            <div class="d-flex gap-2">
+                                            <div class="d-flex flex-wrap gap-2">
                                                 {% if support_ticket.status == 'open' %}
-                                                    <!-- <button class="btn btn-warning btn-sm" onclick="updateTicketStatus('in_progress')">
+                                                    <button class="btn btn-warning" 
+                                                            onclick="updateTicketStatus('in_progress', {{ support_ticket.id }})">
                                                         <i class="fas fa-play me-1"></i> Start Working
-                                                    </button> -->
+                                                    </button>
                                                 {% endif %}
-                                                <button class="btn btn-success btn-sm" onclick="updateTicketStatus('closed')">
+                                                
+                                                <button class="btn btn-success" 
+                                                        onclick="updateTicketStatus('closed', {{ support_ticket.id }})">
                                                     <i class="fas fa-check me-1"></i> Mark as Resolved
                                                 </button>
-                                                <button class="btn btn-secondary btn-sm" onclick="addRevisionNote()">
+                                                
+                                                <button class="btn btn-info" 
+                                                        onclick="addRevisionNote({{ support_ticket.id }})">
                                                     <i class="fas fa-comment me-1"></i> Add Note
                                                 </button>
+                                                
+                                                <button class="btn btn-outline-danger" 
+                                                        onclick="deleteTicket({{ support_ticket.id }})">
+                                                    <i class="fas fa-trash me-1"></i> Delete Ticket
+                                                </button>
+                                            </div>
+                                            
+                                            <div class="alert alert-info mt-3 mb-0">
+                                                <i class="fas fa-info-circle me-2"></i>
+                                                <strong>Note:</strong> Marking as resolved will update the order status and notify the customer.
                                             </div>
                                         </div>
                                     </div>
+                                {% else %}
+                                    <!-- Ticket Closed -->
+                                    <div class="alert alert-success">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        <strong>This ticket has been resolved.</strong> The customer has been notified.
+                                    </div>
                                 {% endif %}
                                 
-                                <!-- <div class="text-center">
-                                    <button class="btn btn-primary" onclick="downloadRevisionReport()">
-                                        <i class="fas fa-download me-2"></i> Download Revision Report
-                                    </button>
-                                </div> -->
                             {% else %}
+                                <!-- No Tickets -->
                                 <div class="text-center py-5">
-                                    <i class="fas fa-edit text-muted mb-3" style="font-size: 3rem;"></i>
-                                    <p class="mb-1">No revision requests submitted</p>
-                                    <p class="text-muted">Customer has not requested any revisions for this order</p>
+                                    <i class="fas fa-ticket-alt text-muted mb-3" style="font-size: 3rem;"></i>
+                                    <p class="mb-1 h5">No Support Tickets</p>
+                                    <p class="text-muted">Customer has not submitted any support tickets for this order</p>
                                 </div>
                             {% endif %}
                         </div>
@@ -1795,61 +1892,230 @@
 
 </script>
 <script>
-function updateTicketStatus(status) {
-    if (confirm('Are you sure you want to update the ticket status?')) {
+// function updateTicketStatus(status) {
+//     if (confirm('Are you sure you want to update the ticket status?')) {
         
-        fetch(`/admin/update-ticket-status/{{ support_ticket.id if support_ticket else '' }}`, {
-            method: 'POST',
+//         fetch(`${API_BASE_URL}/admin/support-tickets/{{ support_ticket.id if support_ticket else '' }}/status`, {
+//             method: 'PUT',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'X-CSRFToken': '{{csrf_token()}}'
+//             },
+//             body: JSON.stringify({ status: status })
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data.success) {
+//                 location.reload();
+//             } else {
+//                 alert('Error updating ticket status');
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//             alert('Error updating ticket status');
+//         });
+//     }
+// }
+
+// function addRevisionNote() {
+//     const note = prompt('Enter a note for this revision:');
+//     if (note) {
+        
+//         fetch(`${API_BASE_URL}/admin/add-revision-note/{{ support_ticket.id if support_ticket else '' }}`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({ note: note })
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data.success) {
+//                 location.reload();
+//             } else {
+//                 alert('Error adding note');
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//             alert('Error adding note');
+//         });
+//     }
+// }
+
+function showToast(title, message, type = 'info') {
+    const toastEl = document.getElementById('alertToast');
+    const toastTitle = document.getElementById('toastTitle');
+    const toastMessage = document.getElementById('toastMessage');
+    const toast = new bootstrap.Toast(toastEl);
+    
+    // Set colors based on type
+    const toastHeader = toastEl.querySelector('.toast-header');
+    toastHeader.className = 'toast-header';
+    
+    if (type === 'success') {
+        toastHeader.classList.add('bg-success', 'text-white');
+    } else if (type === 'error') {
+        toastHeader.classList.add('bg-danger', 'text-white');
+    } else if (type === 'warning') {
+        toastHeader.classList.add('bg-warning');
+    }
+    
+    toastTitle.textContent = title;
+    toastMessage.textContent = message;
+    toast.show();
+}
+
+// Update ticket status function
+function updateTicketStatus(status, ticketId) {
+    if (!ticketId) {
+        showToast('Error', 'Ticket ID is missing', 'error');
+        return;
+    }
+    
+    // Confirm the action
+    const confirmMessages = {
+        'in_progress': 'Mark this ticket as In Progress?',
+        'closed': 'Mark this ticket as Resolved/Closed?',
+        'open': 'Reopen this ticket?'
+    };
+    
+    if (!confirm(confirmMessages[status] || 'Update ticket status?')) {
+        return;
+    }
+    
+    // Show loading state
+    const button = event.target.closest('button');
+    const originalHTML = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Updating...';
+    
+    fetch(`${API_BASE_URL}/admin/support-tickets/${ticketId}/status`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{csrf_token()}}'
+        },
+        body: JSON.stringify({ 
+            status: status,
+            admin_note: '' // Can add admin note if needed
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Success', data.message, 'success');
+            // Reload page after short delay to show the toast
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+        } else {
+            showToast('Error', data.message || 'Failed to update ticket status', 'error');
+            button.disabled = false;
+            button.innerHTML = originalHTML;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Error', 'An error occurred while updating the ticket', 'error');
+        button.disabled = false;
+        button.innerHTML = originalHTML;
+    });
+}
+
+// Delete ticket function
+function deleteTicket(ticketId) {
+    if (!ticketId) {
+        showToast('Error', 'Ticket ID is missing', 'error');
+        return;
+    }
+    
+    // Confirm deletion
+    if (!confirm('Are you sure you want to delete this ticket? This action cannot be undone.')) {
+        return;
+    }
+    
+    // Show loading state
+    const button = event.target.closest('button');
+    const originalHTML = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Deleting...';
+    
+    fetch(`${API_BASE_URL}/admin/support-tickets/${ticketId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{csrf_token()}}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Success', data.message, 'success');
+            // Reload page after short delay
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+        } else {
+            showToast('Error', data.message || 'Failed to delete ticket', 'error');
+            button.disabled = false;
+            button.innerHTML = originalHTML;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Error', 'An error occurred while deleting the ticket', 'error');
+        button.disabled = false;
+        button.innerHTML = originalHTML;
+    });
+}
+
+// Add revision note with status update
+function addRevisionNote(ticketId) {
+    if (!ticketId) {
+        showToast('Error', 'Ticket ID is missing', 'error');
+        return;
+    }
+    
+    const note = prompt('Enter a note for this revision:');
+    if (note && note.trim()) {
+        // Update status to in_progress with the note
+        fetch(`${API_BASE_URL}/admin/support-tickets/${ticketId}/status`, {
+            method: 'PUT',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': '{{csrf_token()}}'
             },
-            body: JSON.stringify({ status: status })
+            body: JSON.stringify({ 
+                status: 'in_progress',
+                admin_note: note.trim()
+            })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                location.reload();
+                showToast('Success', 'Note added successfully', 'success');
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
             } else {
-                alert('Error updating ticket status');
+                showToast('Error', data.message || 'Failed to add note', 'error');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error updating ticket status');
-        });
-    }
-}
-
-function addRevisionNote() {
-    const note = prompt('Enter a note for this revision:');
-    if (note) {
-        
-        fetch(`/admin/add-revision-note/{{ support_ticket.id if support_ticket else '' }}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ note: note })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Error adding note');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error adding note');
+            showToast('Error', 'An error occurred while adding the note', 'error');
         });
     }
 }
 
 function downloadRevisionReport() {
     // Add your download logic here
-    window.open(`/admin/download-revision-report/{{ support_ticket.id if support_ticket else '' }}`, '_blank');
+    window.open(`${API_BASE_URL}/admin/download-revision-report/{{ support_ticket.id if support_ticket else '' }}`, '_blank');
 }
 </script>
 {% endblock %}

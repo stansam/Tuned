@@ -186,7 +186,7 @@ Payoneer Payment Instructions:
             # Notify the admin about the payment request for a particular order
             admin_user = User.query.filter_by(is_admin=True).first()  
             if admin_user:
-                notify(admin_user.id, "New Payment Confirmation", f"A payment confirmation has been submitted for Order #{order.order_number} by {user.full_name}.", type='alert', link=f"/admin/orders/{order.id}")
+                notify(admin_user.id, "New Payment Confirmation", f"A payment confirmation has been submitted for Order #{order.order_number} by {user.get_name()}.", notification_type='alert', link=f"/admin/orders/{order.id}", priority='high')
             send_email(admin_user, order, support_ticket)
             
             current_app.logger.info(f"Notifications sent for support ticket {support_ticket.id}")

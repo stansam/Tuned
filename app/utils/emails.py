@@ -711,3 +711,236 @@ This is an automated notification from your order management system.
         current_app.logger.error(f"Failed to send payment confirmation email to admin: {str(e)}")
         # Don't raise the exception - we don't want email failures to break the payment flow
         return False
+    
+# Add this to your app/utils/emails.py file
+
+def send_ticket_status_update_email(user, ticket, old_status, new_status, admin_note=None):
+    """
+    Send email notification to user about support ticket status update.
+    
+    Args:
+        user: User object
+        ticket: SupportTicket object
+        old_status: Previous ticket status
+        new_status: New ticket status
+        admin_note: Optional note from admin
+    """
+    try:
+        # Email subject
+        subject = f"Support Ticket #{ticket.id} Status Update"
+        
+        # Get order information
+        order = ticket.order
+        order_number = order.order_number if order else "N/A"
+        
+        # Status display names
+        status_display = {
+            'open': 'Open',
+            'in_progress': 'In Progress',
+            'closed': 'Closed/Resolved'
+        }
+        
+        # HTML email template
+        html_body = render_template_string("""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }
+                .header {
+                    background-color: #28a745;
+                    color: white;
+                    padding: 20px;
+                    text-align: center;
+                    border-radius: 5px 5px 0 0;
+                }
+                .content {
+                    background-color: #f9f9f9;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                    border-top: none;
+                }
+                .status-update {
+                    background-color: white;
+                    padding: 20px;
+                    margin: 20px 0;
+                    border-radius: 5px;
+                    text-align: center;
+                    border: 2px solid #28a745;
+                }
+                .status-badge {
+                    display: inline-block;
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    margin: 0 10px;
+                }
+                .status-old {
+                    background-color: #ffc107;
+                    color: #000;
+                }
+                .status-new {
+                    background-color: #28a745;
+                    color: white;
+                }
+                .arrow {
+                    font-size: 24px;
+                    color: #666;
+                }
+                .info-section {
+                    background-color: white;
+                    padding: 15px;
+                    margin: 15px 0;
+                    border-left: 4px solid #28a745;
+                    border-radius: 3px;
+                }
+                .info-row {
+                    margin: 10px 0;
+                    padding: 5px 0;
+                }
+                .label {
+                    font-weight: bold;
+                    color: #555;
+                }
+                .admin-note {
+                    background-color: #e7f3ff;
+                    border-left: 4px solid #2196F3;
+                    padding: 15px;
+                    margin: 15px 0;
+                    border-radius: 3px;
+                }
+                .button {
+                    display: inline-block;
+                    padding: 12px 30px;
+                    background-color: #007bff;
+                    color: white !important;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    margin: 20px 0;
+                }
+                .footer {
+                    text-align: center;
+                    margin-top: 20px;
+                    padding-top: 20px;
+                    border-top: 1px solid #ddd;
+                    color: #777;
+                    font-size: 12px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h2>✅ Ticket Status Updated</h2>
+            </div>
+            
+            <div class="content">
+                <p>Hello {{ user.get_name() }},</p>
+                
+                <p>Your support ticket status has been updated by our team.</p>
+                
+                <div class="status-update">
+                    <span class="status-badge status-old">{{ old_status_display }}</span>
+                    <span class="arrow">→</span>
+                    <span class="status-badge status-new">{{ new_status_display }}</span>
+                </div>
+                
+                <div class="info-section">
+                    <h3>Ticket Details</h3>
+                    <div class="info-row">
+                        <span class="label">Ticket ID:</span> #{{ ticket.id }}
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Subject:</span> {{ ticket.subject }}
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Related Order:</span> #{{ order_number }}
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Updated:</span> {{ ticket.updated_at.strftime('%B %d, %Y at %I:%M %p') }}
+                    </div>
+                </div>
+                
+                {% if admin_note %}
+                <div class="admin-note">
+                    <strong>📝 Note from Support Team:</strong><br>
+                    {{ admin_note }}
+                </div>
+                {% endif %}
+                
+                {% if new_status == 'closed' %}
+                <p style="color: #28a745; font-weight: bold;">
+                    ✅ Your ticket has been resolved. If you need further assistance, please create a new support ticket.
+                </p>
+                {% elif new_status == 'in_progress' %}
+                <p style="color: #007bff;">
+                    🔄 Our team is actively working on your request. We'll update you as soon as possible.
+                </p>
+                {% endif %}
+                
+                <div style="text-align: center;">
+                    <a href="{{ order_url }}" class="button">
+                        View Order Details
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>Thank you for your patience.</p>
+                <p>If you have any questions, feel free to contact our support team.</p>
+            </div>
+        </body>
+        </html>
+        """,
+            user=user,
+            ticket=ticket,
+            order_number=order_number,
+            old_status_display=status_display.get(old_status, old_status.title()),
+            new_status_display=status_display.get(new_status, new_status.title()),
+            admin_note=admin_note,
+            new_status=new_status,
+            order_url=url_for('client.view_order', order_id=ticket.order_id, _external=True)
+        )
+        
+        # Plain text version
+        text_body = f"""
+Ticket Status Update
+
+Hello {user.get_name()},
+
+Your support ticket status has been updated:
+{status_display.get(old_status, old_status.title())} → {status_display.get(new_status, new_status.title())}
+
+Ticket Details:
+- Ticket ID: #{ticket.id}
+- Subject: {ticket.subject}
+- Related Order: #{order_number}
+- Updated: {ticket.updated_at.strftime('%B %d, %Y at %I:%M %p')}
+
+{f'Note from Support Team: {admin_note}' if admin_note else ''}
+
+View Order: {url_for('client.view_order', order_id=ticket.order_id, _external=True)}
+
+Thank you for your patience.
+        """
+        
+        msg = Message(
+            subject=subject,
+            sender=current_app.config.get('MAIL_DEFAULT_SENDER', 'noreply@yourdomain.com'),
+            recipients=[user.email],
+            body=text_body,
+            html=html_body
+        )
+        
+        mail.send(msg)
+        return True
+        
+    except Exception as e:
+        current_app.logger.error(f"Failed to send ticket status email: {str(e)}")
+        return False

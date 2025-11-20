@@ -7,7 +7,7 @@ from app.api.routes.client.chats import chat_modal
 from app.api.routes.admin import dashboard
 from app.api.routes.admin.blogs import blogs
 from app.api.routes.admin.samples import samples
-from app.api.routes.admin.orders import orders
+from app.api.routes.admin.orders import orders, tickets
 from app.api.routes.admin.services import services
 from app.api.routes.client.orders import order_activities, create_order
 from app.api.routes.client.payment import payment
