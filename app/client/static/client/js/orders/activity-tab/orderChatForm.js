@@ -134,7 +134,7 @@ class OrderChatHandler {
         try {
             this.showLoading();
             
-            const response = await fetch(`http://api.tunedessays.com:5000/client/chat/${this.chatId}/messages`, {
+            const response = await fetch(`${API_BASE_URL}/client/chat/${this.chatId}/messages`, {
                 credentials: 'include'
             });
             
